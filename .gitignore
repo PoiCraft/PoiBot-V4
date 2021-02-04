@@ -4,5 +4,5 @@
 /.idea/
 /test/
 /out/
-/run/
+/.run/RunMiraiKt.run.xml
 /mirai/
