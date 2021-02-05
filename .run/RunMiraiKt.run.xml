@@ -8,10 +8,6 @@
     <option name="PASS_PARENT_ENVS" value="true" />
     <option name="MAIN_CLASS_NAME" value="com.poicraft.bot.v4.plugin.RunMiraiKt" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/mirai" />
-    <envs>
-      <env name="ID" value="QQ" />
-      <env name="PASSWORD" value="YOUR_PASSWORD" />
-    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

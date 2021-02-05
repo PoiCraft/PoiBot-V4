@@ -2,6 +2,8 @@ package com.poicraft.bot.v4.plugin
 
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.event.GlobalEventChannel
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.utils.info
 
 object PluginMain : KotlinPlugin(
@@ -12,7 +14,8 @@ object PluginMain : KotlinPlugin(
     )
 ) {
     override fun onEnable() {
-        logger.info{ """
+        logger.info {
+            """
             
              ________  ________  ___  ________  ________  ________  ________ _________        ________  ________  _________        ___      ___ ___   ___     
             |\   __  \|\   __  \|\  \|\   ____\|\   __  \|\   __  \|\  _____\\___   ___\     |\   __  \|\   __  \|\___   ___\     |\  \    /  /|\  \ |\  \    
@@ -22,6 +25,19 @@ object PluginMain : KotlinPlugin(
                \ \__\    \ \_______\ \__\ \_______\ \__\\ _\\ \__\ \__\ \__\       \ \__\       \ \_______\ \_______\   \ \__\       \ \__/ /           \ \__\
                 \|__|     \|_______|\|__|\|_______|\|__|\|__|\|__|\|__|\|__|        \|__|        \|_______|\|_______|    \|__|        \|__|/             \|__|
                                                                                                                                                                                 
-        """.trimIndent()}
+        """.trimIndent()
+        }
+
+        CommandMap.loadCommands()
+
+        GlobalEventChannel.subscribeAlways<MessageEvent> {
+            val message = this.message.contentToString()
+            if (message.startsWith("#")) {
+                val args = message.removePrefix("#").split(" ")
+
+                CommandMap.getCommand(message.removePrefix("#"))
+                    .onMessage(this, args)
+            }
+        }
     }
 }
