@@ -9,17 +9,27 @@ abstract class Command {
     abstract val name: String
     abstract val aliases: List<String>
     open val introduction: String = ""
+
     open val permissionLevel = Permission.PERMISSION_LEVEL_EVERYONE
+
     abstract suspend fun handleMessage(event: GroupMessageEvent, args: List<String>)
-    open suspend fun onPermissionDenied(permission_level:Int, event: GroupMessageEvent, args: List<String>){}
-    suspend fun onMessage(event: GroupMessageEvent, args: List<String>){
-        when (permissionLevel){
+
+    open suspend fun onPermissionDenied(permissionLevel: Permission, event: GroupMessageEvent, args: List<String>) {}
+
+    suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
+        when (permissionLevel) {
             Permission.PERMISSION_LEVEL_EVERYONE ->
                 handleMessage(event, args)
             Permission.PERMISSION_LEVEL_ADMIN ->
-                if (event.sender.isOperator()) handleMessage(event, args) else onPermissionDenied(Permission.PERMISSION_LEVEL_ADMIN,event, args)
+                if (event.sender.isOperator()) handleMessage(
+                    event,
+                    args
+                ) else onPermissionDenied(Permission.PERMISSION_LEVEL_ADMIN, event, args)
             Permission.PERMISSION_LEVEL_OWNER ->
-                if (event.sender.isOwner()) handleMessage(event, args) else onPermissionDenied(Permission.PERMISSION_LEVEL_OWNER,event, args)
+                if (event.sender.isOwner()) handleMessage(
+                    event,
+                    args
+                ) else onPermissionDenied(Permission.PERMISSION_LEVEL_OWNER, event, args)
         }
     }
 }
