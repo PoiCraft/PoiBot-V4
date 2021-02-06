@@ -28,7 +28,13 @@ object PluginMain : KotlinPlugin(
         """.trimIndent()
         }
 
-        CommandMap.loadCommands()
+        CommandMap.loadCommands { names ->
+            var msg = "已加载${names.size}个命令: "
+            for (name in names){
+                msg += ("$name ")
+            }
+            logger.info(msg.trimIndent())
+        }
 
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
             val message = this.message.contentToString()
