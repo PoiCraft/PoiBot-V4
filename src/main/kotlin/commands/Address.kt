@@ -3,6 +3,11 @@ package com.poicraft.bot.v4.plugin.commands
 import com.poicraft.bot.v4.plugin.Command
 import net.mamoe.mirai.event.events.GroupMessageEvent
 
+/**
+ * 服务器地址
+ * @author gggxbbb
+ * @see Command
+ */
 object Address : Command() {
     override val name: String = "地址"
     override val aliases: List<String> = listOf(

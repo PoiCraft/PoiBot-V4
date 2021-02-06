@@ -3,6 +3,11 @@ package com.poicraft.bot.v4.plugin.commands
 import com.poicraft.bot.v4.plugin.Command
 import net.mamoe.mirai.event.events.GroupMessageEvent
 
+/**
+ * Bot帮助
+ * @author gggxbbb
+ * @see Command
+ */
 object Helper : Command() {
 
     private val commandMap = hashMapOf<String, Command>()
