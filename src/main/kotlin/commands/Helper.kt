@@ -29,7 +29,9 @@ object Helper : Command() {
                 for (v in command.commands) {
                     msg += ("#$v\n")
                 }
-                msg += ("\n\n" + command.introduction)
+                msg += ("\n" + command.introduction)
+            } else {
+                msg += "找不到此命令"
             }
         } else {
             msg += "输入 #help <名称> 获得帮助:\n"
@@ -38,7 +40,7 @@ object Helper : Command() {
             }
         }
 
-        event.subject.sendMessage(msg)
+        event.subject.sendMessage(msg.trimIndent())
     }
 
 
