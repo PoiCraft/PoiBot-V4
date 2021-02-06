@@ -7,7 +7,7 @@ import com.poicraft.bot.v4.plugin.commands.Hitokoto
 
 object CommandMap : HashMap<String, Command>() {
 
-    private val commands:MutableList<Command> = mutableListOf(
+    private val commands: MutableList<Command> = mutableListOf(
         Hitokoto,
         Address
     )
@@ -19,8 +19,8 @@ object CommandMap : HashMap<String, Command>() {
         helper.load(commands)
         commands.add(helper)
 
-        for (command in commands){
-            for (c in command.aliases){
+        for (command in commands) {
+            for (c in command.aliases) {
                 put(c, command)
             }
         }
