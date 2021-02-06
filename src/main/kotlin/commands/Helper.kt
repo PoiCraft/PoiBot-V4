@@ -1,7 +1,7 @@
 package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
-import net.mamoe.mirai.event.events.MessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 
 object Helper : Command() {
 
@@ -20,7 +20,7 @@ object Helper : Command() {
         "帮助"
     )
     override val introduction: String = "查看帮助"
-    override suspend fun handleMessage(event: MessageEvent, args: List<String>) {
+    override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
         var msg = ""
         if (args.singleOrNull() == null) {
             val command = commandMap.getOrDefault(args[1], null)
