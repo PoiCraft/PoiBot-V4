@@ -3,7 +3,7 @@ package com.poicraft.bot.v4.plugin
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.MessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.info
 
 object PluginMain : KotlinPlugin(
@@ -30,7 +30,7 @@ object PluginMain : KotlinPlugin(
 
         CommandMap.loadCommands()
 
-        GlobalEventChannel.subscribeAlways<MessageEvent> {
+        GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
             val message = this.message.contentToString()
             if (message.startsWith("#")) {
                 val args = message.removePrefix("#").split(" ")
