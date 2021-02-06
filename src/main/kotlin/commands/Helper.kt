@@ -20,7 +20,7 @@ object Helper : Command() {
         "帮助"
     )
     override val introduction: String = "查看帮助"
-    override suspend fun onMessage(event: MessageEvent, args: List<String>) {
+    override suspend fun handleMessage(event: MessageEvent, args: List<String>) {
         var msg = ""
         if (args.singleOrNull() == null) {
             val command = commandMap.getOrDefault(args[1], null)

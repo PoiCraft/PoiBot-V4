@@ -11,6 +11,13 @@ object Hitokoto : Command() {
     @Serializable
     data class HitokotoData(val hitokoto: String, val from: String)
 
+    override val name: String = "一言"
+    override val commands: List<String> = listOf(
+        "Hitokoto",
+        "一言"
+    )
+    override val introduction: String = "从网络获取一言"
+
     override suspend fun handleMessage(event: MessageEvent, args: List<String>) {
         val data = Http.client()?.get<HitokotoData>("https://v1.hitokoto.cn/?c=a")
         event.subject.sendMessage(

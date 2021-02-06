@@ -8,7 +8,7 @@ object EmptyCommand : Command() {
     override val introduction: String  = "啥都没有"
     override val commands: List<String> = listOf()
 
-    override suspend fun onMessage(event: MessageEvent, args: List<String>) {
+    override suspend fun handleMessage(event: MessageEvent, args: List<String>) {
         return
     }
 }
