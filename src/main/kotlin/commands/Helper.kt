@@ -27,7 +27,7 @@ object Helper : Command() {
             if (command != null) {
                 msg += "命令:\n"
                 for (v in command.commands) {
-                    msg += (v + "\n")
+                    msg += ("#$v\n")
                 }
                 msg += ("\n\n" + command.introduction)
             }
