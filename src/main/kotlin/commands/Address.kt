@@ -5,7 +5,7 @@ import net.mamoe.mirai.event.events.MessageEvent
 
 object Address: Command() {
     override val name: String = "地址"
-    override val commands: List<String> = listOf(
+    override val aliases: List<String> = listOf(
         "address",
         "ip",
         "addr",

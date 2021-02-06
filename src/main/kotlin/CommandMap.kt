@@ -20,7 +20,7 @@ object CommandMap : HashMap<String, Command>() {
         commands.add(helper)
 
         for (command in commands){
-            for (c in command.commands){
+            for (c in command.aliases){
                 put(c, command)
             }
         }

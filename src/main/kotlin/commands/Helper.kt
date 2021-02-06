@@ -15,7 +15,7 @@ object Helper : Command() {
 
     override val name: String = "帮助"
 
-    override val commands: List<String> = listOf(
+    override val aliases: List<String> = listOf(
         "help",
         "帮助"
     )
@@ -26,7 +26,7 @@ object Helper : Command() {
             val command = commandMap.getOrDefault(args[1], null)
             if (command != null) {
                 msg += "命令:\n"
-                for (v in command.commands) {
+                for (v in command.aliases) {
                     msg += ("#$v\n")
                 }
                 msg += ("\n" + command.introduction)
