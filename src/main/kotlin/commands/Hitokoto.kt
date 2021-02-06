@@ -2,6 +2,7 @@ package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
 import com.poicraft.bot.v4.plugin.request.Http
+import com.poicraft.bot.v4.plugin.utils.Permission
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.event.events.GroupMessageEvent

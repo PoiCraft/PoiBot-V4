@@ -36,7 +36,7 @@ object PluginMain : KotlinPlugin(
                 val args = message.removePrefix("#").split(" ")
 
                 CommandMap.getCommand(message.removePrefix("#"))
-                    .handleMessage(this, args)
+                    .onMessage(this, args)
             }
         }
     }
