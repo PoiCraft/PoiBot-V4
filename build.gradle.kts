@@ -19,3 +19,9 @@ repositories {
     jcenter()
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
+
+dependencies {
+    val ktorVersion = "1.5.1"
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-websockets:$ktorVersion")
+}
