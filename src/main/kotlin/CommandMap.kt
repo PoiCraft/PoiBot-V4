@@ -5,6 +5,10 @@ import com.poicraft.bot.v4.plugin.commands.EmptyCommand
 import com.poicraft.bot.v4.plugin.commands.Helper
 import com.poicraft.bot.v4.plugin.commands.Hitokoto
 
+/**
+ * 命令表
+ * @author topjohncian, gggxbbb
+ */
 object CommandMap : HashMap<String, Command>() {
 
     private val commands: MutableList<Command> = mutableListOf(
@@ -20,8 +24,8 @@ object CommandMap : HashMap<String, Command>() {
         commands.add(helper)
 
         for (command in commands) {
-            for (c in command.aliases) {
-                put(c, command)
+            for (alias in command.aliases) {
+                put(alias, command)
             }
         }
     }

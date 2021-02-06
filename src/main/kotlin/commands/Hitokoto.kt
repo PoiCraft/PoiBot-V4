@@ -2,12 +2,16 @@ package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
 import com.poicraft.bot.v4.plugin.request.Http
-import com.poicraft.bot.v4.plugin.utils.Permission
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 
+/**
+ * 一言
+ * @author topjohncian
+ * @see Command
+ */
 object Hitokoto : Command() {
     @Serializable
     data class HitokotoData(val hitokoto: String, val from: String)
