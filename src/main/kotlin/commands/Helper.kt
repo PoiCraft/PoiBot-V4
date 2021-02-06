@@ -7,7 +7,7 @@ object Helper : Command() {
 
     private val commandMap = hashMapOf<String, Command>()
 
-    fun load(command_list:List<Command>) {
+    fun load(command_list: List<Command>) {
         for (v in command_list) {
             commandMap[v.name] = v
         }
