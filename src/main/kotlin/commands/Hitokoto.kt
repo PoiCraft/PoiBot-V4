@@ -14,6 +14,7 @@ object Hitokoto : Command() {
     override val name: String = "一言"
     override val commands: List<String> = listOf(
         "Hitokoto",
+        "yy",
         "一言"
     )
     override val introduction: String = "从网络获取一言"
