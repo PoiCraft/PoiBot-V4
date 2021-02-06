@@ -1,5 +1,6 @@
 package com.poicraft.bot.v4.plugin
 
+import com.poicraft.bot.v4.plugin.commands.Address
 import com.poicraft.bot.v4.plugin.commands.EmptyCommand
 import com.poicraft.bot.v4.plugin.commands.Helper
 import com.poicraft.bot.v4.plugin.commands.Hitokoto
@@ -7,7 +8,8 @@ import com.poicraft.bot.v4.plugin.commands.Hitokoto
 object CommandMap : HashMap<String, Command>() {
 
     private val commands:MutableList<Command> = mutableListOf(
-        Hitokoto
+        Hitokoto,
+        Address
     )
 
     fun loadCommands() {
