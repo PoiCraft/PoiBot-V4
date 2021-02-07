@@ -42,6 +42,7 @@ abstract class Command {
     open suspend fun onPermissionDenied(permissionLevel: Permission, event: GroupMessageEvent, args: List<String>) {}
 
     open val argsRequired: Int = 0
+    open val unlimitedArgs: Boolean = false
 
     open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>){
         event.subject.sendMessage(
@@ -54,7 +55,7 @@ abstract class Command {
      * 鉴权
      */
     open suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
-        if ((args.size  - 1) != argsRequired){
+        if (((args.size  - 1) != argsRequired) and !unlimitedArgs){
             onArgsMissing(argsRequired, event, args)
             return
         }
