@@ -9,13 +9,13 @@ import org.ktorm.schema.varchar
 interface User: Entity<User> {
     var XboxID: String
     var QQNumber: String
-    var status: Int
-    var create_time: String
+    var Status: Int
+    var CreateTime: String
 }
 
-object Users: Table<User>("poi_users"){
-    val create_time = varchar("create_time").bindTo { it.create_time }
-    val status = int("status").bindTo { it.status }
+object Users: Table<User>("poi_users") {
+    val CreateTime = varchar("create_time").bindTo { it.CreateTime }
+    val Status = int("status").bindTo { it.Status }
     val XboxID = varchar("xbox_id").bindTo { it.XboxID }
     val QQNumber = varchar("qq_number").bindTo { it.QQNumber }
 }

@@ -1,11 +1,11 @@
 package com.poicraft.bot.v4.plugin
 
+import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.info
-import org.ktorm.database.Database
 
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
@@ -29,11 +29,11 @@ object PluginMain : KotlinPlugin(
         """.trimIndent()
         }
 
-        val database = Database.connect("jdbc:sqlite:${System.getenv("HOMEPATH")}\\poi.sqlite")
+        DatabaseManager.init()
 
-        CommandMap.loadCommands(database){ names ->
+        CommandMap.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
-            for (name in names){
+            for (name in names) {
                 msg += ("$name ")
             }
             logger.info(msg.trimIndent())

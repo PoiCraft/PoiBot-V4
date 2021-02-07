@@ -4,8 +4,6 @@ import com.poicraft.bot.v4.plugin.utils.Permission
 import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.MessageSource.Key.quote
-import org.ktorm.database.Database
 
 /**
  * 所有命令的父类
@@ -20,11 +18,6 @@ abstract class Command {
      * 命令的程序友好名称
      */
     abstract val aliases: List<String>
-
-    lateinit var db: Database
-    fun loadCommand(database: Database){
-        db = database
-    }
 
     /**
      * 命令的简介 (可选)
@@ -52,7 +45,7 @@ abstract class Command {
     open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>){
         event.subject.sendMessage(
             event.source.quote() + """
-            提供的参数(${args.size - 1}个)数量异常,需要${argsRequired}个
+            提供的参数( ${args.size - 1} 个)数量异常,需要 $argsRequired 个
             """.trimIndent())
     }
 
