@@ -20,17 +20,12 @@ object Bind: Command() {
 
     override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
         if (args.singleOrNull()==null){
-            try {
                 db.insert(Users){
                     set(it.XboxID, args[1])
                     set(it.QQNumber, event.sender.id.toString())
                     set(it.create_time, Instant.now().epochSecond.toString())
                     set(it.status, Status.NOT_VERIFIED.ordinal)
                 }
-            }catch (e:Exception){
-                event.subject.sendMessage(e.message.toString())
-            }
-
 
             event.subject.sendMessage("已绑定 ${args[1]}")
         } else {
