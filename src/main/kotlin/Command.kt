@@ -4,6 +4,7 @@ import com.poicraft.bot.v4.plugin.utils.Permission
 import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import org.ktorm.database.Database
 
 /**
@@ -46,10 +47,23 @@ abstract class Command {
      */
     open suspend fun onPermissionDenied(permissionLevel: Permission, event: GroupMessageEvent, args: List<String>) {}
 
+    open val argsRequired: Int = 0
+
+    open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>){
+        event.subject.sendMessage(
+            event.source.quote() + """
+            提供的参数(${args.size - 1}个)数量异常,需要${argsRequired}个
+            """.trimIndent())
+    }
+
     /**
      * 鉴权
      */
     suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
+        if ((args.size  - 1) != argsRequired){
+            onArgsMissing(argsRequired, event, args)
+            return
+        }
         when (permissionLevel) {
             Permission.PERMISSION_LEVEL_EVERYONE ->
                 handleMessage(event, args)
