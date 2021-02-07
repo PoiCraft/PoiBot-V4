@@ -23,14 +23,14 @@ object Dailypics : Command() {
 
     override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
         val data = Http.client()?.get<List<TujianPic>>("https://v2.api.dailypics.cn/random")
-        val img = Http.client()?.get<InputStream>("https://s1.images.dailypics.cn${data?.get(0)?.nativePath}")
+        val img = Http.client()?.get<InputStream>("https://s1.images.dailypics.cn${data?.get(0)?.nativePath}!w720")
         if (img != null) {
             data?.get(0)?.let {
                 event.subject.sendMessage(
                     event.source.quote() +
                         PlainText("""${it.p_title}
                             |via@${it.username}
-                            |查看详情: https://dailypics.cn/member/${it.PID}
+                            |查看详情及原图: https://dailypics.cn/member/${it.PID}
                             """.trimMargin()) +
                         img.uploadAsImage(event.subject)
                 )
