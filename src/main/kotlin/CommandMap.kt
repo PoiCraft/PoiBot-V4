@@ -12,6 +12,7 @@ object CommandMap : HashMap<String, Command>() {
         Hitokoto,
         Address,
         Bind,
+        Dailypics,
         Status
     )
 
