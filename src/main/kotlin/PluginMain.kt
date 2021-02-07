@@ -1,13 +1,11 @@
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.database.Users
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.info
 import org.ktorm.database.Database
-import org.ktorm.dsl.from
 
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
@@ -32,7 +30,6 @@ object PluginMain : KotlinPlugin(
         }
 
         val database = Database.connect("jdbc:sqlite:${System.getenv("HOMEPATH")}\\poi.sqlite")
-        database.from(Users)
 
         CommandMap.loadCommands(database){ names ->
             var msg = "已加载${names.size}个命令: "
