@@ -1,6 +1,7 @@
 package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.commands.*
+import org.ktorm.database.Database
 
 /**
  * 命令表
@@ -11,10 +12,11 @@ object CommandMap : HashMap<String, Command>() {
     private val commands: MutableList<Command> = mutableListOf(
         Hitokoto,
         Address,
+        Bind,
         Status
     )
 
-    fun loadCommands(callback: (List<String>) -> Unit = {_->}) {
+    fun loadCommands(database: Database,callback: (List<String>) -> Unit = {_->}) {
         clear()
 
         val helper = Helper
@@ -24,6 +26,7 @@ object CommandMap : HashMap<String, Command>() {
         val names = mutableListOf<String>()
 
         for (command in commands) {
+            command.loadCommand(database)
             names.add(command.name)
             for (alias in command.aliases) {
                 put(alias, command)
