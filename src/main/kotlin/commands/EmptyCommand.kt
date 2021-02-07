@@ -16,4 +16,8 @@ object EmptyCommand : Command() {
     override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
         return
     }
+
+    override suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
+        return
+    }
 }

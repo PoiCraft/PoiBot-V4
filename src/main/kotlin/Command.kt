@@ -53,7 +53,7 @@ abstract class Command {
     /**
      * 鉴权
      */
-    suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
+    open suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
         if ((args.size  - 1) != argsRequired){
             onArgsMissing(argsRequired, event, args)
             return
