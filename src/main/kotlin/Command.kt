@@ -4,6 +4,7 @@ import com.poicraft.bot.v4.plugin.utils.Permission
 import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.data.MessageSource.Key.quote
 
 /**
  * 所有命令的父类
