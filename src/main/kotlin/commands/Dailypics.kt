@@ -28,9 +28,11 @@ object Dailypics : Command() {
             data?.get(0)?.let {
                 event.subject.sendMessage(
                     event.source.quote() +
-                        PlainText("${data[0].p_title}\nvia@${data[0].username}\n") +
-                        img.uploadAsImage(event.subject) +
-                        PlainText("\n查看详情: https://dailypics.cn/member/${data[0].PID}")
+                        PlainText("""${it.p_title}
+                            |via@${it.username}
+                            |查看详情: https://dailypics.cn/member/${it.PID}
+                            """.trimMargin()) +
+                        img.uploadAsImage(event.subject)
                 )
             }
         }
