@@ -72,7 +72,7 @@ object Bind : Command() {
      * @see Command
      */
     object Remove : Command() {
-        override val name: String = "接触绑定"
+        override val name: String = "解除绑定"
         override val argsRequired: Int = 1
         override val aliases: List<String> = listOf(
             "del"
