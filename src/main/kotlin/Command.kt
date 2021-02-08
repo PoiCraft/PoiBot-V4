@@ -37,16 +37,29 @@ abstract class Command {
      */
     open suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {}
 
+    /**
+     * 存储 subCommands 所用的 Map
+     */
     private var subCommands: MutableMap<String, Command> = mutableMapOf()
 
+    /**
+     * 注册新的 subCommand
+     */
     fun newSubCommand(command: Command) {
         for (com in command.aliases) {
             subCommands[com] = command
         }
     }
 
+    /**
+     * 是否支持子命令, 默认为否
+     */
     open val enableSubCommand: Boolean = false
 
+    /**
+     * 为子命令实现帮助
+     * @author gggxbbb
+     */
     private class Helper(val f_name: String, val f_subCommands: Map<String, Command>) : Command() {
         override val name: String = "帮助"
         override val aliases: List<String> = listOf()
@@ -67,9 +80,20 @@ abstract class Command {
         event.subject.sendMessage(event.source.quote() + "权限不足")
     }
 
+    /**
+     * 定义所需参数数量, 默认0个
+     */
     open val argsRequired: Int = 0
+
+    /**
+     * 定义是否限制参数数量, 默认否
+     * 当为 true 时忽略 argsRequired
+     */
     open val unlimitedArgs: Boolean = false
 
+    /**
+     * 参数数量异常时调用
+     */
     open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>) {
         event.subject.sendMessage(
             event.source.quote() + """

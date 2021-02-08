@@ -20,10 +20,9 @@ object Address : Command() {
 
     override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
         event.subject.sendMessage(
-            """
-        地址: play.poicraft.com
-        端口: 19132
-        """.trimIndent()
+            """PoiCraft
+        |地址: play.poicraft.com
+        |端口: 19132""".trimMargin()
         )
     }
 

@@ -10,12 +10,17 @@ import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import java.io.InputStream
 
+/**
+ * 图鉴日图
+ * @author gggxbbb
+ * @see Command
+ */
 object Dailypics : Command() {
 
     @Serializable
     data class TujianPic(val p_title: String, val PID: String, val username: String, val nativePath: String)
 
-    override val name: String = "图鉴"
+    override val name: String = "随机图鉴日图"
     override val aliases: List<String> = listOf(
         "dpic"
     )
