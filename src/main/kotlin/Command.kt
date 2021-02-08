@@ -9,6 +9,7 @@ import net.mamoe.mirai.message.data.MessageSource.Key.quote
 /**
  * 所有命令的父类
  * */
+@Suppress("ImplicitNullableNothingType")
 abstract class Command {
     /**
      * 命令的人类友好名称
@@ -34,49 +35,66 @@ abstract class Command {
     /**
      * 命令所执行的事件
      */
-    abstract suspend fun handleMessage(event: GroupMessageEvent, args: List<String>)
+    open suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {}
+
+    private var subCommands:MutableMap<String, Command> = mutableMapOf()
+
+    fun newSubCommand(command: Command) {
+        for (com in command.aliases){
+            subCommands[com] = command
+        }
+    }
+
+    open val enableSubCommand: Boolean = false
 
     /**
      * 权限等级不足时执行的事件 (可选) 默认为空
      */
-    open suspend fun onPermissionDenied(permissionLevel: Permission, event: GroupMessageEvent, args: List<String>) {}
+    open suspend fun onPermissionDenied(permissionLevel: Permission, event: GroupMessageEvent, args: List<String>) {
+        event.subject.sendMessage(event.source.quote()+"权限不足")
+    }
 
     open val argsRequired: Int = 0
     open val unlimitedArgs: Boolean = false
 
-    open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>){
+    open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>) {
         event.subject.sendMessage(
             event.source.quote() + """
             提供的参数( ${args.size - 1} 个)数量异常,需要 $argsRequired 个
-            """.trimIndent())
+            """.trimIndent()
+        )
     }
 
     /**
      * 鉴权
      */
     open suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
-        if (((args.size  - 1) != argsRequired) and !unlimitedArgs){
+
+        if (((args.size - 1) != argsRequired) and !unlimitedArgs and !enableSubCommand) {
             onArgsMissing(argsRequired, event, args)
             return
         }
         when (permissionLevel) {
             Permission.PERMISSION_LEVEL_EVERYONE ->
-                handleMessage(event, args)
+                if (!enableSubCommand or (args.size == 1)) handleMessage(event, args) else subCommands[args[1]]?.onMessage(
+                    event,
+                    args.subList(1, args.size)
+                )
 
             Permission.PERMISSION_LEVEL_ADMIN ->
                 if (event.sender.isOperator())
-                    handleMessage(
+                    if (!enableSubCommand or (args.size == 1)) handleMessage(event, args) else subCommands[args[1]]?.onMessage(
                         event,
-                        args
+                        args.subList(1, args.size)
                     )
                 else
                     onPermissionDenied(Permission.PERMISSION_LEVEL_ADMIN, event, args)
 
             Permission.PERMISSION_LEVEL_OWNER ->
                 if (event.sender.isOwner())
-                    handleMessage(
+                    if (!enableSubCommand or (args.size == 1)) handleMessage(event, args) else subCommands[args[1]]?.onMessage(
                         event,
-                        args
+                        args.subList(1, args.size)
                     )
                 else
                     onPermissionDenied(Permission.PERMISSION_LEVEL_OWNER, event, args)
