@@ -6,9 +6,8 @@ import com.poicraft.bot.v4.plugin.Command
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.database.Users
 import com.poicraft.bot.v4.plugin.utils.Permission
-import com.poicraft.bot.v4.plugin.utils.Status
+import com.poicraft.bot.v4.plugin.utils.UserStatus
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import org.ktorm.dsl.*
 import java.time.Instant
@@ -54,7 +53,7 @@ object Bind : Command() {
                     set(it.XboxID, args[1])
                     set(it.QQNumber, event.sender.id.toString())
                     set(it.CreateTime, Instant.now().epochSecond.toString()) /*绑定 时间戳*/
-                    set(it.Status, Status.NOT_VERIFIED.ordinal) /*默认验证未通过 status=0*/
+                    set(it.Status, UserStatus.NOT_VERIFIED.ordinal) /*默认验证未通过 status=0*/
                 }
 
                 event.subject.sendMessage(event.source.quote() + "已绑定 ${args[1]}")
