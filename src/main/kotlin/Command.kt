@@ -1,6 +1,6 @@
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.utils.Permission
+import com.poicraft.bot.v4.plugin.constants.Permission
 import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.event.events.GroupMessageEvent

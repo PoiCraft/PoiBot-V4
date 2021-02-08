@@ -1,4 +1,4 @@
-package com.poicraft.bot.v4.plugin.utils
+package com.poicraft.bot.v4.plugin.constants
 
 /**
  * 权限常量

@@ -3,10 +3,10 @@
 package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
+import com.poicraft.bot.v4.plugin.constants.Permission
+import com.poicraft.bot.v4.plugin.constants.UserStatus
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.database.Users
-import com.poicraft.bot.v4.plugin.utils.Permission
-import com.poicraft.bot.v4.plugin.utils.UserStatus
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import org.ktorm.dsl.*
