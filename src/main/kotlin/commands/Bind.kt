@@ -8,7 +8,10 @@ import com.poicraft.bot.v4.plugin.constants.UserStatus
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.database.Users
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.code.MiraiCode.deserializeMiraiCode
+import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
+import net.mamoe.mirai.message.data.getValue
 import org.ktorm.dsl.*
 import java.time.Instant
 
@@ -42,21 +45,22 @@ object Bind : Command() {
         )
 
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
+            val xboxID = args[1]
             if (DatabaseManager.instance().from(Users) /*判断是否已被绑定*/
                     .select(Users.QQNumber)
                     .where {
-                        ((Users.QQNumber eq event.sender.id.toString())
-                                or (Users.XboxID eq args[1]))
+                        ((Users.QQNumber eq event.sender.id)
+                            or (Users.XboxID eq xboxID))
                     }.totalRecords == 0
             ) {
                 DatabaseManager.instance().insert(Users) { /*实现绑定*/
-                    set(it.XboxID, args[1])
+                    set(it.XboxID, xboxID)
                     set(it.QQNumber, event.sender.id.toString())
                     set(it.CreateTime, Instant.now().epochSecond.toString()) /*绑定 时间戳*/
                     set(it.Status, UserStatus.NOT_VERIFIED.ordinal) /*默认验证未通过 status=0*/
                 }
 
-                event.subject.sendMessage(event.source.quote() + "已绑定 ${args[1]}")
+                event.subject.sendMessage(event.source.quote() + "已绑定 $xboxID")
             } else {
                 event.subject.sendMessage(event.source.quote() + "此XboxID或QQ号已被绑定")
             }
@@ -68,19 +72,16 @@ object Bind : Command() {
      * @see Command
      */
     object Remove : Command() {
-        override val name: String = "消绑定"
+        override val name: String = "接触绑定"
         override val argsRequired: Int = 1
         override val aliases: List<String> = listOf(
             "del"
         )
         override val permissionLevel: Permission = Permission.PERMISSION_LEVEL_ADMIN /*需群主或管理员*/
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            val target = args[1]
-                .replace("[mirai:at:", "")
-                .replace("]", "")
-                .replace("@", "")
-            DatabaseManager.instance().delete(Users) { it.QQNumber eq target }
-            event.subject.sendMessage(event.source.quote() + "绑定已解除" + target)
+            val at: At by args[1].deserializeMiraiCode()
+            DatabaseManager.instance().delete(Users) { it.QQNumber eq at.target }
+            event.subject.sendMessage(event.source.quote() + "绑定已解除" + at.target.toString())
         }
     }
 
