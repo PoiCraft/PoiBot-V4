@@ -47,6 +47,19 @@ abstract class Command {
 
     open val enableSubCommand: Boolean = false
 
+    private class Helper(val f_name: String, val f_subCommands: Map<String, Command>) : Command() {
+        override val name: String = "帮助"
+        override val aliases: List<String> = listOf()
+        override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
+            var msg = "未知的子命令${args[0]}\n $f_name 支持以下子命令"
+            for (cmd in f_subCommands) {
+                msg += "\n${cmd.key} ${cmd.value.name}\n"
+            }
+            event.subject.sendMessage(msg.trimIndent())
+        }
+
+    }
+
     /**
      * 权限等级不足时执行的事件 (可选) 默认为空
      */
@@ -61,6 +74,8 @@ abstract class Command {
         event.subject.sendMessage(
             event.source.quote() + """
             提供的参数( ${args.size - 1} 个)数量异常,需要 $argsRequired 个
+            ------
+            $introduction
             """.trimIndent()
         )
     }
@@ -69,6 +84,8 @@ abstract class Command {
      * 鉴权
      */
     open suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
+
+        val helper = Helper(name, subCommands)
 
         if (((args.size - 1) != argsRequired) and !unlimitedArgs and !enableSubCommand) {
             onArgsMissing(argsRequired, event, args)
@@ -79,7 +96,7 @@ abstract class Command {
                 if (!enableSubCommand or (args.size == 1)) handleMessage(
                     event,
                     args
-                ) else subCommands[args[1]]?.onMessage(
+                ) else subCommands.getOrDefault(args[1], helper).onMessage(
                     event,
                     args.subList(1, args.size)
                 )
@@ -89,7 +106,7 @@ abstract class Command {
                     if (!enableSubCommand or (args.size == 1)) handleMessage(
                         event,
                         args
-                    ) else subCommands[args[1]]?.onMessage(
+                    ) else subCommands.getOrDefault(args[1], helper).onMessage(
                         event,
                         args.subList(1, args.size)
                     )
@@ -101,7 +118,7 @@ abstract class Command {
                     if (!enableSubCommand or (args.size == 1)) handleMessage(
                         event,
                         args
-                    ) else subCommands[args[1]]?.onMessage(
+                    ) else subCommands.getOrDefault(args[1], helper).onMessage(
                         event,
                         args.subList(1, args.size)
                     )
