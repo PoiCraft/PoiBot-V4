@@ -53,7 +53,7 @@ abstract class Command {
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
             var msg = "未知的子命令${args[0]}\n $f_name 支持以下子命令"
             for (cmd in f_subCommands) {
-                msg += "\n${cmd.key} ${cmd.value.name}\n"
+                msg += "\n${cmd.key} ${cmd.value.name}"
             }
             event.subject.sendMessage(msg.trimIndent())
         }
