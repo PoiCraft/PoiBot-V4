@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
@@ -55,7 +53,7 @@ object Bind : Command() {
             ) {
                 DatabaseManager.instance().insert(Users) { /*实现绑定*/
                     set(it.XboxID, xboxID)
-                    set(it.QQNumber, event.sender.id.toString())
+                    set(it.QQNumber, event.sender.id)
                     set(it.CreateTime, Instant.now().epochSecond.toString()) /*绑定 时间戳*/
                     set(it.Status, UserStatus.NOT_VERIFIED.ordinal) /*默认验证未通过 status=0*/
                 }

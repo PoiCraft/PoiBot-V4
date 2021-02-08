@@ -24,7 +24,8 @@ object Dailypics : Command() {
     override val aliases: List<String> = listOf(
         "dpic"
     )
-    override val introduction: String ="随机获得一张图片\n感谢 图鉴日图Project https://dailypics.cn"
+    override val introduction: String = """随机获得一张图片
+        |感谢图鉴日图Project https://dailypics.cn""".trimMargin()
 
     override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
         val data = Http.client()?.get<List<TujianPic>>("https://v2.api.dailypics.cn/random")
@@ -33,7 +34,8 @@ object Dailypics : Command() {
             data?.get(0)?.let {
                 event.subject.sendMessage(
                     event.source.quote() +
-                        PlainText("""${it.p_title}
+                        PlainText(
+                            """${it.p_title}
                             |via@${it.username}
                             |查看详情及原图: https://dailypics.cn/member/${it.PID}
                             """.trimMargin()) +

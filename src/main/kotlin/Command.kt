@@ -8,8 +8,7 @@ import net.mamoe.mirai.message.data.MessageSource.Key.quote
 
 /**
  * 所有命令的父类
- * */
-@Suppress("ImplicitNullableNothingType")
+ */
 abstract class Command {
     /**
      * 命令的人类友好名称

@@ -6,7 +6,7 @@ import org.ktorm.schema.int
 import org.ktorm.schema.long
 import org.ktorm.schema.varchar
 
-@Suppress("PropertyName", "unused")
+@Suppress("PropertyName")
 interface User: Entity<User> {
     var XboxID: String
     var QQNumber: Long

@@ -40,11 +40,12 @@ object PluginMain : KotlinPlugin(
         }
 
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
-            val message = this.message.contentToString()
+            var message = this.message.contentToString()
             if (message.startsWith("#")) {
-                val args = message.removePrefix("#").split(" ")
+                message = message.removePrefix("#")
+                val args = message.split(" ")
 
-                CommandMap.getCommand(message.removePrefix("#"))
+                CommandMap.getCommand(message)
                     .onMessage(this, args)
             }
         }
