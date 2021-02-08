@@ -37,10 +37,10 @@ abstract class Command {
      */
     open suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {}
 
-    private var subCommands:MutableMap<String, Command> = mutableMapOf()
+    private var subCommands: MutableMap<String, Command> = mutableMapOf()
 
     fun newSubCommand(command: Command) {
-        for (com in command.aliases){
+        for (com in command.aliases) {
             subCommands[com] = command
         }
     }
@@ -51,7 +51,7 @@ abstract class Command {
      * 权限等级不足时执行的事件 (可选) 默认为空
      */
     open suspend fun onPermissionDenied(permissionLevel: Permission, event: GroupMessageEvent, args: List<String>) {
-        event.subject.sendMessage(event.source.quote()+"权限不足")
+        event.subject.sendMessage(event.source.quote() + "权限不足")
     }
 
     open val argsRequired: Int = 0
@@ -76,14 +76,20 @@ abstract class Command {
         }
         when (permissionLevel) {
             Permission.PERMISSION_LEVEL_EVERYONE ->
-                if (!enableSubCommand or (args.size == 1)) handleMessage(event, args) else subCommands[args[1]]?.onMessage(
+                if (!enableSubCommand or (args.size == 1)) handleMessage(
+                    event,
+                    args
+                ) else subCommands[args[1]]?.onMessage(
                     event,
                     args.subList(1, args.size)
                 )
 
             Permission.PERMISSION_LEVEL_ADMIN ->
                 if (event.sender.isOperator())
-                    if (!enableSubCommand or (args.size == 1)) handleMessage(event, args) else subCommands[args[1]]?.onMessage(
+                    if (!enableSubCommand or (args.size == 1)) handleMessage(
+                        event,
+                        args
+                    ) else subCommands[args[1]]?.onMessage(
                         event,
                         args.subList(1, args.size)
                     )
@@ -92,7 +98,10 @@ abstract class Command {
 
             Permission.PERMISSION_LEVEL_OWNER ->
                 if (event.sender.isOwner())
-                    if (!enableSubCommand or (args.size == 1)) handleMessage(event, args) else subCommands[args[1]]?.onMessage(
+                    if (!enableSubCommand or (args.size == 1)) handleMessage(
+                        event,
+                        args
+                    ) else subCommands[args[1]]?.onMessage(
                         event,
                         args.subList(1, args.size)
                     )
