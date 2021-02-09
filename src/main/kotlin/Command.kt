@@ -110,6 +110,11 @@ abstract class Command {
 
         val helper = Helper(name, subCommands)
 
+        if (enableSubCommand and (args.size == 1)) {
+            helper.onMessage(event, listOf(""))
+            return
+        }
+
         if (((args.size - 1) != argsRequired) and !unlimitedArgs and !enableSubCommand) {
             onArgsMissing(argsRequired, event, args)
             return
