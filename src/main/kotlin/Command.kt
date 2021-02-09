@@ -95,11 +95,14 @@ abstract class Command {
      */
     open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>) {
         event.subject.sendMessage(
-            event.source.quote() + """
-            提供的参数( ${args.size - 1} 个)数量异常,需要 $argsRequired 个
-            ------
-            $introduction
-            """.trimIndent()
+            event.source.quote() + """|提供的参数( ${args.size - 1} 个)数量异常,需要 $argsRequired 个
+            ${
+                if (introduction != "") {
+                    "|------\n$introduction"
+                } else {
+                    ""
+                }
+            }""".trimMargin()
         )
     }
 
