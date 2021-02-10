@@ -6,6 +6,11 @@ package com.poicraft.bot.v4.plugin.remote
  */
 abstract class Control {
     /**
+     * 初始化 Control
+     */
+    abstract fun init()
+
+    /**
      * 执行命令(不需要获得返回值)
      */
     abstract fun runCmdNoRes(cmdString: String)

@@ -82,14 +82,14 @@ object PluginMain : KotlinPlugin(
 object PluginData : AutoSavePluginConfig("PoiBotConf") {
     @ValueDescription("sqlite数据库的绝对位置")
     var databasePath by value("")
-    var remoteConfig by value<RemoteConfig>()
+    var remoteConfig by value<RemoteConfig>(RemoteConfig())
 }
 
 @Serializable
 data class RemoteConfig(
     @ValueDescription("ws://1.14.5.14:1919/mc810")
-    val host: String,
+    val host: String = "ws://1.14.5.14:1919/mc810",
     @ValueDescription("1p1a4s5s1w4o1r9d")
-    val password: String
+    val password: String = "1p1a4s5s1w4o1r9d"
 
 )
