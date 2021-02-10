@@ -95,11 +95,14 @@ abstract class Command {
      */
     open suspend fun onArgsMissing(argsRequired: Int, event: GroupMessageEvent, args: List<String>) {
         event.subject.sendMessage(
-            event.source.quote() + """
-            提供的参数( ${args.size - 1} 个)数量异常,需要 $argsRequired 个
-            ------
-            $introduction
-            """.trimIndent()
+            event.source.quote() + """|提供的参数( ${args.size - 1} 个)数量异常,需要 $argsRequired 个
+            ${
+                if (introduction != "") {
+                    "|------\n$introduction"
+                } else {
+                    ""
+                }
+            }""".trimMargin()
         )
     }
 
@@ -109,6 +112,11 @@ abstract class Command {
     open suspend fun onMessage(event: GroupMessageEvent, args: List<String>) {
 
         val helper = Helper(name, subCommands)
+
+        if (enableSubCommand and (args.size == 1)) {
+            helper.onMessage(event, listOf(""))
+            return
+        }
 
         if (((args.size - 1) != argsRequired) and !unlimitedArgs and !enableSubCommand) {
             onArgsMissing(argsRequired, event, args)

@@ -48,7 +48,28 @@ object PluginMain : KotlinPlugin(
             var message = this.message.contentToString()
             if (message.startsWith("#")) {
                 message = message.removePrefix("#")
-                val args = message.split(" ")
+
+                var longArg = false
+                val args: MutableList<String> = mutableListOf()
+                message.split(" ").forEach {
+                    if (longArg) {
+                        if (it.endsWith("\"")) {
+                            longArg = false
+                            args[args.size - 1] += " ${it.dropLast(1)}"
+                        } else {
+                            args[args.size - 1] += " $it"
+                        }
+
+                    } else {
+                        if (it.startsWith("\"")) {
+                            longArg = true
+                            args.add(it.drop(1))
+                        } else {
+                            args.add(it)
+                        }
+
+                    }
+                }
 
                 CommandMap.getCommand(message)
                     .onMessage(this, args)
