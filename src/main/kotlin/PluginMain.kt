@@ -1,6 +1,7 @@
 package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
+import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
@@ -36,6 +37,8 @@ object PluginMain : KotlinPlugin(
         PluginData.reload()
 
         DatabaseManager.init()
+
+        BDXWSControl.init()
 
         CommandMap.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
@@ -87,9 +90,8 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
 
 @Serializable
 data class RemoteConfig(
-    @ValueDescription("ws://1.14.5.14:1919/mc810")
-    val host: String = "ws://1.14.5.14:1919/mc810",
-    @ValueDescription("1p1a4s5s1w4o1r9d")
+    val host: String = "1.14.5.14",
+    val port: Int = 1919,
+    val path: String = "/abcdefg",
     val password: String = "1p1a4s5s1w4o1r9d"
-
 )
