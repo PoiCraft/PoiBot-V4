@@ -124,37 +124,34 @@ abstract class Command {
         }
         when (permissionLevel) {
             Permission.PERMISSION_LEVEL_EVERYONE ->
-                if (!enableSubCommand or (args.size == 1)) handleMessage(
-                    event,
-                    args
-                ) else subCommands.getOrDefault(args[1], helper).onMessage(
-                    event,
-                    args.subList(1, args.size)
-                )
+                runIt(event, args, helper)
 
             Permission.PERMISSION_LEVEL_ADMIN ->
                 if (event.sender.isOperator())
-                    if (!enableSubCommand or (args.size == 1)) handleMessage(
-                        event,
-                        args
-                    ) else subCommands.getOrDefault(args[1], helper).onMessage(
-                        event,
-                        args.subList(1, args.size)
-                    )
+                    runIt(event, args, helper)
                 else
                     onPermissionDenied(Permission.PERMISSION_LEVEL_ADMIN, event, args)
 
             Permission.PERMISSION_LEVEL_OWNER ->
                 if (event.sender.isOwner())
-                    if (!enableSubCommand or (args.size == 1)) handleMessage(
-                        event,
-                        args
-                    ) else subCommands.getOrDefault(args[1], helper).onMessage(
-                        event,
-                        args.subList(1, args.size)
-                    )
+                    runIt(event, args, helper)
                 else
                     onPermissionDenied(Permission.PERMISSION_LEVEL_OWNER, event, args)
         }
     }
+
+    private suspend fun runIt(event: GroupMessageEvent, args: List<String>, helper: Helper) {
+        if (!enableSubCommand or (args.size == 1)) {
+            handleMessage(
+                event,
+                args
+            )
+        } else {
+            subCommands.getOrDefault(args[1], helper).onMessage(
+                event,
+                args.subList(1, args.size)
+            )
+        }
+    }
+
 }
