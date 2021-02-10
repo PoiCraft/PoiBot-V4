@@ -1,8 +1,8 @@
-package com.poicraft.bot.v4.plugin.remote.empty
+package com.poicraft.bot.v4.plugin.remote.default
 
 import com.poicraft.bot.v4.plugin.remote.Control
 
-class EmptyControl : Control() {
+class DefaultControl : Control() {
     /**
      * 执行命令(不需要获得返回值)
      */

@@ -1,6 +1,7 @@
 package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
+import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
@@ -81,4 +82,14 @@ object PluginMain : KotlinPlugin(
 object PluginData : AutoSavePluginConfig("PoiBotConf") {
     @ValueDescription("sqlite数据库的绝对位置")
     var databasePath by value("")
+    var remoteConfig by value<RemoteConfig>()
 }
+
+@Serializable
+data class RemoteConfig(
+    @ValueDescription("ws://1.14.5.14:1919/mc810")
+    val host: String,
+    @ValueDescription("1p1a4s5s1w4o1r9d")
+    val password: String
+
+)
