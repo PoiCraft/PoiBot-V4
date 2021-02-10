@@ -6,10 +6,8 @@ import com.poicraft.bot.v4.plugin.constants.UserStatus
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.database.Users
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.code.MiraiCode.deserializeMiraiCode
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
-import net.mamoe.mirai.message.data.getValue
 import org.ktorm.dsl.*
 import java.time.Instant
 
@@ -26,7 +24,8 @@ object Bind : Command() {
     )
 
     override val introduction: String = """管理 QQ 与 Xbox ID 的绑定关系
-        |#bind set <XboxID> 以绑定 Xbox ID""".trimMargin()
+        |#bind set <XboxID> 以绑定 Xbox ID
+        |#bind del @某人 以解除某人的绑定""".trimMargin()
 
     override val enableSubCommand: Boolean = true /*启用子命令支持*/
 
@@ -77,9 +76,17 @@ object Bind : Command() {
         )
         override val permissionLevel: Permission = Permission.PERMISSION_LEVEL_ADMIN /*需群主或管理员*/
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            val at: At by args[1].deserializeMiraiCode()
-            DatabaseManager.instance().delete(Users) { it.QQNumber eq at.target }
-            event.subject.sendMessage(event.source.quote() + "绑定已解除" + at.target.toString())
+            val at: At? = event.message.filterIsInstance<At>().firstOrNull()
+            if (at != null) {
+                DatabaseManager.instance().delete(Users) { it.QQNumber eq at.target }
+                event.subject.sendMessage(event.source.quote() + "绑定已解除" + at.target.toString())
+            } else {
+                event.subject.sendMessage(
+                    event.source.quote() + """|提供的参数异常
+                        |${Bind.introduction}
+                        """.trimMargin()
+                )
+            }
         }
     }
 
