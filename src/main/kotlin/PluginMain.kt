@@ -1,6 +1,9 @@
 package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
+import net.mamoe.mirai.console.data.AutoSavePluginConfig
+import net.mamoe.mirai.console.data.ValueDescription
+import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
@@ -10,7 +13,7 @@ import net.mamoe.mirai.utils.info
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "com.poicraft.bot.v4",
-        name = "PoiBot V4",
+        name = "PoiBot-V4",
         version = "0.1.0"
     )
 ) {
@@ -28,6 +31,8 @@ object PluginMain : KotlinPlugin(
                                                                                                                                                                                 
         """.trimIndent()
         }
+
+        PluginData.reload()
 
         DatabaseManager.init()
 
@@ -50,4 +55,9 @@ object PluginMain : KotlinPlugin(
             }
         }
     }
+}
+
+object PluginData : AutoSavePluginConfig("PoiBotConf") {
+    @ValueDescription("sqlite数据库的绝对位置")
+    var databasePath by value("")
 }
