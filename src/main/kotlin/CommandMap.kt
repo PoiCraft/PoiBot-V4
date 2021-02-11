@@ -13,6 +13,7 @@ object CommandMap : HashMap<String, Command>() {
         Address,
         Bind,
         Dailypics,
+        BedrockTools,
         Status
     )
 

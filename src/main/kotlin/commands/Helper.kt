@@ -27,6 +27,8 @@ object Helper : Command() {
 
     override val introduction: String = "查看帮助"
 
+    override val argsRequired: Int = 1
+
     override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
         var msg = ""
         if (args.singleOrNull() == null) {
