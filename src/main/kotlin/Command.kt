@@ -62,6 +62,7 @@ abstract class Command {
     private class Helper(val f_name: String, val f_subCommands: Map<String, Command>) : Command() {
         override val name: String = "帮助"
         override val aliases: List<String> = listOf()
+        override val unlimitedArgs: Boolean = true
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
             var msg = "未知的子命令${args[0]}\n $f_name 支持以下子命令"
             for (cmd in f_subCommands) {
