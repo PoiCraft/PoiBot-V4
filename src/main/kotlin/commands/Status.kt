@@ -3,13 +3,13 @@ package com.poicraft.bot.v4.plugin.commands
 import com.poicraft.bot.v4.plugin.Command
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import oshi.SystemInfo
-import java.util.concurrent.TimeUnit
 import oshi.hardware.CentralProcessor
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 
 
 @Suppress("BlockingMethodInNonBlockingContext")
-object Status: Command() {
+object Status : Command() {
     override val name: String = "服务器状态"
     override val aliases: List<String> = listOf(
         "status"
@@ -38,11 +38,13 @@ object Status: Command() {
         //剩余
         val availableByte = memory.available
 
-        event.subject.sendMessage("""
-        CPU总体占用率: ${DecimalFormat("#.##%").format(1.0-(idle * 1.0 / totalCpu))}
-        内存总体占用率: ${DecimalFormat("#.##%").format((totalByte-availableByte)*1.0/totalByte)}
-        内存占用情况: ${formatByte(totalByte-availableByte)}/${formatByte(totalByte)}
-        """.trimIndent())
+        event.subject.sendMessage(
+            """
+        CPU总体占用率: ${DecimalFormat("#.##%").format(1.0 - (idle * 1.0 / totalCpu))}
+        内存总体占用率: ${DecimalFormat("#.##%").format((totalByte - availableByte) * 1.0 / totalByte)}
+        内存占用情况: ${formatByte(totalByte - availableByte)}/${formatByte(totalByte)}
+        """.trimIndent()
+        )
 
     }
 

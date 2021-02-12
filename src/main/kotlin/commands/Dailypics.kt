@@ -38,7 +38,8 @@ object Dailypics : Command() {
                             """${it.p_title}
                             |via@${it.username}
                             |查看详情及原图: https://dailypics.cn/member/${it.PID}
-                            """.trimMargin()) +
+                            """.trimMargin()
+                        ) +
                         img.uploadAsImage(event.subject)
                 )
             }
