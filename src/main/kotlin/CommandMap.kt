@@ -14,7 +14,8 @@ object CommandMap : HashMap<String, Command>() {
         Bind,
         Dailypics,
         BedrockTools,
-        Status
+        Status,
+        Exec,
     )
 
     fun loadCommands(callback: (List<String>) -> Unit = { _ -> }) {
