@@ -13,7 +13,7 @@ abstract class Control {
     /**
      * 执行命令(不需要获得返回值)
      */
-    abstract fun runCmdNoRes(cmdString: String)
+    abstract suspend fun runCmdNoRes(cmdString: String)
 
     /**
      * 执行命令
