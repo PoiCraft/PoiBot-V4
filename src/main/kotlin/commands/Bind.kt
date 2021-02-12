@@ -88,9 +88,30 @@ object Bind : Command() {
         }
     }
 
+    object ListPlayers : Command() {
+
+        data class TargetUser(val QQNumber: Long, val XboxID: String)
+
+        override val name: String = "列出玩家"
+        override val aliases: List<String> = listOf(
+            "ls"
+        )
+        override val permissionLevel: Permission = Permission.PERMISSION_LEVEL_ADMIN
+        override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
+            val targets = DatabaseManager.instance().from(Users).select(Users.QQNumber, Users.XboxID)
+                .map { TargetUser(it.getLong(1), it.getString(2)!!) }
+            var msg = "已绑定的玩家:\nQQ   Xbox"
+            targets.forEach {
+                msg += "\n ${it.QQNumber} ${it.XboxID}"
+            }
+            event.subject.sendMessage(msg)
+        }
+    }
+
     init { /*注册子命令*/
         newSubCommand(Add)
         newSubCommand(Remove)
+        newSubCommand(ListPlayers)
     }
 
 
