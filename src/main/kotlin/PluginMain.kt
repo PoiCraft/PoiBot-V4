@@ -67,16 +67,17 @@ object PluginMain : KotlinPlugin(
                         } else {
                             args[args.size - 1] += " $it"
                         }
-
                     } else {
-                        if (it.startsWith("\"")) {
-                            longArg = true
-                            args.add(it.drop(1))
-                        } else {
-                            args.add(it)
+                        if (it.isNotBlank()) {
+                            if (it.startsWith("\"")) {
+                                longArg = true
+                                args.add(it.drop(1))
+                            } else {
+                                args.add(it)
+                            }
                         }
-
                     }
+
                 }
 
                 CommandMap.getCommand(message)
