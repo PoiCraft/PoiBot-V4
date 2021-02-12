@@ -16,6 +16,7 @@ object CommandMap : HashMap<String, Command>() {
         BedrockTools,
         Status,
         Exec,
+        ServerTools,
     )
 
     fun loadCommands(callback: (List<String>) -> Unit = { _ -> }) {
