@@ -2,6 +2,7 @@ package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
 import com.poicraft.bot.v4.plugin.constants.Permission
+import com.poicraft.bot.v4.plugin.database.getXboxID
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
@@ -36,8 +37,36 @@ object ServerTools : Command() {
         }
     }
 
+    object KickPlayer : Command() {
+        override val name: String = "踢出玩家"
+        override val aliases: List<String> = listOf(
+            "kick"
+        )
+        override val argsRequired: Int = 1
+
+        override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
+            BDXWSControl.runCmdNoRes("kick ${args[1]}")
+            event.subject.sendMessage(event.source.quote() + "已执行")
+        }
+    }
+
+    object KillPlayer : Command() {
+        override val name: String = "杀死玩家"
+        override val aliases: List<String> = listOf(
+            "kill"
+        )
+        override val argsRequired: Int = 1
+
+        override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
+            val result = BDXWSControl.runCmd("kill ${args[1]}")
+            event.subject.sendMessage(event.source.quote() + result)
+        }
+    }
+
     init {
         newSubCommand(ServerAnnounce)
+        newSubCommand(KickPlayer)
+        newSubCommand(KillPlayer)
     }
 
 }
