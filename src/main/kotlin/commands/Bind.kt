@@ -8,6 +8,7 @@ import com.poicraft.bot.v4.plugin.database.Users
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
+import net.mamoe.mirai.message.data.orNull
 import org.ktorm.dsl.*
 import java.time.Instant
 
@@ -76,16 +77,13 @@ object Bind : Command() {
         )
         override val permissionLevel: Permission = Permission.PERMISSION_LEVEL_ADMIN /*需群主或管理员*/
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            val at: At? = event.message.filterIsInstance<At>().firstOrNull()
+            val at: At? by event.message.orNull()
             if (at != null) {
-                DatabaseManager.instance().delete(Users) { it.QQNumber eq at.target }
-                event.subject.sendMessage(event.source.quote() + "绑定已解除" + at.target.toString())
+                DatabaseManager.instance().delete(Users) { it.QQNumber eq at!!.target }
+                event.subject.sendMessage(event.source.quote() + "绑定已解除" + at!!.target.toString())
             } else {
-                event.subject.sendMessage(
-                    event.source.quote() + """|提供的参数异常
-                        |${Bind.introduction}
-                        """.trimMargin()
-                )
+                DatabaseManager.instance().delete(Users) { it.XboxID eq args[1] }
+                event.subject.sendMessage(event.source.quote() + "绑定已解除" + args[1])
             }
         }
     }
