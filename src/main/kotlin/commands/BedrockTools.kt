@@ -33,32 +33,30 @@ object BedrockTools : Command() {
                 port = 19132
             }
 
-            event.subject.sendMessage("$address $port")
+            val sData =
+                Hex2Byte.hexToByteArray("01000000000000176B00FFFF00FEFEFEFEFDFDFDFD12345678ADDE22239AC7BD0F")
+            val inetAddress = InetAddress.getByName(address)
+            val sDp = DatagramPacket(sData, sData.size, inetAddress, port)
+            val ds = DatagramSocket()
+            ds.send(sDp)
+            val rData = ByteArray(1024)
+            val rDp = DatagramPacket(rData, rData.size)
+            ds.receive(rDp)
 
-            try {
+            val resD = String(rDp.data, charset("utf8"))
 
-                val sData =
-                    Hex2Byte.hexToByteArray("01000000000000176B00FFFF00FEFEFEFEFDFDFDFD12345678ADDE22239AC7BD0F")
-                val inetAddress = InetAddress.getByName(address)
-                val sDp = DatagramPacket(sData, sData.size, inetAddress, port)
-                val ds = DatagramSocket()
-                ds.send(sDp)
-                val rData = ByteArray(1024)
-                val rDp = DatagramPacket(rData, rData.size)
-                ds.receive(rDp)
+            val res = resD.split(";").toTypedArray()
+            ds.close()
 
-                val resD = rDp.data.map { it.toInt() and 0xFF }.joinToString { "" }
-                // TODO: 2021/2/11 完成 ByteArray 转字符串 
-                event.subject.sendMessage(resD)
+            val result = ServerInfoResult(res[1], res[3], res[4].toInt(), res[5].toInt(), res[7], res[8])
 
-                val res = resD.split(";").toTypedArray()
-                ds.close()
-                val result = ServerInfoResult(res[1], res[3], res[4].toInt(), res[5].toInt(), res[7], res[8])
-
-                event.subject.sendMessage(result.name)
-            } catch (e: Exception) {
-                event.subject.sendMessage(e.toString())
-            }
+            event.subject.sendMessage(
+                """服务器名称: ${result.name}
+                    |游戏版本: ${result.version}
+                    |地图名称: ${result.level}
+                    |在线数量: ${result.player}/${result.max_player}
+                """.trimMargin()
+            )
 
 
         }

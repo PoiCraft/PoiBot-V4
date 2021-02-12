@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     val kotlinVersion = "1.4.21"
     kotlin("jvm") version kotlinVersion
@@ -28,5 +30,14 @@ dependencies {
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
     implementation("com.github.oshi:oshi-core:5.4.1")
     implementation("org.ktorm:ktorm-core:$ktormVersion")
-    implementation(group="org.xerial", name="sqlite-jdbc", version="3.34.0")
+    implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.34.0")
+    implementation(kotlin("stdlib-jdk8"))
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
