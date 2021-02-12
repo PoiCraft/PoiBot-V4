@@ -51,6 +51,10 @@ object PluginMain : KotlinPlugin(
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
             var message = this.message.contentToString()
             if (message.startsWith("#")) {
+                if (!PluginData.groupList.contains(source.group.id)) {
+                    subject.sendMessage("本群不处理事件！")
+                    return@subscribeAlways
+                }
                 message = message.removePrefix("#")
 
                 var longArg = false
@@ -85,7 +89,10 @@ object PluginMain : KotlinPlugin(
 object PluginData : AutoSavePluginConfig("PoiBotConf") {
     @ValueDescription("sqlite数据库的绝对位置")
     var databasePath by value("")
-    var remoteConfig by value<RemoteConfig>(RemoteConfig())
+    var remoteConfig by value(RemoteConfig())
+
+    @ValueDescription("机器人服务的群")
+    var groupList by value<List<Long>>(listOf())
 }
 
 @Serializable
