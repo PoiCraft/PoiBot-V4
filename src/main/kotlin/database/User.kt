@@ -2,6 +2,7 @@ package com.poicraft.bot.v4.plugin.database
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
+import net.mamoe.mirai.message.data.orNull
 import org.ktorm.dsl.*
 import org.ktorm.entity.Entity
 import org.ktorm.schema.Table
@@ -25,21 +26,21 @@ object Users : Table<User>("poi_users") {
 }
 
 fun GroupMessageEvent.getXboxID(default_id: String): String? {
-    val at: At? = this.message.filterIsInstance<At>().firstOrNull()
+    val at: At? by this.message.orNull()
     return if (at == null) {
         default_id
     } else {
         val targets = DatabaseManager.instance().from(Users).select(Users.QQNumber, Users.XboxID)
-            .where { Users.QQNumber eq at.target }.map { it.getString(2) }
+            .where { Users.QQNumber eq at!!.target }.map { it.getString(2) }
         if (targets.isEmpty()) null
         else targets[0]
     }
 }
 
 fun GroupMessageEvent.getQQNumber(default_id: String): Long? {
-    val at: At? = this.message.filterIsInstance<At>().firstOrNull()
+    val at: At? by this.message.orNull()
     return if (at != null) {
-        at.target
+        at!!.target
     } else {
         val targets = DatabaseManager.instance().from(Users).select(Users.QQNumber, Users.XboxID)
             .where { Users.XboxID eq default_id }.map { it.getLong(1) }
