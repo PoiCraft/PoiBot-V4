@@ -17,6 +17,7 @@ object CommandMap : HashMap<String, Command>() {
         Status,
         Exec,
         ServerTools,
+        Whitelist,
     )
 
     fun loadCommands(callback: (List<String>) -> Unit = { _ -> }) {
