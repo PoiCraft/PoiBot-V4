@@ -142,3 +142,30 @@ class OnAuthFailedParam(
 //    密匙不匹配，无法解密数据包
     val msg: String
 )
+
+
+/**
+ * 玩家死亡
+ * **注：文档没有更新 所以参数说明缺失**
+ */
+@Serializable
+@SerialName("die")
+class OnDieRes(
+    val params: OnDieParam
+) : RemoteResponse()
+
+/**
+ * 玩家死亡的参数
+ * **注：文档没有更新 所以参数说明缺失**
+ * @param target 玩家 XBoxID
+ * @param source 未知 (例:unknow)
+ * @param causecode 未知 (例:8)
+ * @param cause_name 未知 (例:lava)
+ */
+@Serializable
+class OnDieParam(
+    val target: String,
+    val source: String,
+    val causecode: String,
+    val cause_name: String,
+)
