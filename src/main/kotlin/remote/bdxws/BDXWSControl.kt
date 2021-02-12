@@ -8,11 +8,11 @@ import io.ktor.client.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import net.mamoe.mirai.utils.info
 import kotlin.system.exitProcess
 
 object BDXWSControl : Control() {
@@ -25,6 +25,8 @@ object BDXWSControl : Control() {
     private lateinit var session: ClientWebSocketSession
 
     private lateinit var decryptUtil: BDXWSAESUtil
+
+    private val cmdFeedbackChannels = mutableMapOf(0 to Channel<String>())
 
     /**
      * 初始化 Control
@@ -62,12 +64,15 @@ object BDXWSControl : Control() {
 
     }
 
-    private fun decryptData(data: String) {
+    private suspend fun decryptData(data: String) {
         val rawJson = Json.decodeFromString<RawJson>(data)
         val rawString = decryptUtil.decrypt(rawJson.params.raw)
-        PluginMain.logger.info { resJson.decodeFromString<RemoteResponse>(rawString).toString() }
         when (val res = resJson.decodeFromString<RemoteResponse>(rawString)) {
-            is OnChatRes -> PluginMain.logger.info { res.params.text }
+            is OnRunCmdFeedbackRes -> {
+                val channel = cmdFeedbackChannels[res.params.id]
+                channel?.send(res.params.result)
+                channel?.close()
+            }
         }
     }
 
@@ -88,15 +93,31 @@ object BDXWSControl : Control() {
                 )
             )
         )
-        PluginMain.logger.info(body)
-        PluginMain.logger.info(rawString)
-        session.send(Frame.Text(rawString))
+        session.send(rawString)
     }
 
     /**
      * 执行命令
      */
-    override fun runCmd(cmdString: String): String {
-        return ""
+    override suspend fun runCmd(cmdString: String): String {
+        val cmdID = (1..10000).random()
+
+        val body = bodyJson.encodeToString(
+            RunCmdRequestBody(
+                RunCmdRequestParam(cmdString, cmdID)
+            ) as RemoteBody
+        )
+
+        val rawString = rawJson.encodeToString(
+            RawJson(
+                RawJsonParams(
+                    decryptUtil.encrypt(body)
+                )
+            )
+        )
+        val channel = Channel<String>()
+        session.send(rawString)
+        cmdFeedbackChannels[cmdID] = channel
+        return channel.receive()
     }
 }

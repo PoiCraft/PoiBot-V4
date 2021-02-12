@@ -24,9 +24,9 @@ object Exec : Command() {
     override val argsRequired: Int = 1
 
     override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-        BDXWSControl.runCmdNoRes(args[1])
+        val result = BDXWSControl.runCmd(args[1])
 
-        event.subject.sendMessage(event.source.quote() + "已执行")
+        event.subject.sendMessage(event.source.quote() + result)
     }
 
 }

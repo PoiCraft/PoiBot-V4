@@ -18,5 +18,5 @@ abstract class Control {
     /**
      * 执行命令
      */
-    abstract fun runCmd(cmdString: String): String
+    abstract suspend fun runCmd(cmdString: String): String
 }
