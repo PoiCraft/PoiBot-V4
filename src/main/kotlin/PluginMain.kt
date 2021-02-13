@@ -70,8 +70,12 @@ object PluginMain : KotlinPlugin(
                     } else {
                         if (it.isNotBlank()) {
                             if (it.startsWith("\"")) {
-                                longArg = true
-                                args.add(it.drop(1))
+                                if (it.endsWith("\"")) {
+                                    args.add(it.dropLast(1).drop(1))
+                                } else {
+                                    longArg = true
+                                    args.add(it.drop(1))
+                                }
                             } else {
                                 args.add(it)
                             }
