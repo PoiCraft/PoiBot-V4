@@ -9,13 +9,16 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.system.exitProcess
 
+@ExperimentalCoroutinesApi
 object BDXWSControl : Control() {
     private val client = HttpClient {
         install(Logging) {
@@ -46,7 +49,7 @@ object BDXWSControl : Control() {
         PluginMain.launch {
             try {
                 val remoteConfig = PluginData.remoteConfig
-                session = client.webSocketRawSession(
+                session = client.webSocketSession(
                     HttpMethod.Get,
                     remoteConfig.host,
                     remoteConfig.port,
@@ -65,9 +68,23 @@ object BDXWSControl : Control() {
             }
 
             while (true) {
-                when (val frame = session.incoming.receive()) {
-                    is Frame.Text -> decryptData(frame.readText())
-                    else -> println(frame)
+                try {
+                    when (val frame = session.incoming.receive()) {
+                        is Frame.Text -> decryptData(frame.readText())
+                        is Frame.Pong -> println(frame)
+                        is Frame.Ping -> println(frame)
+                        else -> println(frame)
+                    }
+                } catch (e: ClosedReceiveChannelException) {
+                    init()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    retryTime++
+                    if (retryTime < 5) {
+                        init()
+                    } else {
+                        exitProcess(-1)
+                    }
                 }
             }
         }
