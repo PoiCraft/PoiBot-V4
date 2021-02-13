@@ -85,7 +85,7 @@ object PluginMain : KotlinPlugin(
                 }
 
                 CommandMap.getCommand(message)
-                    .onMessage(this, args)
+                    .onMessage(this, args.map { it.replace("\\\"", "\"") })
             }
         }
     }
