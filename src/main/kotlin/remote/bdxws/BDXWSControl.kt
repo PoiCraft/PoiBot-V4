@@ -83,6 +83,7 @@ object BDXWSControl : Control() {
                 val channel = cmdFeedbackChannels[res.params.id]
                 channel?.send(res.params.result)
                 channel?.close()
+                cmdFeedbackChannels.remove(res.params.id)
             }
         }
     }
