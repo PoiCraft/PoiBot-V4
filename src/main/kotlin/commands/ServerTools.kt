@@ -2,6 +2,7 @@ package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
 import com.poicraft.bot.v4.plugin.constants.Permission
+import com.poicraft.bot.v4.plugin.database.ifOnline
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
@@ -62,10 +63,27 @@ object ServerTools : Command() {
         }
     }
 
+    object IfOnline : Command() {
+        override val name: String = "是否在线"
+        override val aliases: List<String> = listOf(
+            "on",
+            "online"
+        )
+        override val argsRequired: Int = 1
+        override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
+            when (event.ifOnline(args[1])) {
+                null -> event.subject.sendMessage(event.source.quote() + "未知玩家")
+                true -> event.subject.sendMessage(event.source.quote() + "在线")
+                false -> event.subject.sendMessage(event.source.quote() + "离线")
+            }
+        }
+    }
+
     init {
         newSubCommand(ServerAnnounce)
         newSubCommand(KickPlayer)
         newSubCommand(KillPlayer)
+        newSubCommand(IfOnline)
     }
 
 }

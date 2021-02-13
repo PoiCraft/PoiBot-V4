@@ -1,5 +1,6 @@
 package com.poicraft.bot.v4.plugin.database
 
+import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.orNull
@@ -46,5 +47,15 @@ fun GroupMessageEvent.getQQNumber(default_id: String): Long? {
             .where { Users.XboxID eq default_id }.map { it.getLong(1) }
         if (targets.isEmpty()) null
         else targets[0]
+    }
+}
+
+suspend fun GroupMessageEvent.ifOnline(default_id: String): Boolean? {
+    val target = this.getXboxID(default_id) ?: return null
+    val result = BDXWSControl.runCmd("testfor \"$target\"")
+    return when {
+        result.contains("No targets matched selector") -> false
+        result.contains("Found") -> true
+        else -> null
     }
 }
