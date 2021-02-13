@@ -128,6 +128,7 @@ object BDXWSControl : Control() {
             )
         )
         val channel = Channel<String>()
+
         session.send(rawString)
         cmdFeedbackChannels[cmdID] = channel
         return channel.receive()
