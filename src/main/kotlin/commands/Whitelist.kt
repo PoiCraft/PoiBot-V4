@@ -26,7 +26,7 @@ object Whitelist : Command() {
             if (target == null) {
                 event.subject.sendMessage(event.source.quote() + "玩家未绑定")
             } else {
-                val msg = when (val result = BDXWSControl.runCmd("whitelist add $target")) {
+                val msg = when (val result = BDXWSControl.runCmd("whitelist add \"$target\"")) {
                     "Player added to whitelist" -> "添加成功"
                     "Player already in whitelist" -> "玩家已在白名单中"
                     else -> result
@@ -48,7 +48,7 @@ object Whitelist : Command() {
             if (target == null) {
                 event.subject.sendMessage(event.source.quote() + "玩家未绑定")
             } else {
-                val msg = when (val result = BDXWSControl.runCmd("whitelist remove $target")) {
+                val msg = when (val result = BDXWSControl.runCmd("whitelist remove \"$target\"")) {
                     "Player removed from whitelist" -> "玩家已移除"
                     "Player not in whitelist" -> "玩家未在白名单中"
                     else -> result
