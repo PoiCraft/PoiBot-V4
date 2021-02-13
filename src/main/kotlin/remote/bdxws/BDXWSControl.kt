@@ -5,6 +5,7 @@ import com.poicraft.bot.v4.plugin.PluginMain
 import com.poicraft.bot.v4.plugin.remote.Control
 import com.poicraft.bot.v4.plugin.remote.bdxws.data.*
 import io.ktor.client.*
+import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
@@ -17,7 +18,17 @@ import kotlin.system.exitProcess
 
 object BDXWSControl : Control() {
     private val client = HttpClient {
-        install(WebSockets)
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) {
+                    PluginMain.logger.info(message)
+                }
+            }
+        }
+
+        WebSockets {
+            pingInterval = 1000L
+        }
     }
 
     private var retryTime = 0
