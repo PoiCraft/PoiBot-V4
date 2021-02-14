@@ -143,7 +143,7 @@ abstract class Command {
 
     private suspend fun runIt(event: GroupMessageEvent, args: List<String>, helper: Helper) {
         if (enableSubCommand and subCommands.keys.contains("_")) {
-            if ((args.size == 1) or !subCommands.keys.contains(args[1])) {
+            if ((args.size == 1) or !subCommands.keys.contains(args.getOrElse(1) { "" })) {
                 subCommands["_"]!!.onMessage(event, args)
             }
         } else {
