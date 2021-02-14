@@ -142,17 +142,24 @@ abstract class Command {
     }
 
     private suspend fun runIt(event: GroupMessageEvent, args: List<String>, helper: Helper) {
-        if (!enableSubCommand or (args.size == 1)) {
-            handleMessage(
-                event,
-                args
-            )
+        if (enableSubCommand and subCommands.keys.contains("_")) {
+            if ((args.size == 1) or !subCommands.keys.contains(args[1])) {
+                subCommands["_"]!!.onMessage(event, args)
+            }
         } else {
-            subCommands.getOrDefault(args[1], helper).onMessage(
-                event,
-                args.subList(1, args.size)
-            )
+            if (!enableSubCommand or (args.size == 1)) {
+                handleMessage(
+                    event,
+                    args
+                )
+            } else {
+                subCommands.getOrDefault(args[1], helper).onMessage(
+                    event,
+                    args.subList(1, args.size)
+                )
+            }
         }
+
     }
 
 }
