@@ -64,8 +64,11 @@ abstract class Command {
         override val aliases: List<String> = listOf()
         override val unlimitedArgs: Boolean = true
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            var msg = "未知的子命令${args[0]}\n $f_name 支持以下子命令"
+            var msg = "未知的子命令${args.getOrNull(0)}\n $f_name 支持以下子命令"
             for (cmd in f_subCommands) {
+                if (cmd.key == "_") {
+                    continue
+                }
                 msg += "\n${cmd.key} ${cmd.value.name}"
             }
             event.subject.sendMessage(msg.trimIndent())
@@ -114,15 +117,6 @@ abstract class Command {
 
         val helper = Helper(name, subCommands)
 
-        if (enableSubCommand and (args.size == 1)) {
-            helper.onMessage(event, listOf(""))
-            return
-        }
-
-        if (((args.size - 1) != argsRequired) and !unlimitedArgs and !enableSubCommand) {
-            onArgsMissing(argsRequired, event, args)
-            return
-        }
         when (permissionLevel) {
             Permission.PERMISSION_LEVEL_EVERYONE ->
                 runIt(event, args, helper)
@@ -142,21 +136,67 @@ abstract class Command {
     }
 
     private suspend fun runIt(event: GroupMessageEvent, args: List<String>, helper: Helper) {
-        if (enableSubCommand and subCommands.keys.contains("_")) {
-            if ((args.size == 1) or !subCommands.keys.contains(args.getOrElse(1) { "" })) {
-                subCommands["_"]!!.onMessage(event, args)
+
+        if (!enableSubCommand) { /*未启用子命令*/
+
+            if (unlimitedArgs) { /*不限制参数数量*/
+
+                handleMessage(event, args)
+
+            } else { /*限制参数数量*/
+
+                if (args.size - 1 == argsRequired) { /*参数数量符合条件*/
+
+                    handleMessage(event, args)
+
+                } else { /*参数数量不符合条件*/
+
+                    onArgsMissing(argsRequired, event, args)
+
+                }
             }
-        } else {
-            if (!enableSubCommand or (args.size == 1)) {
-                handleMessage(
-                    event,
-                    args
-                )
-            } else {
-                subCommands.getOrDefault(args[1], helper).onMessage(
-                    event,
-                    args.subList(1, args.size)
-                )
+
+        } else { /*启用子命令*/
+
+            if (subCommands.keys.contains("_")) { /*包含默认子命令*/
+
+                if ((args.size >= 2) and subCommands.keys.contains(args.getOrElse(1) { "" })) { /*参数指向子命令*/
+
+                    subCommands[args[1]]!!.onMessage( /*执行子命令*/
+                        event,
+                        args.subList(1, args.size)
+                    )
+
+                } else { /*参数未指向子命令*/
+
+                    if (args.size - 1 == subCommands["_"]!!.argsRequired) { /*参数符合默认子命令参数数量条件*/
+
+                        subCommands["_"]!!.onMessage(event, args)
+
+                    } else { /*参数不符合默认子命令参数条件*/
+
+                        helper.onMessage(event, args.subList(1, args.size)) /*视为指向未知子命令*/
+
+                    }
+
+                }
+
+            } else { /*不包含默认子命令*/
+
+                if (args.size == 1) { /*未指向子命令*/
+
+                    helper.onMessage(event, args.subList(1, args.size)) /*视为指向未知子命令*/
+
+                } else { /*指向子命令*/
+
+                    subCommands.getOrDefault(args[1], helper).onMessage(
+                        event,
+                        args.subList(1, args.size)
+                    )
+
+                }
+
+
             }
         }
 
