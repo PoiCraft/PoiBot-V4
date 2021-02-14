@@ -3,6 +3,7 @@ package com.poicraft.bot.v4.plugin.commands
 import com.poicraft.bot.v4.plugin.Command
 import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.database.ifOnline
+import com.poicraft.bot.v4.plugin.database.ifVerified
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
@@ -79,11 +80,26 @@ object ServerTools : Command() {
         }
     }
 
+    object IfVerified : Command() {
+        override val name: String = "是否验证"
+        override val aliases: List<String> = listOf(
+            "v"
+        )
+        override val argsRequired: Int = 1
+        override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
+            when (event.ifVerified(args[1])) {
+                true -> event.subject.sendMessage(event.source.quote() + "已验证")
+                false -> event.subject.sendMessage(event.source.quote() + "未验证或未绑定")
+            }
+        }
+    }
+
     init {
         newSubCommand(ServerAnnounce)
         newSubCommand(KickPlayer)
         newSubCommand(KillPlayer)
         newSubCommand(IfOnline)
+        newSubCommand(IfVerified)
     }
 
 }

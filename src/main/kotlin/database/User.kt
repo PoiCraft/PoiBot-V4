@@ -1,6 +1,8 @@
 package com.poicraft.bot.v4.plugin.database
 
+import com.poicraft.bot.v4.plugin.constants.UserStatus
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.orNull
@@ -50,6 +52,7 @@ fun GroupMessageEvent.getQQNumber(default_id: String): Long? {
     }
 }
 
+@ExperimentalCoroutinesApi
 suspend fun GroupMessageEvent.ifOnline(default_id: String): Boolean? {
     val target = this.getXboxID(default_id) ?: return null
     val result = BDXWSControl.runCmd("testfor \"$target\"")
@@ -57,5 +60,20 @@ suspend fun GroupMessageEvent.ifOnline(default_id: String): Boolean? {
         result.contains("No targets matched selector") -> false
         result.contains("Found") -> true
         else -> null
+    }
+}
+
+fun GroupMessageEvent.ifVerified(default_id: String): Boolean {
+    val target = this.getXboxID(default_id)
+    return if (target == null) {
+        false
+    } else {
+        when (DatabaseManager.instance().from(Users).select(Users.XboxID, Users.Status).where { Users.XboxID eq target }
+            .map { it.getInt(2) }.getOrNull(0)) {
+            null -> false
+            UserStatus.NOT_VERIFIED.ordinal -> false
+            UserStatus.VERIFIED.ordinal -> true
+            else -> false
+        }
     }
 }

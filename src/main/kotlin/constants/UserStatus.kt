@@ -8,5 +8,10 @@ enum class UserStatus {
     /**
      * 未验证
      */
-    NOT_VERIFIED
+    NOT_VERIFIED,
+
+    /**
+     * 已验证
+     */
+    VERIFIED
 }
