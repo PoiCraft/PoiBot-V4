@@ -2,6 +2,7 @@ package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
+import com.poicraft.bot.v4.plugin.services.Services
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
@@ -41,6 +42,8 @@ object PluginMain : KotlinPlugin(
         DatabaseManager.init()
 
         BDXWSControl.init()
+
+        Services.init()
 
         CommandMap.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "

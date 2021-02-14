@@ -16,7 +16,15 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlin.reflect.KClass
 import kotlin.system.exitProcess
+
+typealias EventHandler<E> = E.(E) -> Unit
+
+class ListenerRegistry(
+    val listener: EventHandler<RemoteResponse>,
+    val type: KClass<out RemoteResponse>
+)
 
 @ExperimentalCoroutinesApi
 object BDXWSControl : Control() {
@@ -41,6 +49,8 @@ object BDXWSControl : Control() {
     private lateinit var decryptUtil: BDXWSAESUtil
 
     private val cmdFeedbackChannels = mutableMapOf(0 to Channel<String>())
+
+    private val eventListeners = mutableListOf<ListenerRegistry>()
 
     /**
      * 初始化 Control
@@ -95,13 +105,19 @@ object BDXWSControl : Control() {
     private suspend fun decryptData(data: String) {
         val rawJson = Json.decodeFromString<RawJson>(data)
         val rawString = decryptUtil.decrypt(rawJson.params.raw)
-        when (val res = resJson.decodeFromString<RemoteResponse>(rawString)) {
+        val res = resJson.decodeFromString<RemoteResponse>(rawString)
+        when (res) {
             is OnRunCmdFeedbackRes -> {
                 val channel = cmdFeedbackChannels[res.params.id]
                 channel?.send(res.params.result)
                 channel?.close()
                 cmdFeedbackChannels.remove(res.params.id)
             }
+            else -> {
+            }
+        }
+        eventListeners.forEach {
+            if (res::class === it.type) it.listener.invoke(res, res)
         }
     }
 
@@ -150,4 +166,13 @@ object BDXWSControl : Control() {
         cmdFeedbackChannels[cmdID] = channel
         return channel.receive()
     }
+
+    /**
+     * 添加一个事件监听器
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <E : RemoteResponse> addEventListener(eventClass: KClass<out E>, handler: EventHandler<E>) {
+        eventListeners.add(ListenerRegistry(handler as EventHandler<RemoteResponse>, eventClass))
+    }
+
 }
