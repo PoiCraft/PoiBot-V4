@@ -5,19 +5,33 @@ import com.poicraft.bot.v4.plugin.PluginMain
 import com.poicraft.bot.v4.plugin.remote.Control
 import com.poicraft.bot.v4.plugin.remote.bdxws.data.*
 import io.ktor.client.*
+import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.system.exitProcess
 
+@ExperimentalCoroutinesApi
 object BDXWSControl : Control() {
     private val client = HttpClient {
-        install(WebSockets)
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) {
+                    PluginMain.logger.info(message)
+                }
+            }
+        }
+
+        WebSockets {
+            pingInterval = 1000L
+        }
     }
 
     private var retryTime = 0
@@ -35,7 +49,7 @@ object BDXWSControl : Control() {
         PluginMain.launch {
             try {
                 val remoteConfig = PluginData.remoteConfig
-                session = client.webSocketRawSession(
+                session = client.webSocketSession(
                     HttpMethod.Get,
                     remoteConfig.host,
                     remoteConfig.port,
@@ -54,9 +68,23 @@ object BDXWSControl : Control() {
             }
 
             while (true) {
-                when (val frame = session.incoming.receive()) {
-                    is Frame.Text -> decryptData(frame.readText())
-                    else -> println(frame)
+                try {
+                    when (val frame = session.incoming.receive()) {
+                        is Frame.Text -> decryptData(frame.readText())
+                        is Frame.Pong -> println(frame)
+                        is Frame.Ping -> println(frame)
+                        else -> println(frame)
+                    }
+                } catch (e: ClosedReceiveChannelException) {
+                    init()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    retryTime++
+                    if (retryTime < 5) {
+                        init()
+                    } else {
+                        exitProcess(-1)
+                    }
                 }
             }
         }
@@ -72,6 +100,7 @@ object BDXWSControl : Control() {
                 val channel = cmdFeedbackChannels[res.params.id]
                 channel?.send(res.params.result)
                 channel?.close()
+                cmdFeedbackChannels.remove(res.params.id)
             }
         }
     }
@@ -116,6 +145,7 @@ object BDXWSControl : Control() {
             )
         )
         val channel = Channel<String>()
+
         session.send(rawString)
         cmdFeedbackChannels[cmdID] = channel
         return channel.receive()

@@ -2,6 +2,7 @@ package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
@@ -12,11 +13,12 @@ import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.info
 
+@ExperimentalCoroutinesApi
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "com.poicraft.bot.v4",
         name = "PoiBot-V4",
-        version = "0.1.0"
+        version = "4.0.0"
     )
 ) {
     override fun onEnable() {
