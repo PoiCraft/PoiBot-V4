@@ -8,6 +8,7 @@ import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.orNull
 import org.ktorm.dsl.*
 import org.ktorm.entity.Entity
+import org.ktorm.expression.BinaryExpression
 import org.ktorm.schema.Table
 import org.ktorm.schema.int
 import org.ktorm.schema.long
@@ -30,50 +31,61 @@ object Users : Table<User>("poi_users") {
     val qqNumber = long("qq_number").bindTo { it.qqNumber }
 }
 
-fun GroupMessageEvent.getXboxID(default_id: String, require_verified: Boolean = true): String? {
-    val at: At? by this.message.orNull()
-    return if (at == null) {
-        if (require_verified) {
-            if (DatabaseManager.instance().from(Users).select(Users.xboxId, Users.status)
-                    .where { Users.xboxId eq default_id and (Users.status eq UserStatus.VERIFIED.ordinal) }.totalRecords == 0
-            ) null
-            else default_id
-        } else default_id
+val userIsValidateCondition = Users.status eq UserStatus.VERIFIED.ordinal
+
+fun genUserCondition(expr: BinaryExpression<Boolean>, requireVerified: Boolean): BinaryExpression<Boolean> {
+    return if (requireVerified) {
+        (expr and userIsValidateCondition)
     } else {
-        val targets = DatabaseManager.instance().from(Users).select(Users.qqNumber, Users.xboxId, Users.status)
-            .let {
-                if (require_verified)
-                    it.where { Users.qqNumber eq at!!.target and (Users.status eq UserStatus.VERIFIED.ordinal) }
-                else
-                    it.where { Users.qqNumber eq at!!.target }
-            }
-            .map { it.getString(2) }
-        if (targets.isEmpty()) null
-        else targets[0]
+        expr
     }
 }
 
-fun GroupMessageEvent.getQQNumber(default_id: String, require_verified: Boolean = true): Long? {
+fun getUsers(condition: (Query) -> Query): List<User> {
+    return DatabaseManager.instance()
+        .from(Users)
+        .select()
+        .let(condition)
+        .map { row -> Users.createEntity(row) }
+}
+
+fun getUsersByQQNumber(qqNumber: Long, requireVerified: Boolean): List<User> {
+    return getUsers { query ->
+        query.where { genUserCondition(Users.qqNumber eq qqNumber, requireVerified) }
+    }
+}
+
+fun getUsersByXboxId(xboxId: String, requireVerified: Boolean): List<User> {
+    return getUsers { query ->
+        query.where { genUserCondition(Users.xboxId eq xboxId, requireVerified) }
+    }
+}
+
+fun GroupMessageEvent.getXboxID(defaultId: String, requireVerified: Boolean = true): String? {
+    val at: At? by this.message.orNull()
+    return if (at == null) {
+        if (requireVerified) {
+            if (getUsersByXboxId(defaultId, requireVerified).isNotEmpty()) defaultId
+            else defaultId
+        } else defaultId
+    } else {
+        val targets = getUsersByQQNumber(at!!.target, requireVerified)
+        if (targets.isEmpty()) null
+        else targets[0].xboxId
+    }
+}
+
+fun GroupMessageEvent.getQQNumber(defaultId: String, requireVerified: Boolean = true): Long? {
     val at: At? by this.message.orNull()
     return if (at != null) {
-        if (require_verified) {
-            if (DatabaseManager.instance().from(Users).select(Users.qqNumber, Users.status)
-                    .where { Users.qqNumber eq at!!.target and (Users.status eq UserStatus.VERIFIED.ordinal) }.totalRecords == 0
-            ) null
+        if (requireVerified) {
+            if (getUsersByQQNumber(at!!.target, requireVerified).isNotEmpty()) at!!.target
             else at!!.target
         } else at!!.target
     } else {
-        val targets = DatabaseManager.instance().from(Users).select(Users.qqNumber, Users.xboxId, Users.status)
-            .let {
-                if (require_verified) {
-                    it.where { Users.xboxId eq default_id and (Users.status eq UserStatus.VERIFIED.ordinal) }
-                } else {
-                    it.where { Users.xboxId eq default_id }
-                }
-            }
-            .map { it.getLong(1) }
+        val targets = getUsersByXboxId(defaultId, requireVerified)
         if (targets.isEmpty()) null
-        else targets[0]
+        else targets[0].qqNumber
     }
 }
 
@@ -88,17 +100,10 @@ suspend fun GroupMessageEvent.ifOnline(default_id: String): Boolean? {
     }
 }
 
-fun GroupMessageEvent.ifVerified(default_id: String): Boolean {
-    val target = this.getXboxID(default_id, false)
-    return if (target == null) {
-        false
-    } else {
-        when (DatabaseManager.instance().from(Users).select(Users.xboxId, Users.status).where { Users.xboxId eq target }
-            .map { it.getInt(2) }.getOrNull(0)) {
-            null -> false
-            UserStatus.NOT_VERIFIED.ordinal -> false
-            UserStatus.VERIFIED.ordinal -> true
-            else -> false
-        }
+fun ifVerified(defaultId: String): Boolean {
+    return when (getUsersByXboxId(defaultId, false)[0].status) {
+        UserStatus.NOT_VERIFIED.ordinal -> false
+        UserStatus.VERIFIED.ordinal -> true
+        else -> false
     }
 }

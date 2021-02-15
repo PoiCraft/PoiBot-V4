@@ -5,9 +5,11 @@ import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.database.ifOnline
 import com.poicraft.bot.v4.plugin.database.ifVerified
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 
+@ExperimentalCoroutinesApi
 /**
  * 服务器管理类
  * @author gggxbbb
@@ -87,7 +89,7 @@ object ServerTools : Command() {
         )
         override val argsRequired: Int = 1
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            when (event.ifVerified(args[1])) {
+            when (ifVerified(args[1])) {
                 true -> event.subject.sendMessage(event.source.quote() + "已验证")
                 false -> event.subject.sendMessage(event.source.quote() + "未验证或未绑定")
             }
