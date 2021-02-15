@@ -31,6 +31,10 @@ object Users : Table<User>("poi_users") {
     val qqNumber = long("qq_number").bindTo { it.qqNumber }
 }
 
+/**
+ * 该用户状态是否为验证状态
+ * @sample genUserCondition
+ */
 val userIsValidateCondition = Users.status eq UserStatus.VERIFIED.ordinal
 
 fun genUserCondition(expr: BinaryExpression<Boolean>, requireVerified: Boolean): BinaryExpression<Boolean> {
@@ -41,6 +45,11 @@ fun genUserCondition(expr: BinaryExpression<Boolean>, requireVerified: Boolean):
     }
 }
 
+/**
+ * 获取用户
+ * @sample getUsersByXboxId
+ * @sample getUsersByQQNumber
+ */
 fun getUsers(condition: (Query) -> Query): List<User> {
     return DatabaseManager.instance()
         .from(Users)
@@ -49,24 +58,47 @@ fun getUsers(condition: (Query) -> Query): List<User> {
         .map { row -> Users.createEntity(row) }
 }
 
+/**
+ * 用 QQ 号获取用户
+ * @see getUsersByXboxId
+ */
 fun getUsersByQQNumber(qqNumber: Long, requireVerified: Boolean): List<User> {
     return getUsers { query ->
         query.where { genUserCondition(Users.qqNumber eq qqNumber, requireVerified) }
     }
 }
 
+/**
+ * 用 XboxID 获取用户
+ * @see getUsersByQQNumber
+ */
 fun getUsersByXboxId(xboxId: String, requireVerified: Boolean): List<User> {
     return getUsers { query ->
         query.where { genUserCondition(Users.xboxId eq xboxId, requireVerified) }
     }
 }
 
+/**
+ * 获取 XboxID
+ * 1.如果消息内含 At 信息 则会返回被 At 人数据库中绑定的 XboxID
+ *
+ * 2.如果不含 At 信息:
+ *  (1). requireVerified == true 时
+ *      数据库内有 defaultId 的绑定信息则会返回 defaultId
+ *      否则会返回 null
+ *  (2). requireVerified == false 时
+ *      返回 defaultId
+ * @param defaultId 不含 At 信息时应为 XboxId
+ * @param requireVerified 用户状态是否需要为验证
+ *
+ * @see GroupMessageEvent.getQQNumber
+ */
 fun GroupMessageEvent.getXboxID(defaultId: String, requireVerified: Boolean = true): String? {
     val at: At? by this.message.orNull()
     return if (at == null) {
         if (requireVerified) {
             if (getUsersByXboxId(defaultId, requireVerified).isNotEmpty()) defaultId
-            else defaultId
+            else null
         } else defaultId
     } else {
         val targets = getUsersByQQNumber(at!!.target, requireVerified)
@@ -75,12 +107,27 @@ fun GroupMessageEvent.getXboxID(defaultId: String, requireVerified: Boolean = tr
     }
 }
 
+/**
+ * 获取 QQ号
+ * 1.如果消息内含 At 信息
+ *  (1). requireVerified == true 时
+ *      数据库内有被 At 人的绑定信息则会返回被 At 人的 QQ号
+ *      否则会返回 null
+ *  (2). requireVerified == false 时
+ *      返回被 At 人的 QQ号
+ *
+ * 2.如果不含 At 信息 则会返回 defaultId 中绑定的QQ号
+ * @param defaultId 不含 At 信息时应为 XboxId
+ * @param requireVerified 用户状态是否需要为验证
+ *
+ * @see GroupMessageEvent.getXboxID
+ */
 fun GroupMessageEvent.getQQNumber(defaultId: String, requireVerified: Boolean = true): Long? {
     val at: At? by this.message.orNull()
     return if (at != null) {
         if (requireVerified) {
             if (getUsersByQQNumber(at!!.target, requireVerified).isNotEmpty()) at!!.target
-            else at!!.target
+            else null
         } else at!!.target
     } else {
         val targets = getUsersByXboxId(defaultId, requireVerified)
@@ -100,6 +147,10 @@ suspend fun GroupMessageEvent.ifOnline(default_id: String): Boolean? {
     }
 }
 
+/**
+ * 用户是否为验证状态
+ * @param defaultId XboxID
+ */
 fun ifVerified(defaultId: String): Boolean {
     return when (getUsersByXboxId(defaultId, false)[0].status) {
         UserStatus.NOT_VERIFIED.ordinal -> false
