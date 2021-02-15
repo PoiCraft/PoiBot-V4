@@ -58,7 +58,11 @@ object Bind : Command() {
                     set(it.Status, UserStatus.NOT_VERIFIED.ordinal) /*默认验证未通过 status=0*/
                 }
 
-                event.subject.sendMessage(event.source.quote() + "已绑定 $xboxID")
+                event.subject.sendMessage(
+                    event.source.quote() + """已绑定 $xboxID
+                    |但您还需要进服在聊天框发送 #bind ${event.sender.id} 进行验证
+                """.trimMargin()
+                )
             } else {
                 event.subject.sendMessage(event.source.quote() + "此XboxID或QQ号已被绑定")
             }
