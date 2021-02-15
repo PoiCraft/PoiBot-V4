@@ -50,19 +50,21 @@ fun genUserCondition(expr: BinaryExpression<Boolean>, requireVerified: Boolean):
  * @sample getUsersByXboxId
  * @sample getUsersByQQNumber
  */
-fun getUsers(condition: (Query) -> Query): List<User> {
-    return DatabaseManager.instance()
+fun getUsers(condition: (Query) -> Query): List<User>? {
+    val result = DatabaseManager.instance()
         .from(Users)
         .select()
         .let(condition)
         .map { row -> Users.createEntity(row) }
+    return if (result.isEmpty()) null
+    else result
 }
 
 /**
  * 用 QQ 号获取用户
  * @see getUsersByXboxId
  */
-fun getUsersByQQNumber(qqNumber: Long, requireVerified: Boolean): List<User> {
+fun getUsersByQQNumber(qqNumber: Long, requireVerified: Boolean): List<User>? {
     return getUsers { query ->
         query.where { genUserCondition(Users.qqNumber eq qqNumber, requireVerified) }
     }
@@ -72,7 +74,7 @@ fun getUsersByQQNumber(qqNumber: Long, requireVerified: Boolean): List<User> {
  * 用 XboxID 获取用户
  * @see getUsersByQQNumber
  */
-fun getUsersByXboxId(xboxId: String, requireVerified: Boolean): List<User> {
+fun getUsersByXboxId(xboxId: String, requireVerified: Boolean): List<User>? {
     return getUsers { query ->
         query.where { genUserCondition(Users.xboxId eq xboxId, requireVerified) }
     }
@@ -97,12 +99,12 @@ fun GroupMessageEvent.getXboxID(defaultId: String, requireVerified: Boolean = tr
     val at: At? by this.message.orNull()
     return if (at == null) {
         if (requireVerified) {
-            if (getUsersByXboxId(defaultId, requireVerified).isNotEmpty()) defaultId
+            if (getUsersByXboxId(defaultId, requireVerified) != null) defaultId
             else null
         } else defaultId
     } else {
         val targets = getUsersByQQNumber(at!!.target, requireVerified)
-        if (targets.isEmpty()) null
+        if (targets == null) null
         else targets[0].xboxId
     }
 }
@@ -126,12 +128,12 @@ fun GroupMessageEvent.getQQNumber(defaultId: String, requireVerified: Boolean = 
     val at: At? by this.message.orNull()
     return if (at != null) {
         if (requireVerified) {
-            if (getUsersByQQNumber(at!!.target, requireVerified).isNotEmpty()) at!!.target
+            if (getUsersByQQNumber(at!!.target, requireVerified) != null) at!!.target
             else null
         } else at!!.target
     } else {
         val targets = getUsersByXboxId(defaultId, requireVerified)
-        if (targets.isEmpty()) null
+        if (targets == null) null
         else targets[0].qqNumber
     }
 }
@@ -152,9 +154,14 @@ suspend fun GroupMessageEvent.ifOnline(default_id: String): Boolean? {
  * @param defaultId XboxID
  */
 fun ifVerified(defaultId: String): Boolean {
-    return when (getUsersByXboxId(defaultId, false)[0].status) {
-        UserStatus.NOT_VERIFIED.ordinal -> false
-        UserStatus.VERIFIED.ordinal -> true
-        else -> false
+    val users = getUsersByXboxId(defaultId, false)
+    return if (users != null) {
+        when (users[0].status) {
+            UserStatus.NOT_VERIFIED.ordinal -> false
+            UserStatus.VERIFIED.ordinal -> true
+            else -> false
+        }
+    } else {
+        false
     }
 }
