@@ -19,7 +19,7 @@ import kotlinx.serialization.json.Json
 import kotlin.reflect.KClass
 import kotlin.system.exitProcess
 
-typealias EventHandler<E> = E.(E) -> Unit
+typealias EventHandler<E> = suspend E.(E) -> Unit
 
 class ListenerRegistry(
     val listener: EventHandler<RemoteResponse>,
@@ -80,7 +80,7 @@ object BDXWSControl : Control() {
             while (true) {
                 try {
                     when (val frame = session.incoming.receive()) {
-                        is Frame.Text -> decryptData(frame.readText())
+                        is Frame.Text -> PluginMain.launch { decryptData(frame.readText()) }
                         is Frame.Pong -> println(frame)
                         is Frame.Ping -> println(frame)
                         else -> println(frame)
@@ -117,7 +117,7 @@ object BDXWSControl : Control() {
             }
         }
         eventListeners.forEach {
-            if (res::class === it.type) it.listener.invoke(res, res)
+            if (res::class === it.type) it.listener(res, res)
         }
     }
 
