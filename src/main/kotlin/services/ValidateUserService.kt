@@ -20,15 +20,15 @@ object ValidateUserService : Service() {
                 }
                 val xboxID = params.sender
                 if (DatabaseManager.instance().from(Users)
-                        .select(Users.QQNumber)
+                        .select(Users.qqNumber)
                         .where {
-                            (Users.QQNumber eq qqId) and (Users.XboxID eq xboxID)
+                            (Users.qqNumber eq qqId) and (Users.xboxId eq xboxID)
                         }.totalRecords == 1
                 ) {
                     DatabaseManager.instance().update(Users) {
-                        set(it.Status, UserStatus.VERIFIED.ordinal)
+                        set(it.status, UserStatus.VERIFIED.ordinal)
                         where {
-                            (it.QQNumber eq qqId) and (it.XboxID eq xboxID)
+                            (it.qqNumber eq qqId) and (it.xboxId eq xboxID)
                         }
                     }
                     BDXWSControl.runCmdNoRes("say @$xboxID 您已绑定成功")

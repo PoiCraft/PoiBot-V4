@@ -15,35 +15,37 @@ import org.ktorm.schema.varchar
 
 @Suppress("PropertyName")
 interface User : Entity<User> {
-    var XboxID: String
-    var QQNumber: Long
-    var Status: Int
-    var CreateTime: String
+    var id: Int
+    var xboxId: String
+    var qqNumber: Long
+    var status: Int
+    var createTime: String
 }
 
 object Users : Table<User>("poi_users") {
-    val CreateTime = varchar("create_time").bindTo { it.CreateTime }
-    val Status = int("status").bindTo { it.Status }
-    val XboxID = varchar("xbox_id").bindTo { it.XboxID }
-    val QQNumber = long("qq_number").bindTo { it.QQNumber }
+    val id = int("id").primaryKey().bindTo { it.id }
+    val createTime = varchar("create_time").bindTo { it.createTime }
+    val status = int("status").bindTo { it.status }
+    val xboxId = varchar("xbox_id").bindTo { it.xboxId }
+    val qqNumber = long("qq_number").bindTo { it.qqNumber }
 }
 
 fun GroupMessageEvent.getXboxID(default_id: String, require_verified: Boolean = true): String? {
     val at: At? by this.message.orNull()
     return if (at == null) {
         if (require_verified) {
-            if (DatabaseManager.instance().from(Users).select(Users.XboxID, Users.Status)
-                    .where { Users.XboxID eq default_id and (Users.Status eq UserStatus.VERIFIED.ordinal) }.totalRecords == 0
+            if (DatabaseManager.instance().from(Users).select(Users.xboxId, Users.status)
+                    .where { Users.xboxId eq default_id and (Users.status eq UserStatus.VERIFIED.ordinal) }.totalRecords == 0
             ) null
             else default_id
         } else default_id
     } else {
-        val targets = DatabaseManager.instance().from(Users).select(Users.QQNumber, Users.XboxID, Users.Status)
+        val targets = DatabaseManager.instance().from(Users).select(Users.qqNumber, Users.xboxId, Users.status)
             .let {
                 if (require_verified)
-                    it.where { Users.QQNumber eq at!!.target and (Users.Status eq UserStatus.VERIFIED.ordinal) }
+                    it.where { Users.qqNumber eq at!!.target and (Users.status eq UserStatus.VERIFIED.ordinal) }
                 else
-                    it.where { Users.QQNumber eq at!!.target }
+                    it.where { Users.qqNumber eq at!!.target }
             }
             .map { it.getString(2) }
         if (targets.isEmpty()) null
@@ -55,18 +57,18 @@ fun GroupMessageEvent.getQQNumber(default_id: String, require_verified: Boolean 
     val at: At? by this.message.orNull()
     return if (at != null) {
         if (require_verified) {
-            if (DatabaseManager.instance().from(Users).select(Users.QQNumber, Users.Status)
-                    .where { Users.QQNumber eq at!!.target and (Users.Status eq UserStatus.VERIFIED.ordinal) }.totalRecords == 0
+            if (DatabaseManager.instance().from(Users).select(Users.qqNumber, Users.status)
+                    .where { Users.qqNumber eq at!!.target and (Users.status eq UserStatus.VERIFIED.ordinal) }.totalRecords == 0
             ) null
             else at!!.target
         } else at!!.target
     } else {
-        val targets = DatabaseManager.instance().from(Users).select(Users.QQNumber, Users.XboxID, Users.Status)
+        val targets = DatabaseManager.instance().from(Users).select(Users.qqNumber, Users.xboxId, Users.status)
             .let {
                 if (require_verified) {
-                    it.where { Users.XboxID eq default_id and (Users.Status eq UserStatus.VERIFIED.ordinal) }
+                    it.where { Users.xboxId eq default_id and (Users.status eq UserStatus.VERIFIED.ordinal) }
                 } else {
-                    it.where { Users.XboxID eq default_id }
+                    it.where { Users.xboxId eq default_id }
                 }
             }
             .map { it.getLong(1) }
@@ -91,7 +93,7 @@ fun GroupMessageEvent.ifVerified(default_id: String): Boolean {
     return if (target == null) {
         false
     } else {
-        when (DatabaseManager.instance().from(Users).select(Users.XboxID, Users.Status).where { Users.XboxID eq target }
+        when (DatabaseManager.instance().from(Users).select(Users.xboxId, Users.status).where { Users.xboxId eq target }
             .map { it.getInt(2) }.getOrNull(0)) {
             null -> false
             UserStatus.NOT_VERIFIED.ordinal -> false
