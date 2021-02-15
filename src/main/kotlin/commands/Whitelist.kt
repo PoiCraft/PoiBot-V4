@@ -3,6 +3,7 @@ package com.poicraft.bot.v4.plugin.commands
 import com.poicraft.bot.v4.plugin.Command
 import com.poicraft.bot.v4.plugin.database.getXboxID
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 
@@ -21,8 +22,10 @@ object Whitelist : Command() {
             "add"
         )
         override val argsRequired: Int = 1
+
+        @ExperimentalCoroutinesApi
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            val target = event.getXboxID(args[1])
+            val target = event.getXboxID(args[1], false)
             if (target == null) {
                 event.subject.sendMessage(event.source.quote() + "玩家未绑定")
             } else {
@@ -43,8 +46,10 @@ object Whitelist : Command() {
             "remove"
         )
         override val argsRequired: Int = 1
+
+        @ExperimentalCoroutinesApi
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            val target = event.getXboxID(args[1])
+            val target = event.getXboxID(args[1], false)
             if (target == null) {
                 event.subject.sendMessage(event.source.quote() + "玩家未绑定")
             } else {
