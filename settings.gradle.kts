@@ -1,9 +1,8 @@
 pluginManagement {
     repositories {
-        mavenLocal()
-        gradlePluginPortal()
-        mavenCentral()
-        jcenter()
+        maven("https://maven.aliyun.com/repository/central")
+        maven("https://maven.aliyun.com/repository/public")
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
     }
 }
