@@ -1,5 +1,6 @@
 package com.poicraft.bot.v4.plugin.commands
 
+import com.poicraft.bot.v4.plugin.BotCommand
 import com.poicraft.bot.v4.plugin.Command
 import net.mamoe.mirai.event.events.GroupMessageEvent
 
@@ -10,9 +11,9 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
  */
 object Helper : Command() {
 
-    private val commandMap = hashMapOf<String, Command>()
+    private val commandMap = hashMapOf<String, BotCommand>()
 
-    fun load(commandList: List<Command>) {
+    fun load(commandList: List<BotCommand>) {
         for (command in commandList) {
             commandMap[command.name] = command
         }

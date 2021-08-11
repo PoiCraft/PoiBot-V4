@@ -6,19 +6,19 @@ import com.poicraft.bot.v4.plugin.commands.*
  * 命令表
  * @author topjohncian, gggxbbb
  */
-object CommandMap : HashMap<String, Command>() {
+object CommandMap : HashMap<String, BotCommand>() {
 
-    private val commands: MutableList<Command> = mutableListOf(
-        Hitokoto,
-        Address,
-        Bind,
-        Dailypics,
-        BedrockTools,
-        Status,
-        Exec,
-        ServerTools,
-        Whitelist,
-        RandomTP,
+    private val commands: MutableList<BotCommand> = mutableListOf(
+        Hitokoto.update(),
+        Address.update(),
+        Bind.update(),
+        Dailypics.update(),
+        BedrockTools.update(),
+        Status.update(),
+        Exec.update(),
+        ServerTools.update(),
+        Whitelist.update(),
+        RandomTP.update(),
     )
 
     fun loadCommands(callback: (List<String>) -> Unit = { _ -> }) {
@@ -26,7 +26,7 @@ object CommandMap : HashMap<String, Command>() {
 
         val helper = Helper
         helper.load(commands)
-        commands.add(helper)
+        commands.add(helper.update())
 
         val names = mutableListOf<String>()
 
@@ -41,7 +41,7 @@ object CommandMap : HashMap<String, Command>() {
 
     }
 
-    fun getCommand(message: String): Command {
-        return getOrDefault(message.split(" ")[0], EmptyCommand)
+    fun getCommand(message: String): BotCommand {
+        return getOrDefault(message.split(" ")[0], EmptyCommand.update())
     }
 }

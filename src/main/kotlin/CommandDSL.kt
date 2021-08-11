@@ -121,7 +121,16 @@ class BotCommand(val name: String, val aliases: List<String>) {
         if (this.subCommands.isEmpty()) { /*未启用子命令 */
             messageHandler(event, args)
         } else { /* 启用子命令 */
-            // TODO: 2021-08-11 实现子命令
+            if (args.isEmpty()) { /* 没参数 */
+                messageHandler(event, args)
+                return
+            } else {
+                if (subCommands.keys.contains(args.getOrElse(1) { "" })) {
+                    subCommands[args[1]]!!.run(event, args.subList(1, args.size))
+                } else {
+                    messageHandler(event, args)
+                }
+            }
         }
     }
 
@@ -135,6 +144,4 @@ fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit)
 
 fun updateCommand(cmd: Command): BotCommand = command(cmd.name, cmd.aliases) { cmdProxy(cmd) }
 
-object Update
-
-infix fun Command.require(a: Update) = command(this.name, this.aliases) { cmdProxy(this@require) }
+fun Command.update() = command(this.name, this.aliases) { cmdProxy(this@update) }
