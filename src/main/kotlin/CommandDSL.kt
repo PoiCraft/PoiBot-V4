@@ -65,7 +65,6 @@ class BotCommand(val name: String, val aliases: List<String>) {
             Permission.PERMISSION_LEVEL_EVERYONE -> true
             Permission.PERMISSION_LEVEL_ADMIN -> event.sender.isOperator()
             Permission.PERMISSION_LEVEL_OWNER -> event.sender.isOwner()
-            else -> false
         }
     }
     /* end 权限 */
@@ -100,7 +99,7 @@ class BotCommand(val name: String, val aliases: List<String>) {
             subCommands[com] = cmd
         }
     }
-    /* end 消息处理器器 */
+    /* end 子命令 */
 
     /* 向下兼容 */
     var proxy: Command? = null
