@@ -1,6 +1,9 @@
 package com.poicraft.bot.v4.plugin
 
+import com.poicraft.bot.v4.plugin.constants.Permission
+import com.poicraft.bot.v4.plugin.constants.WhitelistStatus
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
+import com.poicraft.bot.v4.plugin.functions.Whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.Services
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,7 +48,50 @@ object PluginMain : KotlinPlugin(
 
         Services.init()
 
-        CommandMap.loadCommands { names ->
+        val commandMap = CommandMap {
+            /* 白名单 */
+            /**
+             * 添加白名单
+             */
+            command("添加白名单", "addw") {
+                intro("添加白名单")
+                require(Permission.PERMISSION_LEVEL_ADMIN)
+                onMessage { event, args ->
+                    if (args.isEmpty()) {
+                        event.subject.sendMessage("请提供 Xbox ID !")
+                    } else {
+                        when (Whitelist.add(args.joinToString(" "))) {
+                            WhitelistStatus.PLAYER_ALREADY_IN_WHITELIST -> event.subject.sendMessage("玩家已在白名单中")
+                            WhitelistStatus.PLAY_ADDED -> event.subject.sendMessage("已添加至白名单")
+                            else -> event.subject.sendMessage("发生未知错误")
+                        }
+                    }
+                }
+            }
+
+            /**
+             * 添加白名单
+             */
+            command("删除白名单", "rmw") {
+                intro("删除白名单")
+                require(Permission.PERMISSION_LEVEL_ADMIN)
+                onMessage { event, args ->
+                    if (args.isEmpty()) {
+                        event.subject.sendMessage("请提供 Xbox ID !")
+                    } else {
+                        when (Whitelist.remove(args.joinToString(" "))) {
+                            WhitelistStatus.PLAYER_NOT_IN_WHITELIST -> event.subject.sendMessage("玩家不在白名单中")
+                            WhitelistStatus.PLAY_ADDED -> event.subject.sendMessage("已从白名单中移除")
+                            else -> event.subject.sendMessage("发生未知错误")
+                        }
+                    }
+                }
+            }
+            /* end 白名单 */
+        }
+
+
+        commandMap.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
             for (name in names) {
                 msg += ("$name ")
@@ -89,7 +135,7 @@ object PluginMain : KotlinPlugin(
 
                 }
 
-                CommandMap.getCommand(message)
+                commandMap.getCommand(message)
                     .run(this, args.map { it.replace("\\\"", "\"") })
             }
         }

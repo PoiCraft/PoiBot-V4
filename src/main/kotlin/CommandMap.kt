@@ -6,27 +6,26 @@ import com.poicraft.bot.v4.plugin.commands.*
  * 命令表
  * @author topjohncian, gggxbbb
  */
-object CommandMap : HashMap<String, BotCommand>() {
+class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>() {
 
+    /**
     private val commands: MutableList<BotCommand> = mutableListOf(
-        Hitokoto.update(),
-        Address.update(),
-        Bind.update(),
-        Dailypics.update(),
-        BedrockTools.update(),
-        Status.update(),
-        Exec.update(),
-        ServerTools.update(),
-        Whitelist.update(),
-        RandomTP.update(),
+    Hitokoto.update(),
+    Address.update(),
+    Bind.update(),
+    Dailypics.update(),
+    BedrockTools.update(),
+    Status.update(),
+    Exec.update(),
+    ServerTools.update(),
+    Whitelist.update(),
+    RandomTP.update(),
     )
+     */
+    private val commands: MutableList<BotCommand> = mutableListOf()
 
     fun loadCommands(callback: (List<String>) -> Unit = { _ -> }) {
         clear()
-
-        val helper = Helper
-        helper.load(commands)
-        commands.add(helper.update())
 
         val names = mutableListOf<String>()
 
@@ -39,6 +38,22 @@ object CommandMap : HashMap<String, BotCommand>() {
 
         callback(names)
 
+    }
+
+    fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit) {
+        val cmd = BotCommand(name, aliases)
+        builder(cmd)
+        this.commands.add(cmd)
+    }
+
+    fun command(name: String, alias: String, builder: BotCommand.() -> Unit) {
+        val cmd = BotCommand(name, listOf(alias))
+        builder(cmd)
+        this.commands.add(cmd)
+    }
+
+    fun command(command: BotCommand) {
+        this.commands.add(command)
     }
 
     fun getCommand(message: String): BotCommand {

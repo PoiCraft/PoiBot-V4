@@ -99,6 +99,17 @@ class BotCommand(val name: String, val aliases: List<String>) {
             subCommands[com] = cmd
         }
     }
+
+    /**
+     * 注册新的 subCommand, 调用则激活子命令
+     */
+    fun command(name: String, alias: String, builder: BotCommand.() -> Unit) {
+        val cmd = BotCommand(name, listOf(alias))
+        builder(cmd)
+        for (com in cmd.aliases) {
+            subCommands[com] = cmd
+        }
+    }
     /* end 子命令 */
 
     /* 向下兼容 */
@@ -137,6 +148,12 @@ class BotCommand(val name: String, val aliases: List<String>) {
 
 fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit): BotCommand {
     val cmd = BotCommand(name, aliases)
+    builder(cmd)
+    return cmd
+}
+
+fun command(name: String, alias: String, builder: BotCommand.() -> Unit): BotCommand {
+    val cmd = BotCommand(name, listOf(alias))
     builder(cmd)
     return cmd
 }
