@@ -110,11 +110,20 @@ class BotCommand(val name: String, val aliases: List<String>) {
             subCommands[com] = cmd
         }
     }
+
+    /**
+     * 注册新的 subCommand, 调用则激活子命令
+     */
+    infix fun command(command: BotCommand) {
+        for (com in command.aliases) {
+            subCommands[com] = command
+        }
+    }
     /* end 子命令 */
 
     /* 向下兼容 */
     var proxy: Command? = null
-    fun cmdProxy(cmd: Command) {
+    infix fun cmdProxy(cmd: Command) {
         this.proxy = cmd
     }
     /* end 向下兼容 */
@@ -146,16 +155,30 @@ class BotCommand(val name: String, val aliases: List<String>) {
 
 }
 
+/**
+ * 构造命令
+ * @param name 命令的人类友好名称
+ * @param aliases 命令的程序友好名称
+ */
 fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit): BotCommand {
     val cmd = BotCommand(name, aliases)
     builder(cmd)
     return cmd
 }
 
+/**
+ * 构造命令
+ * @param name 命令的人类友好名称
+ * @param alias 命令的程序友好名称
+ */
 fun command(name: String, alias: String, builder: BotCommand.() -> Unit): BotCommand {
     val cmd = BotCommand(name, listOf(alias))
     builder(cmd)
     return cmd
 }
 
+/**
+ * 兼容旧命令
+ * @see Command
+ */
 fun Command.update() = command(this.name, this.aliases) { cmdProxy(this@update);intro(this@update.introduction) }

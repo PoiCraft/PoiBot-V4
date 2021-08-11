@@ -7,20 +7,20 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class Whitelist {
     companion object {
         @ExperimentalCoroutinesApi
-        suspend fun add(target: String): WhitelistStatus? {
+        suspend fun add(target: String): Pair<WhitelistStatus?, String> {
             return when (val result = BDXWSControl.runCmd("whitelist add \"$target\"")) {
-                "Player added to whitelist" -> WhitelistStatus.PLAY_ADDED
-                "Player already in whitelist" -> WhitelistStatus.PLAYER_ALREADY_IN_WHITELIST
-                else -> null
+                "Player added to whitelist" -> Pair(WhitelistStatus.PLAY_ADDED, result)
+                "Player already in whitelist" -> Pair(WhitelistStatus.PLAYER_ALREADY_IN_WHITELIST, result)
+                else -> Pair(null, result)
             }
         }
 
         @ExperimentalCoroutinesApi
-        suspend fun remove(target: String): WhitelistStatus? {
+        suspend fun remove(target: String): Pair<WhitelistStatus?, String> {
             return when (val result = BDXWSControl.runCmd("whitelist remove \"$target\"")) {
-                "Player removed from whitelist" -> WhitelistStatus.PLAY_REMOVED
-                "Player not in whitelist" -> WhitelistStatus.PLAYER_NOT_IN_WHITELIST
-                else -> null
+                "Player removed from whitelist" -> Pair(WhitelistStatus.PLAY_REMOVED, result)
+                "Player not in whitelist" -> Pair(WhitelistStatus.PLAYER_NOT_IN_WHITELIST, result)
+                else -> Pair(null, result)
             }
         }
     }
