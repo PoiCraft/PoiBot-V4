@@ -59,4 +59,9 @@ class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>()
     fun getCommand(message: String): BotCommand {
         return getOrDefault(message.split(" ")[0], EmptyCommand.update())
     }
+
+    init {
+        builder(this)
+    }
+
 }
