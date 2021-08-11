@@ -141,6 +141,4 @@ fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit)
     return cmd
 }
 
-fun updateCommand(cmd: Command): BotCommand = command(cmd.name, cmd.aliases) { cmdProxy(cmd) }
-
-fun Command.update() = command(this.name, this.aliases) { cmdProxy(this@update) }
+fun Command.update() = command(this.name, this.aliases) { cmdProxy(this@update);intro(this@update.introduction) }
