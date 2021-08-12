@@ -83,43 +83,6 @@ class BotCommand(val name: String, val aliases: List<String>) {
         this.messageHandler = messageHandler
     }
 
-    /* 子命令 */
-    /**
-     * 存储 subCommands 所用的 Map
-     */
-    private var subCommands: MutableMap<String, BotCommand> = mutableMapOf()
-
-    /**
-     * 注册新的 subCommand, 调用则激活子命令
-     */
-    fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit) {
-        val cmd = BotCommand(name, aliases)
-        builder(cmd)
-        for (com in cmd.aliases) {
-            subCommands[com] = cmd
-        }
-    }
-
-    /**
-     * 注册新的 subCommand, 调用则激活子命令
-     */
-    fun command(name: String, alias: String, builder: BotCommand.() -> Unit) {
-        val cmd = BotCommand(name, listOf(alias))
-        builder(cmd)
-        for (com in cmd.aliases) {
-            subCommands[com] = cmd
-        }
-    }
-
-    /**
-     * 注册新的 subCommand, 调用则激活子命令
-     */
-    infix fun command(command: BotCommand) {
-        for (com in command.aliases) {
-            subCommands[com] = command
-        }
-    }
-    /* end 子命令 */
 
     /* 向下兼容 */
     var proxy: Command? = null
@@ -136,21 +99,10 @@ class BotCommand(val name: String, val aliases: List<String>) {
             proxy?.onMessage(event, args)
             return
         }
-        if (!checkPermission(event)) return /* 鉴权 */
-        if (this.subCommands.isEmpty()) { /*未启用子命令 */
+        if (checkPermission(event))  /* 鉴权 */
             messageHandler(event, args)
-        } else { /* 启用子命令 */
-            if (args.isEmpty()) { /* 没参数 */
-                messageHandler(event, args)
-                return
-            } else {
-                if (subCommands.keys.contains(args.getOrElse(1) { "" })) {
-                    subCommands[args[1]]!!.run(event, args.subList(1, args.size))
-                } else {
-                    messageHandler(event, args)
-                }
-            }
-        }
+        else
+            permissionDeniedHandler(this.permissionLevel, event, args)
     }
 
 }
