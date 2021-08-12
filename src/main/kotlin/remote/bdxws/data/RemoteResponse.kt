@@ -61,6 +61,26 @@ class OnLeftParam(
     val xuid: String
 )
 
+/**
+ * 玩家使用命令
+ */
+@Serializable
+@SerialName("cmd")
+class OnCmdRes(
+    val params: OnCmdParam
+) : RemoteResponse()
+
+/**
+ * 玩家使用命令的参数
+ * @param sender 玩家 XboxID
+ * @param cmd 玩家使用的命令 (带有斜杠)
+ */
+@Serializable
+class OnCmdParam(
+    val sender: String,
+    val cmd: String,
+)
+
 
 /**
  * 玩家聊天信息
@@ -84,7 +104,8 @@ class OnChatParam(
 
 
 /**
- * 怪物死亡
+ * 生物死亡
+ * **仅限有名字（NameTag）的生物(玩家)**
  */
 @Serializable
 @SerialName("mobdie")
@@ -93,9 +114,15 @@ class OnMobdieRes(
 ) : RemoteResponse()
 
 /**
- * 怪物死亡的参数
- * 文档缺失 你自己猜吧
- * @see "https://github.com/WangYneos/BDXWebSocket/blob/master/example_golang/BDSWebsocketClient.go#L141-L149"
+ * 生物死亡的参数
+ * @param mobtype 实体类型
+ * @param mobname 实体名称
+ * @param dmcase 伤害源ID
+ * @param dmname 伤害类型
+ * @param srctype 伤害源类型
+ * @param srcname 伤害源名称
+ * @param pos 坐标
+ * @see "https://github.com/WangYneos/BDXWebSocket#mob-die"
  */
 @Serializable
 class OnMobdieParam(
