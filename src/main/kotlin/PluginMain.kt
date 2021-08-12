@@ -1,9 +1,9 @@
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.database.DatabaseManager
+import com.poicraft.bot.v4.plugin.database.initDatabase
 import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
-import com.poicraft.bot.v4.plugin.services.Services
+import com.poicraft.bot.v4.plugin.services.initService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
@@ -14,6 +14,7 @@ import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.utils.info
+import org.ktorm.database.Database
 
 @ExperimentalCoroutinesApi
 object PluginMain : KotlinPlugin(
@@ -23,9 +24,9 @@ object PluginMain : KotlinPlugin(
         version = "4.0.0"
     )
 ) {
-    val commandMap = CommandMap {
+    val commandMap = CommandMap { }
 
-    }
+    lateinit var database: Database
 
     override fun onEnable() {
         logger.info {
@@ -44,11 +45,11 @@ object PluginMain : KotlinPlugin(
 
         PluginData.reload()
 
-        DatabaseManager.init()
+        initDatabase()
 
         BDXWSControl.init()
 
-        Services.init()
+        initService()
 
         GlobalEventChannel.subscribeGroupMessages {
             whitelist()

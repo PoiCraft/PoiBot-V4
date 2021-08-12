@@ -1,5 +1,6 @@
 package com.poicraft.bot.v4.plugin.database
 
+import com.poicraft.bot.v4.plugin.PluginMain
 import com.poicraft.bot.v4.plugin.constants.UserStatus
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,13 +52,12 @@ fun genUserCondition(expr: BinaryExpression<Boolean>, requireVerified: Boolean):
  * @sample getUsersByQQNumber
  */
 fun getUsers(condition: (Query) -> Query): List<User>? {
-    val result = DatabaseManager.instance()
+    val result = PluginMain.database
         .from(Users)
         .select()
         .let(condition)
         .map { row -> Users.createEntity(row) }
-    return if (result.isEmpty()) null
-    else result
+    return result.ifEmpty { null }
 }
 
 /**
