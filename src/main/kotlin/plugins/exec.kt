@@ -10,7 +10,7 @@ import net.mamoe.mirai.message.data.MessageSource.Key.quote
  * 执行任意命令
  */
 @ExperimentalCoroutinesApi
-fun Cmd.exec() {
+fun B.exec() {
     /**
      * 执行任意命令
      */

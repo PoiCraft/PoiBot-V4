@@ -13,7 +13,6 @@ import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.GroupMessageSubscribersBuilder
 import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.utils.info
 import org.ktorm.database.Database
@@ -53,7 +52,7 @@ object PluginMain : KotlinPlugin(
 
         initService()
 
-        commandMap.install {
+        GlobalEventChannel.subscribeGroupMessages {
             whitelist()
             exec()
         }
@@ -64,22 +63,6 @@ object PluginMain : KotlinPlugin(
                 msg += ("$name ")
             }
             logger.info(msg.trimIndent())
-        }
-
-        GlobalEventChannel.subscribeGroupMessages {
-            always {
-                var message = this.message.contentToString()
-                if (message.startsWith("#")) {
-                    if (!PluginData.groupList.contains(source.group.id)) {
-                        return@always
-                    }
-                    message = message.removePrefix("#")
-
-                    val args: List<String> = message.split(" ")
-
-                    commandMap.getCommand(message).run(this, args)
-                }
-            }
         }
     }
 }

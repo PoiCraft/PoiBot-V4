@@ -10,7 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
  * 白名单管理
  */
 @ExperimentalCoroutinesApi
-fun Cmd.whitelist() {
+fun B.whitelist() {
     /**
      * 添加白名单
      * @author gggxbbb
