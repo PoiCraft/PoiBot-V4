@@ -1,9 +1,9 @@
 package com.poicraft.bot.v4.plugin.commands
 
 import com.poicraft.bot.v4.plugin.Command
+import com.poicraft.bot.v4.plugin.PluginMain
 import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.constants.UserStatus
-import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.database.Users
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
@@ -44,14 +44,14 @@ object Bind : Command() {
 
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
             val xboxID = args[1]
-            if (DatabaseManager.instance().from(Users) /*判断是否已被绑定*/
+            if (PluginMain.database.from(Users) /*判断是否已被绑定*/
                     .select(Users.qqNumber)
                     .where {
                         ((Users.qqNumber eq event.sender.id)
                             or (Users.xboxId eq xboxID))
                     }.totalRecords == 0
             ) {
-                DatabaseManager.instance().insert(Users) { /*实现绑定*/
+                PluginMain.database.insert(Users) { /*实现绑定*/
                     set(it.xboxId, xboxID)
                     set(it.qqNumber, event.sender.id)
                     set(it.createTime, Instant.now().epochSecond.toString()) /*绑定 时间戳*/
@@ -83,10 +83,10 @@ object Bind : Command() {
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
             val at: At? by event.message.orNull()
             if (at != null) {
-                DatabaseManager.instance().delete(Users) { it.qqNumber eq at!!.target }
+                PluginMain.database.delete(Users) { it.qqNumber eq at!!.target }
                 event.subject.sendMessage(event.source.quote() + "绑定已解除" + at!!.target.toString())
             } else {
-                DatabaseManager.instance().delete(Users) { it.xboxId eq args[1] }
+                PluginMain.database.delete(Users) { it.xboxId eq args[1] }
                 event.subject.sendMessage(event.source.quote() + "绑定已解除" + args[1])
             }
         }
@@ -102,7 +102,7 @@ object Bind : Command() {
         )
         override val permissionLevel: Permission = Permission.PERMISSION_LEVEL_ADMIN
         override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-            val targets = DatabaseManager.instance().from(Users).select(Users.qqNumber, Users.xboxId)
+            val targets = PluginMain.database.from(Users).select(Users.qqNumber, Users.xboxId)
                 .map { TargetUser(it.getLong(1), it.getString(2)!!) }
             var msg = "已绑定的玩家:\nQQ   Xbox"
             targets.forEach {

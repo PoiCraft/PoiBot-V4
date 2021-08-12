@@ -2,7 +2,6 @@ package com.poicraft.bot.v4.plugin.services
 
 import com.poicraft.bot.v4.plugin.PluginMain
 import com.poicraft.bot.v4.plugin.constants.UserStatus
-import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.database.Users
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnChatRes
@@ -20,13 +19,13 @@ fun validateUser(plugin: PluginMain) {
                 0L
             }
             val xboxID = params.sender
-            if (DatabaseManager.instance().from(Users)
+            if (PluginMain.database.from(Users)
                     .select(Users.qqNumber)
                     .where {
                         (Users.qqNumber eq qqId) and (Users.xboxId eq xboxID)
                     }.totalRecords == 1
             ) {
-                DatabaseManager.instance().update(Users) {
+                PluginMain.database.update(Users) {
                     set(it.status, UserStatus.VERIFIED.ordinal)
                     where {
                         (it.qqNumber eq qqId) and (it.xboxId eq xboxID)
