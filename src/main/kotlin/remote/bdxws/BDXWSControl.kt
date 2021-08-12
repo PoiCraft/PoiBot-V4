@@ -175,4 +175,8 @@ object BDXWSControl : Control() {
         eventListeners.add(ListenerRegistry(handler as EventHandler<RemoteResponse>, eventClass))
     }
 
+    inline fun <reified E : RemoteResponse> addEventListener(noinline handler: EventHandler<E>) {
+        addEventListener(E::class, handler)
+    }
+
 }
