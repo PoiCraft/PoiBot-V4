@@ -86,6 +86,9 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
 
     @ValueDescription("机器人服务的群")
     var groupList by value<List<Long>>(listOf())
+
+    @ValueDescription("发送日志的群")
+    val loggerGroup by value(123456L)
 }
 
 @Serializable

@@ -5,7 +5,11 @@ abstract class Service {
 }
 
 object Services {
-    private val services = listOf<Service>(ValidateUserService)
+    private val services = listOf<Service>(
+        ValidateUserService,
+        LoggerServer
+    )
+
     fun init() {
         services.forEach { it.init() }
     }
