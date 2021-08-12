@@ -1,9 +1,7 @@
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.constants.Permission
-import com.poicraft.bot.v4.plugin.constants.WhitelistStatus
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
-import com.poicraft.bot.v4.plugin.functions.Whitelist
+import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.Services
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,7 +12,7 @@ import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.utils.info
 
 @ExperimentalCoroutinesApi
@@ -25,6 +23,10 @@ object PluginMain : KotlinPlugin(
         version = "4.0.0"
     )
 ) {
+    val commandMap = CommandMap {
+
+    }
+
     override fun onEnable() {
         logger.info {
             """
@@ -48,55 +50,6 @@ object PluginMain : KotlinPlugin(
 
         Services.init()
 
-        val commandMap = CommandMap {
-            /* 白名单 */
-            /**
-             * 添加白名单
-             * @author gggxbbb
-             */
-            command("添加白名单", "addw") {
-                intro("添加白名单")
-                require(Permission.PERMISSION_LEVEL_ADMIN)
-                onMessage { event, args ->
-                    val target = args.subList(1, args.size)
-                    if (target.isEmpty()) {
-                        event.subject.sendMessage("请提供 Xbox ID !")
-                    } else {
-                        val (status, result) = Whitelist.add(target.joinToString(" "))
-                        when (status) {
-                            WhitelistStatus.PLAYER_ALREADY_IN_WHITELIST -> event.subject.sendMessage("玩家已在白名单中")
-                            WhitelistStatus.PLAY_ADDED -> event.subject.sendMessage("已添加至白名单")
-                            else -> event.subject.sendMessage("发生未知错误 $result")
-                        }
-                    }
-                }
-            }
-
-            /**
-             * 添加白名单
-             * @author gggxbbb
-             */
-            command("删除白名单", "rmw") {
-                intro("删除白名单")
-                require(Permission.PERMISSION_LEVEL_ADMIN)
-                onMessage { event, args ->
-                    val target = args.subList(1, args.size)
-                    if (target.isEmpty()) {
-                        event.subject.sendMessage("请提供 Xbox ID !")
-                    } else {
-                        val (status, result) = Whitelist.remove(target.joinToString(" "))
-                        when (status) {
-                            WhitelistStatus.PLAYER_NOT_IN_WHITELIST -> event.subject.sendMessage("玩家不在白名单中")
-                            WhitelistStatus.PLAY_REMOVED -> event.subject.sendMessage("已从白名单中移除")
-                            else -> event.subject.sendMessage("发生未知错误 $result")
-                        }
-                    }
-                }
-            }
-            /* end 白名单 */
-        }
-
-
         commandMap.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
             for (name in names) {
@@ -105,19 +58,24 @@ object PluginMain : KotlinPlugin(
             logger.info(msg.trimIndent())
         }
 
-        GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
-            var message = this.message.contentToString()
-            if (message.startsWith("#")) {
-                if (!PluginData.groupList.contains(source.group.id)) {
-                    return@subscribeAlways
+        GlobalEventChannel.subscribeGroupMessages {
+            always {
+                var message = this.message.contentToString()
+                if (message.startsWith("#")) {
+                    if (!PluginData.groupList.contains(source.group.id)) {
+                        return@always
+                    }
+                    message = message.removePrefix("#")
+
+                    val args: List<String> = message.split(" ")
+
+                    commandMap.getCommand(message).run(this, args)
                 }
-                message = message.removePrefix("#")
-
-                val args: List<String> = message.split(" ")
-
-                commandMap.getCommand(message).run(this, args)
             }
+
+            whitelist()
         }
+
     }
 }
 

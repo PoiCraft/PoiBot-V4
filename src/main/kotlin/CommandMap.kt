@@ -1,6 +1,6 @@
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.commands.*
+import net.mamoe.mirai.event.MessageEventSubscribersBuilder
 
 /**
  * 命令表
@@ -85,3 +85,22 @@ class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>()
  * 空命令
  */
 val emptyCommand = command("", "") {}
+
+typealias B = MessageEventSubscribersBuilder
+
+/**
+ * 构造命令
+ * @param name 命令的人类友好名称
+ * @param aliases 命令的程序友好名称
+ */
+fun B.command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit) =
+    PluginMain.commandMap.command(name, aliases, builder)
+
+
+/**
+ * 构造命令
+ * @param name 命令的人类友好名称
+ * @param alias 命令的程序友好名称
+ */
+fun B.command(name: String, alias: String, builder: BotCommand.() -> Unit) =
+    PluginMain.commandMap.command(name, alias, builder)
