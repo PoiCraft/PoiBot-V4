@@ -1,6 +1,7 @@
 package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.initDatabase
+import com.poicraft.bot.v4.plugin.plugins.exec
 import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.initService
@@ -12,6 +13,7 @@ import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
+import net.mamoe.mirai.event.GroupMessageSubscribersBuilder
 import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.utils.info
 import org.ktorm.database.Database
@@ -51,8 +53,9 @@ object PluginMain : KotlinPlugin(
 
         initService()
 
-        GlobalEventChannel.subscribeGroupMessages {
+        commandMap.install {
             whitelist()
+            exec()
         }
 
         commandMap.loadCommands { names ->
@@ -63,6 +66,21 @@ object PluginMain : KotlinPlugin(
             logger.info(msg.trimIndent())
         }
 
+        GlobalEventChannel.subscribeGroupMessages {
+            always {
+                var message = this.message.contentToString()
+                if (message.startsWith("#")) {
+                    if (!PluginData.groupList.contains(source.group.id)) {
+                        return@always
+                    }
+                    message = message.removePrefix("#")
+
+                    val args: List<String> = message.split(" ")
+
+                    commandMap.getCommand(message).run(this, args)
+                }
+            }
+        }
     }
 }
 

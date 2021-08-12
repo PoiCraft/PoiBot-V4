@@ -4,12 +4,13 @@ import com.poicraft.bot.v4.plugin.command
 import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.constants.WhitelistStatus
 import com.poicraft.bot.v4.plugin.functions.Whitelist
-import net.mamoe.mirai.event.GroupMessageSubscribersBuilder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-typealias B = GroupMessageSubscribersBuilder
-
-fun B.whitelist() {
-    /* 白名单 */
+/**
+ * 白名单管理
+ */
+@ExperimentalCoroutinesApi
+fun Cmd.whitelist() {
     /**
      * 添加白名单
      * @author gggxbbb
@@ -53,5 +54,4 @@ fun B.whitelist() {
             }
         }
     }
-    /* end 白名单 */
 }
