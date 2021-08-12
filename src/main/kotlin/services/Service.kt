@@ -1,16 +1,14 @@
 package com.poicraft.bot.v4.plugin.services
 
-abstract class Service {
-    abstract fun init()
-}
+import com.poicraft.bot.v4.plugin.PluginMain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-object Services {
-    private val services = listOf<Service>(
-        ValidateUserService,
-        LoggerServer
-    )
+@ExperimentalCoroutinesApi
+val services = listOf(
+    ::validateUser,
+    ::loggerService
+)
 
-    fun init() {
-        services.forEach { it.init() }
-    }
-}
+
+@ExperimentalCoroutinesApi
+fun PluginMain.initService() = services.forEach { it(this) }

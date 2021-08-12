@@ -3,7 +3,7 @@ package com.poicraft.bot.v4.plugin
 import com.poicraft.bot.v4.plugin.database.DatabaseManager
 import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
-import com.poicraft.bot.v4.plugin.services.Services
+import com.poicraft.bot.v4.plugin.services.initService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
@@ -48,7 +48,7 @@ object PluginMain : KotlinPlugin(
 
         BDXWSControl.init()
 
-        Services.init()
+        initService()
 
         GlobalEventChannel.subscribeGroupMessages {
             whitelist()
