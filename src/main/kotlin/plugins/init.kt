@@ -1,5 +1,5 @@
 package com.poicraft.bot.v4.plugin.plugins
 
-import com.poicraft.bot.v4.plugin.CommandMap
+import net.mamoe.mirai.event.GroupMessageSubscribersBuilder
 
-typealias Cmd = CommandMap
+typealias B = GroupMessageSubscribersBuilder
