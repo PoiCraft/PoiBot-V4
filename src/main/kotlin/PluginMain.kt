@@ -50,30 +50,16 @@ object PluginMain : KotlinPlugin(
 
         Services.init()
 
+        GlobalEventChannel.subscribeGroupMessages {
+            whitelist()
+        }
+
         commandMap.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
             for (name in names) {
                 msg += ("$name ")
             }
             logger.info(msg.trimIndent())
-        }
-
-        GlobalEventChannel.subscribeGroupMessages {
-            always {
-                var message = this.message.contentToString()
-                if (message.startsWith("#")) {
-                    if (!PluginData.groupList.contains(source.group.id)) {
-                        return@always
-                    }
-                    message = message.removePrefix("#")
-
-                    val args: List<String> = message.split(" ")
-
-                    commandMap.getCommand(message).run(this, args)
-                }
-            }
-
-            whitelist()
         }
 
     }

@@ -1,6 +1,9 @@
 package com.poicraft.bot.v4.plugin
 
-import net.mamoe.mirai.event.MessageEventSubscribersBuilder
+import com.poicraft.bot.v4.plugin.PluginMain.commandMap
+import net.mamoe.mirai.event.*
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 
 /**
  * 命令表
@@ -86,21 +89,69 @@ class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>()
  */
 val emptyCommand = command("", "") {}
 
-typealias B = MessageEventSubscribersBuilder
+typealias B = GroupMessageSubscribersBuilder
+
+fun <M : MessageEvent, Ret, R : RR, RR> MessageSubscribersBuilder<M, Ret, R, RR>.content(
+    filter: M.(String) -> Boolean,
+    onEvent: MessageListener<M, RR>
+): Ret =
+    subscriber(filter) { onEvent(this, it) }
+
+fun GroupMessageEvent.containsCommand(): Boolean {
+    var message = this.message.contentToString()
+    if (message.startsWith("#")) {
+        if (!PluginData.groupList.contains(source.group.id)) {
+            return false
+        }
+        message = message.removePrefix("#")
+
+        val args: List<String> = message.split(" ")
+
+        return if (args.isNotEmpty()) commandMap.containsKey(args[0]) else false
+    } else {
+        return false
+    }
+}
+
+@MessageDsl
+fun B.commandImpl() = content({ containsCommand() }) {
+    var message = this.message.contentToString()
+    if (message.startsWith("#")) {
+        if (!PluginData.groupList.contains(source.group.id)) {
+            return@content
+        }
+        message = message.removePrefix("#")
+
+        val args: List<String> = message.split(" ")
+
+        commandMap.getCommand(message).run(this, args)
+    }
+}
 
 /**
  * 构造命令
  * @param name 命令的人类友好名称
  * @param aliases 命令的程序友好名称
  */
-fun B.command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit) =
-    PluginMain.commandMap.command(name, aliases, builder)
+@MessageDsl
+fun B.command(
+    name: String, aliases: List<String>, builder: @MessageDsl BotCommand.() -> Unit
+): Listener<GroupMessageEvent> {
+    commandMap.command(name, aliases, builder)
 
+    return commandImpl()
+}
 
 /**
  * 构造命令
  * @param name 命令的人类友好名称
  * @param alias 命令的程序友好名称
  */
-fun B.command(name: String, alias: String, builder: BotCommand.() -> Unit) =
-    PluginMain.commandMap.command(name, alias, builder)
+@MessageDsl
+fun B.command(
+    name: String, alias: String, builder: @MessageDsl BotCommand.() -> Unit
+): Listener<GroupMessageEvent> {
+    commandMap.command(name, alias, builder)
+
+    return commandImpl()
+}
