@@ -25,7 +25,6 @@ object PluginMain : KotlinPlugin(
         version = "4.0.0"
     )
 ) {
-    val commandMap = CommandMap { }
 
     lateinit var database: Database
 
@@ -57,7 +56,7 @@ object PluginMain : KotlinPlugin(
             exec()
         }
 
-        commandMap.loadCommands { names ->
+        PluginBox.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
             for (name in names) {
                 msg += ("$name ")

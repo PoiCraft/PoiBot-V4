@@ -1,6 +1,7 @@
+@file:Suppress("unused")
+
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.PluginMain.commandMap
 import net.mamoe.mirai.event.*
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.MessageEvent
@@ -9,22 +10,7 @@ import net.mamoe.mirai.event.events.MessageEvent
  * 命令表
  * @author topjohncian, gggxbbb
  */
-class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>() {
-
-    /**
-    private val commands: MutableList<BotCommand> = mutableListOf(
-    Hitokoto.update(),
-    Address.update(),
-    Bind.update(),
-    Dailypics.update(),
-    BedrockTools.update(),
-    Status.update(),
-    Exec.update(),
-    ServerTools.update(),
-    Whitelist.update(),
-    RandomTP.update(),
-    )
-     */
+object PluginBox : HashMap<String, BotCommand>() {
 
     private val commands: MutableList<BotCommand> = mutableListOf()
 
@@ -61,6 +47,7 @@ class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>()
      * @param name 命令的人类友好名称
      * @param alias 命令的程序友好名称
      */
+    @MessageDsl
     fun command(name: String, alias: String, builder: BotCommand.() -> Unit) {
         val cmd = BotCommand(name, listOf(alias))
         builder(cmd)
@@ -71,6 +58,7 @@ class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>()
      * 导入命令
      * @param command 待导入的命令
      */
+    @MessageDsl
     fun command(command: BotCommand) {
         this.commands.add(command)
     }
@@ -79,9 +67,6 @@ class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>()
         return getOrDefault(message.split(" ")[0], emptyCommand)
     }
 
-    init {
-        builder(this)
-    }
 
 }
 
@@ -89,6 +74,7 @@ class CommandMap(builder: CommandMap.() -> Unit) : HashMap<String, BotCommand>()
  * 空命令
  */
 val emptyCommand = command("", "") {}
+
 typealias B = GroupMessageSubscribersBuilder
 
 fun <M : MessageEvent, Ret, R : RR, RR> MessageSubscribersBuilder<M, Ret, R, RR>.content(
@@ -118,7 +104,7 @@ fun GroupMessageEvent.getCommandNameAndArgs(): Pair<String, List<String>> {
 @MessageDsl
 fun B.commandImpl(aliases: List<String>) = content({ aliases.contains(getCommandNameAndArgs().first) }) {
     val (cmdName, args) = getCommandNameAndArgs()
-    commandMap.getCommand(cmdName).run(this, args)
+    PluginBox.getCommand(cmdName).run(this, args)
 }
 
 /**
@@ -130,7 +116,7 @@ fun B.commandImpl(aliases: List<String>) = content({ aliases.contains(getCommand
 fun B.command(
     name: String, aliases: List<String>, builder: @MessageDsl BotCommand.() -> Unit
 ): Listener<GroupMessageEvent> {
-    commandMap.command(name, aliases, builder)
+    PluginBox.command(name, aliases, builder)
 
     return commandImpl(aliases)
 }
@@ -144,7 +130,7 @@ fun B.command(
 fun B.command(
     name: String, alias: String, builder: @MessageDsl BotCommand.() -> Unit
 ): Listener<GroupMessageEvent> {
-    commandMap.command(name, alias, builder)
+    PluginBox.command(name, alias, builder)
 
     return commandImpl(listOf(alias))
 }
