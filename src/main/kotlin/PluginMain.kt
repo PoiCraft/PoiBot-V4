@@ -7,7 +7,9 @@ import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.initService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
@@ -49,6 +51,12 @@ object PluginMain : KotlinPlugin(
         initDatabase()
 
         BDXWSControl.init()
+
+        BDXWSControl.onCrash { e ->
+            launch {
+                Bot.instances.last().getGroup(PluginData.loggerGroup)!!.sendMessage("WebSocket 炸了, 我不干了: " + e.message)
+            }
+        }
 
         initService()
 

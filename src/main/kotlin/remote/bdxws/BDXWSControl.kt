@@ -52,6 +52,12 @@ object BDXWSControl : Control() {
 
     private val eventListeners = mutableListOf<ListenerRegistry>()
 
+    private var crashCallback = { _: Throwable -> }
+
+    fun onCrash(callback: (Throwable) -> Unit) {
+        crashCallback = callback
+    }
+
     /**
      * 初始化 Control
      */
@@ -73,6 +79,7 @@ object BDXWSControl : Control() {
                 if (retryTime < 5) {
                     init()
                 } else {
+                    crashCallback(e)
                     exitProcess(-1)
                 }
             }
@@ -93,6 +100,7 @@ object BDXWSControl : Control() {
                     if (retryTime < 5) {
                         init()
                     } else {
+                        crashCallback(e)
                         exitProcess(-1)
                     }
                 }
