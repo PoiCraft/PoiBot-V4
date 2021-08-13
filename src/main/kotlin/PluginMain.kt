@@ -6,9 +6,7 @@ import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.initService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
@@ -59,7 +57,7 @@ object PluginMain : KotlinPlugin(
             exec()
         }
 
-        PluginBox.loadCommands { names ->
+        CommandBox.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
             for (name in names) {
                 msg += ("$name ")

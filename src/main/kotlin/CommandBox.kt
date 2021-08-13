@@ -11,7 +11,7 @@ import net.mamoe.mirai.event.events.MessageEvent
  * 命令表
  * @author topjohncian, gggxbbb
  */
-object PluginBox : HashMap<String, BotCommand>() {
+object CommandBox : HashMap<String, BotCommand>() {
 
     private val commands: MutableList<BotCommand> = mutableListOf()
 
@@ -105,7 +105,7 @@ fun GroupMessageEvent.getCommandNameAndArgs(): Pair<String, List<String>> {
 @MessageDsl
 fun B.commandImpl(aliases: List<String>) = content({ aliases.contains(getCommandNameAndArgs().first) }) {
     val (cmdName, args) = getCommandNameAndArgs()
-    PluginBox.getCommand(cmdName).run(this, args)
+    CommandBox.getCommand(cmdName).run(this, args)
 }
 
 /**
@@ -117,7 +117,7 @@ fun B.commandImpl(aliases: List<String>) = content({ aliases.contains(getCommand
 fun B.command(
     name: String, aliases: List<String>, builder: @MessageDsl BotCommand.() -> Unit
 ): Listener<GroupMessageEvent> {
-    PluginBox.command(name, aliases, builder)
+    CommandBox.command(name, aliases, builder)
 
     return commandImpl(aliases)
 }
@@ -131,7 +131,7 @@ fun B.command(
 fun B.command(
     name: String, alias: String, builder: @MessageDsl BotCommand.() -> Unit
 ): Listener<GroupMessageEvent> {
-    PluginBox.command(name, alias, builder)
+    CommandBox.command(name, alias, builder)
 
     return commandImpl(listOf(alias))
 }
@@ -272,7 +272,7 @@ infix fun CommandHeader.to(builder: BotCommand.() -> Unit): Listener<GroupMessag
     cmd.require(this.permissionLevel)
     cmd.intro(this.introduction)
     builder(cmd)
-    PluginBox.command(cmd)
+    CommandBox.command(cmd)
     return this.b.commandImpl(this.aliases)
 }
 
@@ -285,7 +285,7 @@ infix fun CommandHeader.run(onMessage: suspend (GroupMessageEvent, List<String>)
     cmd.require(this.permissionLevel)
     cmd.intro(this.introduction)
     cmd.onMessage(onMessage)
-    PluginBox.command(cmd)
+    CommandBox.command(cmd)
     return this.b.commandImpl(this.aliases)
 }
 
@@ -297,6 +297,6 @@ infix fun CommandHeader.reply(message: String): Listener<GroupMessageEvent> {
     cmd.require(this.permissionLevel)
     cmd.intro(this.introduction)
     cmd.onMessage { event, _ -> event.subject.sendMessage(message) }
-    PluginBox.command(cmd)
+    CommandBox.command(cmd)
     return this.b.commandImpl(this.aliases)
 }
