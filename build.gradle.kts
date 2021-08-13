@@ -29,7 +29,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    implementation("com.github.oshi:oshi-core:5.4.1")
+    implementation("com.github.oshi:oshi-core:5.8.0")
     implementation("org.ktorm:ktorm-core:$ktormVersion")
     implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.34.0")
     implementation(kotlin("stdlib-jdk8"))

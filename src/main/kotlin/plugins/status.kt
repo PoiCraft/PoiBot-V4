@@ -1,24 +1,27 @@
-package com.poicraft.bot.v4.plugin.commands
+package com.poicraft.bot.v4.plugin.plugins
 
-import com.poicraft.bot.v4.plugin.Command
-import net.mamoe.mirai.event.events.GroupMessageEvent
+import com.poicraft.bot.v4.plugin.by
+import com.poicraft.bot.v4.plugin.command
+import com.poicraft.bot.v4.plugin.intro
+import com.poicraft.bot.v4.plugin.run
+import com.poicraft.bot.v4.plugin.utils.formatByte
 import oshi.SystemInfo
 import oshi.hardware.CentralProcessor
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 
+/**
+ * 服务器状态
+ */
+fun B.status() {
 
-@Suppress("BlockingMethodInNonBlockingContext")
-object Status : Command() {
-    override val name: String = "服务器状态"
-    override val aliases: List<String> = listOf(
-        "status"
-    )
+    command("服务器状态") by "status" intro "获取服务器信息" run { event, _ ->
+        val sysInfo = SystemInfo()
 
-    override suspend fun handleMessage(event: GroupMessageEvent, args: List<String>) {
-        val systemInfo = SystemInfo()
-        val processor = systemInfo.hardware.processor
-        val memory = systemInfo.hardware.memory
+        // 硬件信息
+        val hal = sysInfo.hardware
+        val processor = hal.processor
+        val memory = hal.memory
 
         val prevTicks: LongArray = processor.systemCpuLoadTicks
         TimeUnit.SECONDS.sleep(1)
@@ -48,21 +51,4 @@ object Status : Command() {
 
     }
 
-    private fun formatByte(byteNumber: Long): String? {
-        val format = 1024.0
-        val kbNumber = byteNumber / format
-        if (kbNumber < format) {
-            return DecimalFormat("#.##KB").format(kbNumber)
-        }
-        val mbNumber = kbNumber / format
-        if (mbNumber < format) {
-            return DecimalFormat("#.##MB").format(mbNumber)
-        }
-        val gbNumber = mbNumber / format
-        if (gbNumber < format) {
-            return DecimalFormat("#.##GB").format(gbNumber)
-        }
-        val tbNumber = gbNumber / format
-        return DecimalFormat("#.##TB").format(tbNumber)
-    }
 }

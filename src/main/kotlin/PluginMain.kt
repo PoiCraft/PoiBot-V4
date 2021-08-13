@@ -2,6 +2,7 @@ package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.initDatabase
 import com.poicraft.bot.v4.plugin.plugins.exec
+import com.poicraft.bot.v4.plugin.plugins.status
 import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.initService
@@ -55,6 +56,7 @@ object PluginMain : KotlinPlugin(
             command("生死检测") by "alive" reply "Bot 还活着"
             whitelist()
             exec()
+            status()
         }
 
         CommandBox.loadCommands { names ->
