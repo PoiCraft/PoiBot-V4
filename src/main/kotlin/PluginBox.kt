@@ -134,3 +134,33 @@ fun B.command(
 
     return commandImpl(listOf(alias))
 }
+
+class CommandNameHeader(val b: GroupMessageSubscribersBuilder, val name: String)
+class CommandHeader(val b: GroupMessageSubscribersBuilder, val name: String, val aliases: List<String>)
+
+/**
+ * 构造命令
+ * @param aliases 命令的程序友好名称
+ */
+infix fun CommandNameHeader.by(aliases: List<String>) = CommandHeader(this.b, this.name, aliases)
+
+/**
+ * 构造命令
+ * @param alias 命令的程序友好名称
+ */
+infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name, listOf(alias))
+
+/**
+ * 构造命令
+ * @param name 命令的人类友好名称
+ */
+@MessageDsl
+infix fun B.command(name: String) = CommandNameHeader(this, name)
+
+/**
+ * 构造命令
+ */
+infix fun CommandHeader.run(builder: BotCommand.() -> Unit): Listener<GroupMessageEvent> {
+    PluginBox.command(this.name, this.aliases, builder)
+    return this.b.commandImpl(this.aliases)
+}
