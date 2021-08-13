@@ -110,8 +110,10 @@ object BDXWSControl : Control() {
             is OnRunCmdFeedbackRes -> {
                 val channel = cmdFeedbackChannels[res.params.id]
                 channel?.send(res.params.result)
-                channel?.close()
-                cmdFeedbackChannels.remove(res.params.id)
+                if (res.params.id != 0) {
+                    channel?.close()
+                    cmdFeedbackChannels.remove(res.params.id)
+                }
             }
             else -> {
             }
