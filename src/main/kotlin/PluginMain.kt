@@ -54,6 +54,7 @@ object PluginMain : KotlinPlugin(
         initService()
 
         GlobalEventChannel.subscribeGroupMessages {
+            command("生死检测") by "alive" reply "Bot 还活着"
             whitelist()
             exec()
         }

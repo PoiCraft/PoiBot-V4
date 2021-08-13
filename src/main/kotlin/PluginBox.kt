@@ -164,3 +164,12 @@ infix fun CommandHeader.run(builder: BotCommand.() -> Unit): Listener<GroupMessa
     PluginBox.command(this.name, this.aliases, builder)
     return this.b.commandImpl(this.aliases)
 }
+
+infix fun CommandHeader.reply(message: String): Listener<GroupMessageEvent> {
+    PluginBox.command(this.name, this.aliases) {
+        onMessage { event, _ ->
+            event.subject.sendMessage(message)
+        }
+    }
+    return this.b.commandImpl(this.aliases)
+}
