@@ -152,6 +152,12 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
 
 /**
  * 构造命令
+ *
+ * 结构:
+ *
+ *  * `command("名称") by "命令" run { 构造 command }`
+ *  * `command("名称") by listOf("命令") reply "发送内容"`
+ *
  * @param name 命令的人类友好名称
  */
 @MessageDsl
@@ -165,6 +171,9 @@ infix fun CommandHeader.run(builder: BotCommand.() -> Unit): Listener<GroupMessa
     return this.b.commandImpl(this.aliases)
 }
 
+/**
+ * 简单回复
+ */
 infix fun CommandHeader.reply(message: String): Listener<GroupMessageEvent> {
     PluginBox.command(this.name, this.aliases) {
         onMessage { event, _ ->

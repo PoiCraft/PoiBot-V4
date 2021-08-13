@@ -21,7 +21,7 @@ fun B.exec() {
         require(Permission.PERMISSION_LEVEL_ADMIN)
         onMessage { event, args ->
             val result = BDXWSControl.runCmd(args.subList(1, args.size).joinToString(" "))
-            event.subject.sendMessage(event.source.quote() + result)
+            event.subject.sendMessage(event.source.quote() + "执行完成\n" + result)
         }
     }
 }
