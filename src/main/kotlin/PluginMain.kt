@@ -82,6 +82,8 @@ object PluginMain : KotlinPlugin(
             status()
         }
 
+        logger.info("LoggerGroup: ${PluginData.loggerGroup}")
+
         CommandBox.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
             for (name in names) {
@@ -100,7 +102,7 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
     @ValueDescription("机器人服务的群")
     var groupList by value<List<Long>>(listOf())
 
-    @ValueDescription("发送日志的群")
+    @ValueDescription("发送日志的群, 管理群")
     val loggerGroup by value(123456L)
 }
 

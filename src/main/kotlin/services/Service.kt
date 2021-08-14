@@ -6,7 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 val services = listOf(
     ::validateUser,
-    ::loggerService
+    ::broadcastService
 )
 
 

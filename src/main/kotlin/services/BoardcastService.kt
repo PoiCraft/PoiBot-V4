@@ -11,17 +11,21 @@ import net.mamoe.mirai.Bot
 
 
 @ExperimentalCoroutinesApi
-fun loggerService(plugin: PluginMain) {
-    logger.info("LoggerGroup: ${PluginData.loggerGroup}")
+fun broadcastService(plugin: PluginMain) {
+    logger.info("GroupList: ${PluginData.groupList.joinToString()}")
     BDXWSControl.addEventListener<OnJoinRes> {
         val bot = Bot.instances.last()
         val target = params.sender
-        bot.getGroup(PluginData.loggerGroup)!!.sendMessage("$target 加入了游戏")
+        PluginData.groupList.forEach {
+            bot.getGroup(it)!!.sendMessage("$target 加入了游戏")
+        }
     }
 
     BDXWSControl.addEventListener<OnLeftRes> {
         val bot = Bot.instances.last()
         val target = params.sender
-        bot.getGroup(PluginData.loggerGroup)!!.sendMessage("$target 离开了游戏")
+        PluginData.groupList.forEach {
+            bot.getGroup(it)!!.sendMessage("$target 离开了了游戏")
+        }
     }
 }
