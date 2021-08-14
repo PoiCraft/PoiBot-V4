@@ -15,6 +15,10 @@ import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.contact.isAdministrator
+import net.mamoe.mirai.contact.isOperator
+import net.mamoe.mirai.contact.isOwner
+import net.mamoe.mirai.contact.nameCardOrNick
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.utils.info
@@ -62,6 +66,17 @@ object PluginMain : KotlinPlugin(
 
         GlobalEventChannel.subscribeGroupMessages {
             command("生死检测") by "alive" reply "Bot 还活着"
+            command("权限等级") by "level" run { event, _ ->
+                event.subject.sendMessage(
+                    """
+                    Level of ${event.sender.nameCardOrNick}
+                    Owner [ ${if (event.sender.isOwner()) "✓" else "✕"} ]
+                    Operator [ ${if (event.sender.isOperator()) "✓" else "✕"} ]
+                    Admin [ ${if (event.sender.isAdministrator()) "✓" else "✕"} ]
+                    Everyone [ ✓ ]
+                """.trimIndent()
+                )
+            }
             whitelist()
             exec()
             status()
