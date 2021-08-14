@@ -58,7 +58,7 @@ object PluginMain : KotlinPlugin(
 
         BDXWSControl.onCrash { e ->
             launch {
-                Bot.instances.last().getGroup(PluginData.loggerGroup)!!.sendMessage("WebSocket 炸了, 我不干了: " + e.message)
+                Bot.instances.last().getGroup(PluginData.adminGroup)!!.sendMessage("WebSocket 炸了, 我不干了: " + e.message)
             }
         }
 
@@ -82,7 +82,7 @@ object PluginMain : KotlinPlugin(
             status()
         }
 
-        logger.info("LoggerGroup: ${PluginData.loggerGroup}")
+        logger.info("LoggerGroup: ${PluginData.adminGroup}")
 
         CommandBox.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
@@ -103,7 +103,7 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
     var groupList by value<List<Long>>(listOf())
 
     @ValueDescription("发送日志的群, 管理群")
-    val loggerGroup by value(123456L)
+    val adminGroup by value(123456L)
 }
 
 @Serializable
