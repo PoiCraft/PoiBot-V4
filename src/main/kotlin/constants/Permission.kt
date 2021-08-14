@@ -19,4 +19,9 @@ enum class Permission {
      * 群主
      */
     PERMISSION_LEVEL_OWNER,
+
+    /**
+     * 服务器管理群内成员
+     */
+    PERMISSION_LEVEL_ADMIN_GROUP
 }

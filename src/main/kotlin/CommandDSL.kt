@@ -65,6 +65,7 @@ class BotCommand(val name: String, val aliases: List<String>) {
             Permission.PERMISSION_LEVEL_EVERYONE -> true
             Permission.PERMISSION_LEVEL_ADMIN -> event.sender.isOperator()
             Permission.PERMISSION_LEVEL_OWNER -> event.sender.isOwner()
+            Permission.PERMISSION_LEVEL_ADMIN_GROUP -> event.group.id == PluginData.adminGroup
         }
     }
     /* end 权限 */
