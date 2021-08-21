@@ -82,7 +82,7 @@ object PluginMain : KotlinPlugin(
             status()
         }
 
-        logger.info("LoggerGroup: ${PluginData.adminGroup}")
+        logger.info("AdminGroup: ${PluginData.adminGroup}")
 
         CommandBox.loadCommands { names ->
             var msg = "已加载${names.size}个命令: "
