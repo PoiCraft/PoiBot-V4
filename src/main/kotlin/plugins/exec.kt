@@ -11,10 +11,18 @@ import net.mamoe.mirai.message.data.MessageSource.Key.quote
  */
 @ExperimentalCoroutinesApi
 fun B.exec() {
+
+    startsWith("/") reply { cmd ->
+        if (PluginData.adminGroup == this.group.id) {
+            val result = BDXWSControl.runCmd(cmd)
+            this.subject.sendMessage(this.source.quote() + result)
+        }
+    }
+
     /**
      * 执行任意命令
      */
-    command("执行命令") by "exec" intro "执行命令" require Permission.PERMISSION_LEVEL_ADMIN run { event, args ->
+    command("执行命令") by "exec" intro "执行命令" require Permission.PERMISSION_LEVEL_ADMIN_GROUP run { event, args ->
         val result = BDXWSControl.runCmd(args.subList(1, args.size).joinToString(" "))
         event.subject.sendMessage(event.source.quote() + "执行完成\n" + result)
     }
