@@ -3,6 +3,7 @@
 package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.constants.Permission
+import com.poicraft.bot.v4.plugin.utils.getSimilarCommands
 import net.mamoe.mirai.event.*
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.MessageEvent
@@ -72,7 +73,7 @@ object CommandBox : HashMap<String, BotCommand>() {
 }
 
 /**
- * 空命令
+ * 不存在命令
  */
 val emptyCommand = command("", "") {}
 

@@ -1,12 +1,10 @@
 package com.poicraft.bot.v4.plugin
 
 import com.poicraft.bot.v4.plugin.database.initDatabase
-import com.poicraft.bot.v4.plugin.plugins.exec
-import com.poicraft.bot.v4.plugin.plugins.status
-import com.poicraft.bot.v4.plugin.plugins.utils
-import com.poicraft.bot.v4.plugin.plugins.whitelist
+import com.poicraft.bot.v4.plugin.plugins.*
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.initService
+import com.poicraft.bot.v4.plugin.utils.getSimilarCommands
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -70,6 +68,7 @@ object PluginMain : KotlinPlugin(
             whitelist()
             exec()
             status()
+            help()
         }
 
         logger.info("AdminGroup: ${PluginData.adminGroup}")
