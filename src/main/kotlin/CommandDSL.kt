@@ -96,25 +96,3 @@ class BotCommand(val name: String, val aliases: List<String>) {
     }
 
 }
-
-/**
- * 构造命令
- * @param name 命令的人类友好名称
- * @param aliases 命令的程序友好名称
- */
-fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit): BotCommand {
-    val cmd = BotCommand(name, aliases)
-    builder(cmd)
-    return cmd
-}
-
-/**
- * 构造命令
- * @param name 命令的人类友好名称
- * @param alias 命令的程序友好名称
- */
-fun command(name: String, alias: String, builder: BotCommand.() -> Unit): BotCommand {
-    val cmd = BotCommand(name, listOf(alias))
-    builder(cmd)
-    return cmd
-}

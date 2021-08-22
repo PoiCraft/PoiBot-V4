@@ -1,5 +1,7 @@
 package com.poicraft.bot.v4.plugin.plugins
 
+import com.poicraft.bot.v4.plugin.by
+import com.poicraft.bot.v4.plugin.to
 import com.poicraft.bot.v4.plugin.command
 import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.constants.WhitelistStatus
@@ -15,7 +17,7 @@ fun B.whitelist() {
      * 添加白名单
      * @author gggxbbb
      */
-    command("添加白名单", "addw") {
+    command("添加白名单") by "addw" to {
         intro("添加白名单")
         require(Permission.PERMISSION_LEVEL_ADMIN)
         onMessage { event, args ->
@@ -37,7 +39,7 @@ fun B.whitelist() {
      * 添加白名单
      * @author gggxbbb
      */
-    command("删除白名单", "rmw") {
+    command("删除白名单") by "rmw" to {
         intro("删除白名单")
         require(Permission.PERMISSION_LEVEL_ADMIN)
         onMessage { event, args ->

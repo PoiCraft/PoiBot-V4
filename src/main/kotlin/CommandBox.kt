@@ -75,7 +75,7 @@ object CommandBox : HashMap<String, BotCommand>() {
 /**
  * 不存在命令
  */
-val emptyCommand = command("", "") {}
+val emptyCommand = BotCommand("", listOf())
 
 typealias B = GroupMessageSubscribersBuilder
 
@@ -104,40 +104,20 @@ fun GroupMessageEvent.getCommandNameAndArgs(): Pair<String, List<String>> {
 }
 
 @MessageDsl
-fun B.commandImpl(aliases: List<String>) = content({ aliases.contains(getCommandNameAndArgs().first) }) {
-    val (cmdName, args) = getCommandNameAndArgs()
-    CommandBox.getCommand(cmdName).run(this, args)
-}
+fun B.commandImpl(aliases: List<String>) =
+    content({
+        aliases.contains(getCommandNameAndArgs().first)
+    }) {
+        val (cmdName, args) = getCommandNameAndArgs()
+        CommandBox.getCommand(cmdName).run(this, args)
+    }
 
-/**
- * 构造命令
- * @param name 命令的人类友好名称
- * @param aliases 命令的程序友好名称
- */
-@MessageDsl
-fun B.command(
-    name: String, aliases: List<String>, builder: @MessageDsl BotCommand.() -> Unit
-): Listener<GroupMessageEvent> {
-    CommandBox.command(name, aliases, builder)
 
-    return commandImpl(aliases)
-}
+class CommandNameHeader(
+    val b: GroupMessageSubscribersBuilder,
+    val name: String
+)
 
-/**
- * 构造命令
- * @param name 命令的人类友好名称
- * @param alias 命令的程序友好名称
- */
-@MessageDsl
-fun B.command(
-    name: String, alias: String, builder: @MessageDsl BotCommand.() -> Unit
-): Listener<GroupMessageEvent> {
-    CommandBox.command(name, alias, builder)
-
-    return commandImpl(listOf(alias))
-}
-
-class CommandNameHeader(val b: GroupMessageSubscribersBuilder, val name: String)
 class CommandHeader(
     val b: GroupMessageSubscribersBuilder,
     val name: String,
