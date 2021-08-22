@@ -25,7 +25,7 @@ fun broadcastService(plugin: PluginMain) {
         val bot = Bot.instances.last()
         val target = params.sender
         PluginData.groupList.forEach {
-            bot.getGroup(it)!!.sendMessage("$target 离开了了游戏")
+            bot.getGroup(it)!!.sendMessage("$target 离开了游戏")
         }
     }
 }
