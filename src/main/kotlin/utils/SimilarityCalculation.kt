@@ -12,6 +12,16 @@ fun getSimilarCommands(ipt: String): List<String> {
     return opt
 }
 
+fun getSimilarCommandNames(ipt: String): List<String> {
+    val opt = mutableListOf<String>()
+    for (o in CommandBox.values) {
+        if ((levenshtein(ipt, o.name) > 0.5) and !opt.contains(o.name)) {
+            opt.add(o.name)
+        }
+    }
+    return opt
+}
+
 fun levenshtein(a: String, b: String): Float {
     val editDistance = editDis(a, b)
     return 1 - editDistance.toFloat() / a.length.coerceAtLeast(b.length)
