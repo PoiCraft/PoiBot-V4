@@ -33,13 +33,13 @@ fun B.utils() {
     command("权限等级") by "level" run { event, _ ->
         event.subject.sendMessage(
             """
-                    Level of ${event.sender.nameCardOrNick}
-                    Owner [ ${if (event.sender.isOwner()) "✓" else "✕"} ]
-                    Operator [ ${if (event.sender.isOperator()) "✓" else "✕"} ]
-                    Admin [ ${if (event.sender.isAdministrator()) "✓" else "✕"} ]
-                    Admin Group [ ${if (event.group.id == PluginData.adminGroup) "✓" else "✕"} ]
-                    Everyone [ ✓ ]
-                """.trimIndent()
+               Level of ${event.sender.nameCardOrNick}
+               Owner [ ${if (event.sender.isOwner()) "✓" else "✕"} ]
+               Operator [ ${if (event.sender.isOperator()) "✓" else "✕"} ]
+               Admin [ ${if (event.sender.isAdministrator()) "✓" else "✕"} ]
+               Admin Group [ ${if (event.group.id == PluginData.adminGroup) "✓" else "✕"} ]
+               Everyone [ ✓ ]
+            """.trimIndent()
         )
     }
 }
