@@ -4,6 +4,7 @@ import net.mamoe.mirai.utils.MiraiLogger
 import org.ktorm.logging.LogLevel
 import org.ktorm.logging.Logger
 
+@Suppress("MemberVisibilityCanBePrivate")
 class KtormLoggerAdapter(val threshold: LogLevel, val logger: MiraiLogger) : Logger {
 
     override fun isTraceEnabled(): Boolean {

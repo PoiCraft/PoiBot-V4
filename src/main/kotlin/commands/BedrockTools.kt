@@ -7,7 +7,7 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-@Suppress("BlockingMethodInNonBlockingContext")
+@Suppress("BlockingMethodInNonBlockingContext", "SpellCheckingInspection")
 object BedrockTools : Command() {
     override val name: String = "MCBE工具"
     override val aliases: List<String> = listOf(

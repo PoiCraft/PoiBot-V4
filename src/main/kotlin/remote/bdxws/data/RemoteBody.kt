@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.poicraft.bot.v4.plugin.remote.bdxws.data
 
 import kotlinx.serialization.SerialName
