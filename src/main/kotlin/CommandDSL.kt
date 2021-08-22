@@ -85,21 +85,10 @@ class BotCommand(val name: String, val aliases: List<String>) {
     }
 
 
-    /* 向下兼容 */
-    var proxy: Command? = null
-    infix fun cmdProxy(cmd: Command) {
-        this.proxy = cmd
-    }
-    /* end 向下兼容 */
-
     /**
      * 运行命令
      */
     suspend fun run(event: GroupMessageEvent, args: List<String>) {
-        if (proxy != null) { /* 向下兼容 */
-            proxy?.onMessage(event, args)
-            return
-        }
         if (checkPermission(event))  /* 鉴权 */
             messageHandler(event, args)
         else
@@ -129,9 +118,3 @@ fun command(name: String, alias: String, builder: BotCommand.() -> Unit): BotCom
     builder(cmd)
     return cmd
 }
-
-/**
- * 兼容旧命令
- * @see Command
- */
-fun Command.update() = command(this.name, this.aliases) { cmdProxy(this@update);intro(this@update.introduction) }
