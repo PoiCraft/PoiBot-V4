@@ -63,6 +63,9 @@ object PluginMain : KotlinPlugin(
 
         initService()
 
+        /**
+         * 激活命令
+         */
         GlobalEventChannel.subscribeGroupMessages {
             utils()
             whitelist()

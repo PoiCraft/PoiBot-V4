@@ -7,7 +7,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 
 /**
- * 执行任意命令
+ * 执行任意命令, 仅限 adminGroup 使用
  */
 @ExperimentalCoroutinesApi
 fun B.exec() {
