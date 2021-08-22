@@ -280,3 +280,15 @@ infix fun CommandHeader.reply(message: String): Listener<GroupMessageEvent> {
     CommandBox.command(cmd)
     return this.b.commandImpl(this.aliases)
 }
+
+/**
+ * 复杂回复
+ */
+infix fun CommandHeader.reply(message: suspend () -> String): Listener<GroupMessageEvent> {
+    val cmd = BotCommand(this.name, this.aliases)
+    cmd.require(this.permissionLevel)
+    cmd.intro(this.introduction)
+    cmd.onMessage { event, args -> event.subject.sendMessage(message()) }
+    CommandBox.command(cmd)
+    return this.b.commandImpl(this.aliases)
+}
