@@ -11,11 +11,13 @@ import net.mamoe.mirai.contact.nameCardOrNick
  * 小工具集
  */
 fun B.utils() {
+
     command("地址") by "addr" reply """
         服务器名称: PoiCraft
         服务器地址: play.poicraft.com
         服务器端口: 19132
     """.trimIndent()
+
     command("本服信息") by "info" reply {
         val info = getServerInfo("play.poicraft.com")
         """
@@ -25,7 +27,9 @@ fun B.utils() {
             游戏模式: ${info.game_mode}
         """.trimIndent()
     }
+
     command("生死检测") by "alive" reply "Bot 还活着"
+
     command("权限等级") by "level" run { event, _ ->
         event.subject.sendMessage(
             """
