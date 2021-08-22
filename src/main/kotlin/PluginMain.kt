@@ -3,6 +3,7 @@ package com.poicraft.bot.v4.plugin
 import com.poicraft.bot.v4.plugin.database.initDatabase
 import com.poicraft.bot.v4.plugin.plugins.exec
 import com.poicraft.bot.v4.plugin.plugins.status
+import com.poicraft.bot.v4.plugin.plugins.utils
 import com.poicraft.bot.v4.plugin.plugins.whitelist
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.services.initService
@@ -65,18 +66,7 @@ object PluginMain : KotlinPlugin(
         initService()
 
         GlobalEventChannel.subscribeGroupMessages {
-            command("生死检测") by "alive" reply "Bot 还活着"
-            command("权限等级") by "level" run { event, _ ->
-                event.subject.sendMessage(
-                    """
-                    Level of ${event.sender.nameCardOrNick}
-                    Owner [ ${if (event.sender.isOwner()) "✓" else "✕"} ]
-                    Operator [ ${if (event.sender.isOperator()) "✓" else "✕"} ]
-                    Admin [ ${if (event.sender.isAdministrator()) "✓" else "✕"} ]
-                    Everyone [ ✓ ]
-                """.trimIndent()
-                )
-            }
+            utils()
             whitelist()
             exec()
             status()
