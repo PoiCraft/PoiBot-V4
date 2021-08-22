@@ -1,6 +1,7 @@
 package com.poicraft.bot.v4.plugin.plugins
 
 import com.poicraft.bot.v4.plugin.CommandBox
+import com.poicraft.bot.v4.plugin.PluginData
 import com.poicraft.bot.v4.plugin.getCommandNameAndArgs
 import com.poicraft.bot.v4.plugin.utils.getSimilarCommands
 
@@ -13,7 +14,7 @@ fun B.help() {
      */
     subscriber({
         val name = getCommandNameAndArgs().first
-        (!CommandBox.keys.contains(name)) and (name != "")
+        (!CommandBox.keys.contains(name)) and (name != "") and PluginData.groupList.contains(this.group.id)
     }) {
         val (_, args) = getCommandNameAndArgs()
         val similarOnes = getSimilarCommands(args.first())
