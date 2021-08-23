@@ -8,20 +8,20 @@ enum class Permission {
     /**
      * 任意群员
      */
-    PERMISSION_LEVEL_EVERYONE,
+    EVERYONE,
 
     /**
      * 管理员及群主
      */
-    PERMISSION_LEVEL_ADMIN,
+    ADMIN,
 
     /**
      * 群主
      */
-    PERMISSION_LEVEL_OWNER,
+    OWNER,
 
     /**
      * 服务器管理群内成员
      */
-    PERMISSION_LEVEL_ADMIN_GROUP
+    ADMIN_GROUP
 }

@@ -35,7 +35,7 @@ class BotCommand(val name: String, val aliases: List<String>) {
     /**
      * 权限等级
      */
-    private var permissionLevel = Permission.PERMISSION_LEVEL_EVERYONE
+    private var permissionLevel = Permission.EVERYONE
 
     /**
      * 设置权限等级
@@ -62,10 +62,10 @@ class BotCommand(val name: String, val aliases: List<String>) {
      */
     private fun checkPermission(event: GroupMessageEvent): Boolean {
         return when (this.permissionLevel) {
-            Permission.PERMISSION_LEVEL_EVERYONE -> true
-            Permission.PERMISSION_LEVEL_ADMIN -> event.sender.isOperator()
-            Permission.PERMISSION_LEVEL_OWNER -> event.sender.isOwner()
-            Permission.PERMISSION_LEVEL_ADMIN_GROUP -> event.group.id == PluginData.adminGroup
+            Permission.EVERYONE -> true
+            Permission.ADMIN -> event.sender.isOperator()
+            Permission.OWNER -> event.sender.isOwner()
+            Permission.ADMIN_GROUP -> event.group.id == PluginData.adminGroup
         }
     }
     /* end 权限 */

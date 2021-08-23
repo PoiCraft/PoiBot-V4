@@ -20,7 +20,7 @@ class CommandHeader(
     val b: GroupMessageSubscribersBuilder,
     val name: String,
     val aliases: List<String>,
-    var permissionLevel: Permission = Permission.PERMISSION_LEVEL_EVERYONE,
+    var permissionLevel: Permission = Permission.EVERYONE,
     var introduction: String = ""
 )
 

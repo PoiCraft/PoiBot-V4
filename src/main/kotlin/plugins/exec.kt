@@ -23,7 +23,7 @@ fun B.exec() {
     /**
      * 执行任意命令
      */
-    command("执行命令") by "exec" intro "执行命令" require Permission.PERMISSION_LEVEL_ADMIN_GROUP run { event, args ->
+    command("执行命令") by "exec" intro "执行命令" require Permission.ADMIN_GROUP run { event, args ->
         val result = BDXWSControl.runCmd(args.subList(1, args.size).joinToString(" "))
         event.subject.sendMessage(event.source.quote() + "执行完成\n" + result)
     }

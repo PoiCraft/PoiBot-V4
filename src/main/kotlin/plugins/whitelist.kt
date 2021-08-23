@@ -15,7 +15,7 @@ fun B.whitelist() {
      * 添加白名单
      * @author gggxbbb
      */
-    command("添加白名单") by "addw" require Permission.PERMISSION_LEVEL_ADMIN run { event, args ->
+    command("添加白名单") by "addw" require Permission.ADMIN run { event, args ->
         val target = args.subList(1, args.size)
         if (target.isEmpty()) {
             event.subject.sendMessage("请提供 Xbox ID !")
@@ -33,7 +33,7 @@ fun B.whitelist() {
      * 添加白名单
      * @author gggxbbb
      */
-    command("删除白名单") by "rmw" require Permission.PERMISSION_LEVEL_ADMIN run { event, args ->
+    command("删除白名单") by "rmw" require Permission.ADMIN run { event, args ->
         val target = args.subList(1, args.size)
         if (target.isEmpty()) {
             event.subject.sendMessage("请提供 Xbox ID !")

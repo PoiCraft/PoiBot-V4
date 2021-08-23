@@ -15,7 +15,7 @@ import java.time.Instant
 /**
  * 绑定
  */
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 fun B.bind() {
     command("绑定") by "bind" intro "#bind <XboxID> 以绑定 Xbox ID" run { event, args ->
         val xboxID = args.getOrNull(1)
@@ -47,7 +47,7 @@ fun B.bind() {
         }
     }
 
-    command("解除绑定") by "unbind" require Permission.PERMISSION_LEVEL_ADMIN run { event, args ->
+    command("解除绑定") by "unbind" require Permission.ADMIN run { event, args ->
         val at: At? by event.message.orNull()
         if (at != null) {
             PluginMain.database.delete(Users) { it.qqNumber eq at!!.target }
@@ -58,7 +58,7 @@ fun B.bind() {
         }
     }
 
-    command("列出已绑定玩家") by "lsbind" require Permission.PERMISSION_LEVEL_ADMIN run { event, args ->
+    command("列出已绑定玩家") by "lsbind" require Permission.ADMIN run { event, args ->
         val targets = PluginMain.database.from(Users).select(Users.qqNumber, Users.xboxId)
             .map { TargetUser(it.getLong(1), it.getString(2)!!) }
         var msg = "已绑定的玩家:\nQQ   Xbox"
