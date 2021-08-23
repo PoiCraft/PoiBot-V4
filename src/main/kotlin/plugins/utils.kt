@@ -13,12 +13,18 @@ import com.poicraft.bot.v4.plugin.dsl.*
  */
 fun B.utils() {
 
+    /**
+     * 面向新玩家的服务器相关信息
+     */
     command("地址") by "addr" reply """
         服务器名称: PoiCraft
         服务器地址: play.poicraft.com
         服务器端口: 19132
     """.trimIndent()
 
+    /**
+     * 复杂回复的例子, 获得服务器状态信息
+     */
     command("本服信息") by "info" reply {
         val info = getServerInfo("play.poicraft.com")
         """
@@ -29,8 +35,14 @@ fun B.utils() {
         """.trimIndent()
     }
 
+    /**
+     * 简单回复的例子, 确认机器人存活
+     */
     command("生死检测") by "alive" reply "Bot 还活着"
 
+    /**
+     * 测试命令, 检查群员的权限等级
+     */
     command("权限等级") by "level" run { event, _ ->
         event.subject.sendMessage(
             """

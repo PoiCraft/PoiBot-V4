@@ -8,6 +8,9 @@ import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnChatRes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.ktorm.dsl.*
 
+/**
+ * 服务器内绑定
+ */
 @ExperimentalCoroutinesApi
 @Suppress("unused")
 fun validateUser(plugin: PluginMain) {

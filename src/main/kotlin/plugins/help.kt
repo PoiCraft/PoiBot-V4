@@ -26,6 +26,9 @@ fun B.help() {
         }
     }
 
+    /**
+     * 命令帮助
+     */
     command("帮助") by "help" run { event, args ->
         val arg = args.subList(1, args.size)
         val names = mutableMapOf<String, BotCommand>()
@@ -45,7 +48,7 @@ fun B.help() {
                     opt += "\n" + cmd.introduction
                 }
                 event.subject.sendMessage(opt)
-            } else {
+            } else { // 命令名纠错
                 val similarOnes = getSimilarCommandNames(arg.first())
                 var opt = "未知功能 " + arg.first()
                 if (similarOnes.isNotEmpty()) {

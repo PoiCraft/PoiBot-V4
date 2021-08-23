@@ -15,7 +15,7 @@ import net.mamoe.mirai.event.GroupMessageSubscribersBuilder
  * }
  * ```
  *
- * 在此函数内, 你可以使用 `command` 来编写命令, 具体方法见 [com.poicraft.bot.v4.plugin.command].
+ * 在此函数内, 你可以使用 `command` 来编写命令, 具体方法见 [com.poicraft.bot.v4.plugin.dsl.command].
  *
  * 你也可以使用 `mirai` 提供的 DSL 语法来实现命令. **注意,** 此方法需手动实现鉴权和无关群排除. 使用方法见 [net.mamoe.mirai.event.subscribeMessages]
  *

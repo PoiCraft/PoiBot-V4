@@ -4,8 +4,15 @@ import com.poicraft.bot.v4.plugin.constants.WhitelistStatus
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+/**
+ * 白名单管理
+ */
 class Whitelist {
     companion object {
+        /**
+         * 添加白名单
+         * @param target 玩家的 Xbox ID
+         */
         @ExperimentalCoroutinesApi
         suspend fun add(target: String): Pair<WhitelistStatus?, String> {
             return when (val result = BDXWSControl.runCmd("whitelist add \"$target\"")) {
@@ -15,6 +22,10 @@ class Whitelist {
             }
         }
 
+        /**
+         * 移除白名单
+         * @param target 玩家的 Xbox ID
+         */
         @ExperimentalCoroutinesApi
         suspend fun remove(target: String): Pair<WhitelistStatus?, String> {
             return when (val result = BDXWSControl.runCmd("whitelist remove \"$target\"")) {

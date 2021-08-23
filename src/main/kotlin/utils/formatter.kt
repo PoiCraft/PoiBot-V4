@@ -2,6 +2,9 @@ package com.poicraft.bot.v4.plugin.utils
 
 import java.text.DecimalFormat
 
+/**
+ * 格式化单位
+ */
 fun formatByte(byteNumber: Long): String? {
     val format = 1024.0
     val kbNumber = byteNumber / format

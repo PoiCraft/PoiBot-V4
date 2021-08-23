@@ -17,6 +17,9 @@ import java.time.Instant
  */
 @ExperimentalCoroutinesApi
 fun B.bind() {
+    /**
+     * 绑定
+     */
     command("绑定") by "bind" intro "#bind <XboxID> 以绑定 Xbox ID" run { event, args ->
         val xboxID = args.getOrNull(1)
         if (xboxID == null) {
@@ -47,6 +50,9 @@ fun B.bind() {
         }
     }
 
+    /**
+     * 解除绑定
+     */
     command("解除绑定") by "unbind" require Permission.ADMIN run { event, args ->
         val at: At? by event.message.orNull()
         if (at != null) {
@@ -58,6 +64,9 @@ fun B.bind() {
         }
     }
 
+    /**
+     * 列出已绑定的玩家
+     */
     command("列出已绑定玩家") by "lsbind" require Permission.ADMIN run { event, args ->
         val targets = PluginMain.database.from(Users).select(Users.qqNumber, Users.xboxId)
             .map { TargetUser(it.getLong(1), it.getString(2)!!) }

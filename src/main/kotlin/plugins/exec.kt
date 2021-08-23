@@ -13,8 +13,11 @@ import com.poicraft.bot.v4.plugin.dsl.*
 @ExperimentalCoroutinesApi
 fun B.exec() {
 
+    /**
+     * 实现 /xxx 直接执行命令
+     */
     startsWith("/") reply { cmd ->
-        if (PluginData.adminGroup == this.group.id) {
+        if (PluginData.adminGroup == this.group.id /* 等价于 require Permission.ADMIN_GROUP */) {
             val result = BDXWSControl.runCmd(cmd)
             this.subject.sendMessage(this.source.quote() + result)
         }

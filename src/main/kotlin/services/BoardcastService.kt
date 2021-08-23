@@ -10,9 +10,16 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.mamoe.mirai.Bot
 
 
+/**
+ * 广播服务
+ */
 @ExperimentalCoroutinesApi
 fun broadcastService(plugin: PluginMain) {
     logger.info("GroupList: ${PluginData.groupList.joinToString()}")
+
+    /**
+     * 玩家进入游戏
+     */
     BDXWSControl.addEventListener<OnJoinRes> {
         val bot = Bot.instances.last()
         val target = params.sender
@@ -21,6 +28,9 @@ fun broadcastService(plugin: PluginMain) {
         }
     }
 
+    /**
+     * 玩家离开游戏
+     */
     BDXWSControl.addEventListener<OnLeftRes> {
         val bot = Bot.instances.last()
         val target = params.sender

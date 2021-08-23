@@ -50,6 +50,9 @@ object PluginMain : KotlinPlugin(
 
         BDXWSControl.init()
 
+        /**
+         * WebSocket 连接失败提醒
+         */
         BDXWSControl.onCrash { e ->
             launch {
                 Bot.instances.last().getGroup(PluginData.adminGroup)!!.sendMessage("WebSocket 炸了, 我不干了: " + e.message)
@@ -60,6 +63,8 @@ object PluginMain : KotlinPlugin(
 
         /**
          * 激活命令
+         *
+         * 可至 plugins/init.kt 查看命令的编写方法
          */
         GlobalEventChannel.subscribeGroupMessages {
             utils()

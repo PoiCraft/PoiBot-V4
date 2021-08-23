@@ -2,6 +2,9 @@ package com.poicraft.bot.v4.plugin.utils
 
 import com.poicraft.bot.v4.plugin.CommandBox
 
+/**
+ * 获得近似命令
+ */
 fun getSimilarCommands(ipt: String): List<String> {
     val opt = mutableListOf<String>()
     for (o in CommandBox.keys) {
@@ -12,6 +15,9 @@ fun getSimilarCommands(ipt: String): List<String> {
     return opt
 }
 
+/**
+ * 获得近似命令名
+ */
 fun getSimilarCommandNames(ipt: String): List<String> {
     val opt = mutableListOf<String>()
     for (o in CommandBox.values) {

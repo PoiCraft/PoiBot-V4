@@ -12,6 +12,11 @@ import java.util.concurrent.TimeUnit
  */
 fun B.status() {
 
+    /**
+     * 服务器硬件状态
+     *
+     * 基于 oshi
+     */
     command("服务器状态") by "status" intro "获取服务器信息" run { event, _ ->
         val sysInfo = SystemInfo()
 

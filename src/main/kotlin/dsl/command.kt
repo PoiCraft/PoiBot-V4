@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.poicraft.bot.v4.plugin.dsl
 
 import com.poicraft.bot.v4.plugin.BotCommand
@@ -133,18 +135,24 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
 @MessageDsl
 infix fun B.command(name: String) = CommandNameHeader(this, name)
 
+/**
+ * 设置权限等级, 非必须
+ */
 infix fun CommandHeader.require(permissionLevel: Permission): CommandHeader {
     this.permissionLevel = permissionLevel
     return this
 }
 
+/**
+ * 设置命令介绍, 非必须
+ */
 infix fun CommandHeader.intro(introduction: String): CommandHeader {
     this.introduction = introduction
     return this
 }
 
 /**
- * 构造命令
+ * 命令完整构造
  */
 infix fun CommandHeader.to(builder: BotCommand.() -> Unit): Listener<GroupMessageEvent> {
     val cmd = BotCommand(this.name, this.aliases)
@@ -187,7 +195,7 @@ infix fun CommandHeader.reply(message: suspend () -> String): Listener<GroupMess
     val cmd = BotCommand(this.name, this.aliases)
     cmd.require(this.permissionLevel)
     cmd.intro(this.introduction)
-    cmd.onMessage { event, args -> event.subject.sendMessage(message()) }
+    cmd.onMessage { event, _ -> event.subject.sendMessage(message()) }
     CommandBox.command(cmd)
     return this.b.commandImpl(this.aliases)
 }

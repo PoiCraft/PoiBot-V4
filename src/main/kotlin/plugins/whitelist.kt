@@ -13,7 +13,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun B.whitelist() {
     /**
      * 添加白名单
-     * @author gggxbbb
      */
     command("添加白名单") by "addw" require Permission.ADMIN run { event, args ->
         val target = args.subList(1, args.size)
@@ -31,7 +30,6 @@ fun B.whitelist() {
 
     /**
      * 添加白名单
-     * @author gggxbbb
      */
     command("删除白名单") by "rmw" require Permission.ADMIN run { event, args ->
         val target = args.subList(1, args.size)

@@ -54,6 +54,11 @@ object BDXWSControl : Control() {
 
     private var crashCallback = { _: Throwable -> }
 
+    /**
+     * WebSocket 连接失败时回调
+     *
+     * 调用则机器人将**退出**
+     */
     fun onCrash(callback: (Throwable) -> Unit) {
         crashCallback = callback
     }
