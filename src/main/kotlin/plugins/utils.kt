@@ -6,6 +6,7 @@ import net.mamoe.mirai.contact.isAdministrator
 import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.contact.nameCardOrNick
+import com.poicraft.bot.v4.plugin.dsl.*
 
 /**
  * 小工具集

@@ -1,10 +1,6 @@
 package com.poicraft.bot.v4.plugin.plugins
 
-import com.poicraft.bot.v4.plugin.by
-import com.poicraft.bot.v4.plugin.to
-import com.poicraft.bot.v4.plugin.require
-import com.poicraft.bot.v4.plugin.run
-import com.poicraft.bot.v4.plugin.command
+import com.poicraft.bot.v4.plugin.dsl.*
 import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.constants.WhitelistStatus
 import com.poicraft.bot.v4.plugin.functions.Whitelist

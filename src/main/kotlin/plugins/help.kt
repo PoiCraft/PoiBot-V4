@@ -3,6 +3,7 @@ package com.poicraft.bot.v4.plugin.plugins
 import com.poicraft.bot.v4.plugin.*
 import com.poicraft.bot.v4.plugin.utils.getSimilarCommandNames
 import com.poicraft.bot.v4.plugin.utils.getSimilarCommands
+import com.poicraft.bot.v4.plugin.dsl.*
 
 /**
  * 机器人帮助

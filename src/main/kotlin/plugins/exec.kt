@@ -5,6 +5,7 @@ import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
+import com.poicraft.bot.v4.plugin.dsl.*
 
 /**
  * 执行任意命令, 仅限 adminGroup 使用

@@ -1,9 +1,6 @@
 package com.poicraft.bot.v4.plugin.plugins
 
-import com.poicraft.bot.v4.plugin.by
-import com.poicraft.bot.v4.plugin.command
-import com.poicraft.bot.v4.plugin.intro
-import com.poicraft.bot.v4.plugin.run
+import com.poicraft.bot.v4.plugin.dsl.*
 import com.poicraft.bot.v4.plugin.utils.formatByte
 import oshi.SystemInfo
 import oshi.hardware.CentralProcessor
