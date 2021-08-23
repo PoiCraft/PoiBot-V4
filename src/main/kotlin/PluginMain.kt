@@ -67,6 +67,7 @@ object PluginMain : KotlinPlugin(
             exec()
             status()
             help()
+            bind()
         }
 
         logger.info("AdminGroup: ${PluginData.adminGroup}")

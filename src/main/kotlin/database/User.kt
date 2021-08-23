@@ -82,13 +82,15 @@ fun getUsersByXboxId(xboxId: String, requireVerified: Boolean): List<User>? {
 
 /**
  * 获取 XboxID
- * 1.如果消息内含 At 信息 则会返回被 At 人数据库中绑定的 XboxID
  *
- * 2.如果不含 At 信息:
- *  (1). requireVerified == true 时
+ * 1. 如果消息内含 At 信息 则会返回被 At 人数据库中绑定的 XboxID
+ *
+ * 2. 如果不含 At 信息:
+ *
+ *     1. requireVerified == true 时
  *      数据库内有 defaultId 的绑定信息则会返回 defaultId
  *      否则会返回 null
- *  (2). requireVerified == false 时
+ *     2. requireVerified == false 时
  *      返回 defaultId
  * @param defaultId 不含 At 信息时应为 XboxId
  * @param requireVerified 用户状态是否需要为验证
@@ -111,14 +113,17 @@ fun GroupMessageEvent.getXboxID(defaultId: String, requireVerified: Boolean = tr
 
 /**
  * 获取 QQ号
- * 1.如果消息内含 At 信息
- *  (1). requireVerified == true 时
+ *
+ * 1. 如果消息内含 At 信息
+ *
+ *     1. requireVerified == true 时
  *      数据库内有被 At 人的绑定信息则会返回被 At 人的 QQ号
  *      否则会返回 null
- *  (2). requireVerified == false 时
+ *     2. requireVerified == false 时
  *      返回被 At 人的 QQ号
  *
- * 2.如果不含 At 信息 则会返回 defaultId 中绑定的QQ号
+ * 2. 如果不含 At 信息 则会返回 defaultId 中绑定的QQ号
+ *
  * @param defaultId 不含 At 信息时应为 XboxId
  * @param requireVerified 用户状态是否需要为验证
  *
