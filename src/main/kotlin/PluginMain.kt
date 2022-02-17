@@ -97,6 +97,8 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
 
     @ValueDescription("发送日志的群, 管理群")
     val adminGroup by value(123456L)
+
+    val uptimeConfig by value(UptimeConfig())
 }
 
 @Serializable
@@ -105,4 +107,10 @@ data class RemoteConfig(
     val port: Int = 1919,
     val path: String = "/abcdefg",
     val password: String = "1p1a4s5s1w4o1r9d"
+)
+
+@Serializable
+data class UptimeConfig(
+    val url: String = "",
+    val pingInterval: Int = 600
 )

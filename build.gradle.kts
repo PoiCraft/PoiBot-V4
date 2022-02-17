@@ -1,24 +1,24 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.4.32"
+    val kotlinVersion = "1.6.0"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "2.6.7" // mirai-console version
+    id("net.mamoe.mirai-console") version "2.10.0" // mirai-console version
 }
 
 mirai {
-    coreVersion = "2.6.7" // mirai-core version
+    coreVersion = "2.10.0" // mirai-core version
 }
 
 group = "com.poicraft.bot.v4"
 version = "0.1.0"
 
 repositories {
-    maven("https://maven.aliyun.com/repository/public")
-    maven("https://maven.aliyun.com/repository/gradle-plugin")
-    maven("https://dl.bintray.com/kotlin/kotlin-eap")
+    mavenLocal()
+    maven("https://maven.aliyun.com/repository/public") // 阿里云国内代理仓库
+    mavenCentral()
 }
 
 dependencies {
@@ -30,7 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("com.github.oshi:oshi-core:5.8.0")
     implementation("org.ktorm:ktorm-core:$ktormVersion")
-    implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.34.0")
+    implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.36.0.2")
     implementation(kotlin("stdlib-jdk8"))
 }
 val compileKotlin: KotlinCompile by tasks
