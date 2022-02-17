@@ -32,6 +32,7 @@ dependencies {
     implementation("org.ktorm:ktorm-core:$ktormVersion")
     implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.36.0.2")
     implementation(kotlin("stdlib-jdk8"))
+    implementation(group = "io.github.classgraph", name = "classgraph", version = "4.8.139")
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
