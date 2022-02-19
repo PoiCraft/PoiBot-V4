@@ -13,6 +13,7 @@ import org.ktorm.dsl.*
  */
 @ExperimentalCoroutinesApi
 @Suppress("unused")
+@Service
 fun validateUser(plugin: PluginMain) {
     BDXWSControl.addEventListener<OnChatRes> {
         if (params.text.startsWith("#bind ")) {

@@ -16,6 +16,7 @@ import java.time.Instant
  * 绑定
  */
 @ExperimentalCoroutinesApi
+@Plugin
 fun B.bind() {
     /**
      * 绑定

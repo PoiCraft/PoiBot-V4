@@ -9,6 +9,7 @@ import java.util.*
 
 
 @ExperimentalCoroutinesApi
+@Service
 fun uptimeService(plugin: PluginMain) {
     if (PluginData.uptimeConfig.url.isNotEmpty()) {
         val timer = Timer()
@@ -21,7 +22,7 @@ fun uptimeService(plugin: PluginMain) {
 }
 
 object UptimeTasker : TimerTask() {
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @ExperimentalCoroutinesApi
     override fun run() {
         val url = URL(PluginData.uptimeConfig.url)
         val con = url.openConnection() as HttpURLConnection

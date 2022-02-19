@@ -1,8 +1,11 @@
 package com.poicraft.bot.v4.plugin.plugins
 
-import com.poicraft.bot.v4.plugin.dsl.*
 import com.poicraft.bot.v4.plugin.constants.Permission
 import com.poicraft.bot.v4.plugin.constants.WhitelistStatus
+import com.poicraft.bot.v4.plugin.dsl.by
+import com.poicraft.bot.v4.plugin.dsl.command
+import com.poicraft.bot.v4.plugin.dsl.require
+import com.poicraft.bot.v4.plugin.dsl.run
 import com.poicraft.bot.v4.plugin.functions.Whitelist
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -10,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
  * 白名单管理
  */
 @ExperimentalCoroutinesApi
+@Plugin
 fun B.whitelist() {
     /**
      * 添加白名单

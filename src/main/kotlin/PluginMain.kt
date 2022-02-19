@@ -1,9 +1,9 @@
 package com.poicraft.bot.v4.plugin
 
+import com.poicraft.bot.v4.plugin.autoimport.loadAllPlugin
+import com.poicraft.bot.v4.plugin.autoimport.loadAllService
 import com.poicraft.bot.v4.plugin.database.initDatabase
-import com.poicraft.bot.v4.plugin.plugins.*
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
-import com.poicraft.bot.v4.plugin.services.initService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -13,8 +13,6 @@ import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.utils.info
 import org.ktorm.database.Database
 
@@ -59,21 +57,14 @@ object PluginMain : KotlinPlugin(
             }
         }
 
-        initService()
+        loadAllService()
 
         /**
          * 激活命令
          *
          * 可至 plugins/init.kt 查看命令的编写方法
          */
-        GlobalEventChannel.subscribeGroupMessages {
-            utils()
-            whitelist()
-            exec()
-            status()
-            help()
-            bind()
-        }
+        loadAllPlugin()
 
         logger.info("AdminGroup: ${PluginData.adminGroup}")
 

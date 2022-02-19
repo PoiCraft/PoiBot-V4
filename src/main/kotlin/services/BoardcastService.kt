@@ -14,6 +14,7 @@ import net.mamoe.mirai.Bot
  * 广播服务
  */
 @ExperimentalCoroutinesApi
+@Service
 fun broadcastService(plugin: PluginMain) {
     logger.info("GroupList: ${PluginData.groupList.joinToString()}")
 

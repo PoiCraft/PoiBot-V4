@@ -1,6 +1,9 @@
 package com.poicraft.bot.v4.plugin.plugins
 
-import com.poicraft.bot.v4.plugin.dsl.*
+import com.poicraft.bot.v4.plugin.dsl.by
+import com.poicraft.bot.v4.plugin.dsl.command
+import com.poicraft.bot.v4.plugin.dsl.intro
+import com.poicraft.bot.v4.plugin.dsl.run
 import com.poicraft.bot.v4.plugin.utils.formatByte
 import oshi.SystemInfo
 import oshi.hardware.CentralProcessor
@@ -10,6 +13,7 @@ import java.util.concurrent.TimeUnit
 /**
  * 服务器状态
  */
+@Plugin
 fun B.status() {
 
     /**

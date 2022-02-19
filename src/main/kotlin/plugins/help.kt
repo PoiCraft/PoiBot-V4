@@ -1,13 +1,19 @@
 package com.poicraft.bot.v4.plugin.plugins
 
-import com.poicraft.bot.v4.plugin.*
+import com.poicraft.bot.v4.plugin.BotCommand
+import com.poicraft.bot.v4.plugin.CommandBox
+import com.poicraft.bot.v4.plugin.PluginData
+import com.poicraft.bot.v4.plugin.dsl.by
+import com.poicraft.bot.v4.plugin.dsl.command
+import com.poicraft.bot.v4.plugin.dsl.run
+import com.poicraft.bot.v4.plugin.getCommandNameAndArgs
 import com.poicraft.bot.v4.plugin.utils.getSimilarCommandNames
 import com.poicraft.bot.v4.plugin.utils.getSimilarCommands
-import com.poicraft.bot.v4.plugin.dsl.*
 
 /**
  * 机器人帮助
  */
+@Plugin
 fun B.help() {
     /**
      * 命令名纠错
