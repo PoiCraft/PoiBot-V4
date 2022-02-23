@@ -22,7 +22,6 @@ fun uptimeService(plugin: PluginMain) {
 }
 
 object UptimeTasker : TimerTask() {
-    @ExperimentalCoroutinesApi
     override fun run() {
         val url = URL(PluginData.uptimeConfig.url)
         val con = url.openConnection() as HttpURLConnection

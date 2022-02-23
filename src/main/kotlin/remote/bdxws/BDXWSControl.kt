@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package com.poicraft.bot.v4.plugin.remote.bdxws
 
 import com.poicraft.bot.v4.plugin.PluginData
@@ -12,7 +14,10 @@ import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -53,6 +58,8 @@ object BDXWSControl : Control() {
     private val eventListeners = mutableListOf<ListenerRegistry>()
 
     private var crashCallback = { _: Throwable -> }
+    private var reconnectCallback = { _: Throwable, _: Int -> }
+    private var reconnectSuccess = { }
 
     /**
      * WebSocket 连接失败时回调
@@ -61,6 +68,14 @@ object BDXWSControl : Control() {
      */
     fun onCrash(callback: (Throwable) -> Unit) {
         crashCallback = callback
+    }
+
+    fun onReconnect(callback: (Throwable, Int) -> Unit) {
+        reconnectCallback = callback
+    }
+
+    fun onReconnectSuccess(callback: () -> Unit) {
+        reconnectSuccess = callback
     }
 
     /**
@@ -103,10 +118,19 @@ object BDXWSControl : Control() {
                     e.printStackTrace()
                     retryTime++
                     if (retryTime < 5) {
+                        PluginMain.logger.info("Retry connect in 15 seconds...")
+                        reconnectCallback(e, retryTime)
+                        delay(15 * 1000)
                         init()
                     } else {
                         crashCallback(e)
                         exitProcess(-1)
+                    }
+                } finally {
+                    if (retryTime > 0 && session.isActive) {
+                        PluginMain.logger.info("Connect success!")
+                        retryTime = 0
+                        reconnectSuccess()
                     }
                 }
             }
@@ -115,6 +139,7 @@ object BDXWSControl : Control() {
 
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     private suspend fun decryptData(data: String) {
         val rawJson = Json.decodeFromString<RawJson>(data)
         val rawString = decryptUtil.decrypt(rawJson.params.raw)

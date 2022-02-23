@@ -53,7 +53,21 @@ object PluginMain : KotlinPlugin(
          */
         BDXWSControl.onCrash { e ->
             launch {
-                Bot.instances.last().getGroup(PluginData.adminGroup)!!.sendMessage("WebSocket 炸了, 我不干了: " + e.message)
+                Bot.instances.last().getGroup(PluginData.adminGroup)!!
+                    .sendMessage("WebSocket 连接失败, Bot 将退出: " + e.message)
+            }
+        }
+
+        BDXWSControl.onReconnect { e, t ->
+            launch {
+                Bot.instances.last().getGroup(PluginData.adminGroup)!!
+                    .sendMessage("WebSocket 已断开, 尝试重连(${t}): " + e.message)
+            }
+        }
+
+        BDXWSControl.onReconnectSuccess {
+            launch {
+                Bot.instances.last().getGroup(PluginData.adminGroup)!!.sendMessage("WebSocket 重连成功")
             }
         }
 
@@ -96,6 +110,7 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
 data class RemoteConfig(
     val host: String = "1.14.5.14",
     val port: Int = 1919,
+    val mcPort: Int = 19132,
     val path: String = "/abcdefg",
     val password: String = "1p1a4s5s1w4o1r9d"
 )
