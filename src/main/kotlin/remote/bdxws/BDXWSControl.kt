@@ -96,7 +96,7 @@ object BDXWSControl : Control() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 retryTime++
-                if (retryTime < 5) {
+                if (retryTime < 10) {
                     init()
                 } else {
                     crashCallback(e)
@@ -117,7 +117,7 @@ object BDXWSControl : Control() {
                 } catch (e: Throwable) {
                     e.printStackTrace()
                     retryTime++
-                    if (retryTime < 5) {
+                    if (retryTime < 10) {
                         PluginMain.logger.info("Retry connect in 45 seconds...")
                         reconnectCallback(e, retryTime)
                         delay(45 * 1000)
