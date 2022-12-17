@@ -45,7 +45,7 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
  *
  * ## 声明一个命令
  *
- * 声明一个命令是非常简答的, 只需要这样:
+ * 声明一个命令是非常简单的, 只需要这样:
  * ```
  * command("测试命令")
  * ```
@@ -99,6 +99,14 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
  * command("测试命令") by "test" require Permission.PERMISSION_LEVEL_EVERYONE intro "这是命令简介" reply "测试通过"
  * ```
  *
+ * 此外, reply 也支持复杂回复, 用法如下:
+ * ```
+ * command("测试命令") by "test" reply {
+ *    val msg = "测试通过"
+ *    msg // 返回值即为回复内容
+ *    }
+ * ```
+ *
  * ### 普通事件 `run`
  *
  * 详细配置命令的事件
@@ -115,7 +123,7 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
  * ```
  * ### 完整配置 `to`
  *
- * 这是最完整配置方法, **也是唯一能定义权限不足事件的方法**..
+ * 这是最完整配置方法.
  *
  * **注意**, 在 `to` 中设置的 `require` 和 `intro` 将覆盖之前的配置.
  *
