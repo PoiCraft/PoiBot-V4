@@ -16,8 +16,12 @@ class Whitelist {
         @ExperimentalCoroutinesApi
         suspend fun add(target: String): Pair<WhitelistStatus?, String> {
             return when (val result = BDXWSControl.runCmd("whitelist add \"$target\"")) {
-                "Player added to whitelist" -> Pair(WhitelistStatus.PLAY_ADDED, result)
-                "Player already in whitelist" -> Pair(WhitelistStatus.PLAYER_ALREADY_IN_WHITELIST, result)
+                "Player added to whitelist", "Player added to allowlist" -> Pair(WhitelistStatus.PLAY_ADDED, result)
+                "Player already in whitelist", "Player already in allowlist" -> Pair(
+                    WhitelistStatus.PLAYER_ALREADY_IN_WHITELIST,
+                    result
+                )
+
                 else -> Pair(null, result)
             }
         }
@@ -29,8 +33,16 @@ class Whitelist {
         @ExperimentalCoroutinesApi
         suspend fun remove(target: String): Pair<WhitelistStatus?, String> {
             return when (val result = BDXWSControl.runCmd("whitelist remove \"$target\"")) {
-                "Player removed from whitelist" -> Pair(WhitelistStatus.PLAY_REMOVED, result)
-                "Player not in whitelist" -> Pair(WhitelistStatus.PLAYER_NOT_IN_WHITELIST, result)
+                "Player removed from whitelist", "Player removed from allowlist" -> Pair(
+                    WhitelistStatus.PLAY_REMOVED,
+                    result
+                )
+
+                "Player not in whitelist", "Player not in allowlist" -> Pair(
+                    WhitelistStatus.PLAYER_NOT_IN_WHITELIST,
+                    result
+                )
+
                 else -> Pair(null, result)
             }
         }
