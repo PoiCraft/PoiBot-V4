@@ -6,9 +6,11 @@ import com.poicraft.bot.v4.plugin.PluginMain.logger
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnJoinRes
 import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnLeftRes
+import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnMobdieParam
+import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnMobdieRes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.serialization.json.Json
 import net.mamoe.mirai.Bot
-
 
 /**
  * 广播服务
@@ -38,5 +40,20 @@ fun broadcastService(plugin: PluginMain) {
         PluginData.groupList.forEach {
             bot.getGroup(it)!!.sendMessage("$target 离开了游戏")
         }
+    }
+
+    /**
+     * 玩家发送死亡
+     */
+    BDXWSControl.addEventListener<OnMobdieRes> {
+        val bot = Bot.instances.last()
+        val type = params.mobtype
+        if (type == "minecraft:player") {
+            val name = params.mobname
+            PluginData.groupList.forEach {
+                bot.getGroup(it)!!.sendMessage("$name 失败了")
+            }
+        }
+
     }
 }
