@@ -7,11 +7,11 @@ annotation class Service
  *
  * 首先，你需要在 services 包下新建一个 Kotlin 文件，其名称应根据你需要实现的一个或一组服务的功能来定。为了阐述方便，此处采用 `abc` 这个名称。
  *
- * 之后，在 abc.kt 中定义一个函数, 并且这个函数应该被 `@Service` 注解：
+ * 之后，在 abc.kt 中定义一个函数, 并且这个函数应该被 `@Service` 注解, 同时必须接收参数 plugin: PluginMain.
  *
  * ```
  * @Service
- * fun abc(){
+ * fun abc(plugin: PluginMain) {
  *    //xxx
  *    }
  */
