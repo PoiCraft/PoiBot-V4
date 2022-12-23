@@ -31,12 +31,12 @@ fun getServerInfo(address: String, port: Int = 19132): ServerInfoResult {
 
     return ServerInfoResult(
         name = res[1],
-        server_version = res[2].toInt(),
+        serverVersion = res[2].toInt(),
         version = res[3],
         player = res[4].toInt(),
-        max_player = res[5].toInt(),
+        maxPlayer = res[5].toInt(),
         level = res[7],
-        game_mode = res[8]
+        gameMode = res[8]
     )
 }
 
@@ -52,7 +52,7 @@ data class ServerInfoResult(
     /**
      * 服务器协议版本
      */
-    val server_version: Int,
+    val serverVersion: Int,
     /**
      * 服务器在线玩家数量
      */
@@ -60,7 +60,7 @@ data class ServerInfoResult(
     /**
      * 服务器允许的最大玩家数量
      */
-    val max_player: Int,
+    val maxPlayer: Int,
     /**
      * 地图名称
      */
@@ -68,5 +68,5 @@ data class ServerInfoResult(
     /**
      * 游戏模式
      */
-    val game_mode: String
+    val gameMode: String
 )

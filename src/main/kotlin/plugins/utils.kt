@@ -33,9 +33,9 @@ fun B.utils() {
         val info = getServerInfo("play.poicraft.com")
         """
             服务器名称: ${info.name}
-            服务器版本: ${info.version}(${info.server_version})
-            在线人数: ${info.player}/${info.max_player}
-            游戏模式: ${info.game_mode}
+            服务器版本: ${info.version}(${info.serverVersion})
+            在线人数: ${info.player}/${info.maxPlayer}
+            游戏模式: ${info.gameMode}
         """.trimIndent()
     }
 

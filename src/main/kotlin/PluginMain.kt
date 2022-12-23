@@ -71,12 +71,17 @@ object PluginMain : KotlinPlugin(
             }
         }
 
+        /**
+         * 激活服务
+         *
+         * 可至 services/Service.kt 查看服务的编写方法
+         */
         loadAllService()
 
         /**
          * 激活命令
          *
-         * 可至 plugins/init.kt 查看命令的编写方法
+         * 可至 plugins/Plugin.kt 查看命令的编写方法
          */
         loadAllPlugin()
 
