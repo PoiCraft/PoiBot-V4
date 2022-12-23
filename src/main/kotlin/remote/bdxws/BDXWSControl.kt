@@ -11,6 +11,7 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
+import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -33,7 +34,7 @@ class ListenerRegistry(
 
 @ExperimentalCoroutinesApi
 object BDXWSControl : Control() {
-    private val client = HttpClient {
+    private val client = HttpClient(CIO) {
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {

@@ -5,11 +5,11 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "2.10.0" // mirai-console version
+    id("net.mamoe.mirai-console") version "2.13.2" // mirai-console version
 }
 
 mirai {
-    coreVersion = "2.10.0" // mirai-core version
+    coreVersion = "2.13.2" // mirai-core version
 }
 
 group = "com.poicraft.bot.v4"
@@ -22,13 +22,13 @@ repositories {
 }
 
 dependencies {
-    val ktorVersion = "1.5.1"
+    val ktorVersion = "1.6.8"
     val ktormVersion = "3.3.0"
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    implementation("com.github.oshi:oshi-core:5.8.0")
+    implementation("com.github.oshi:oshi-core:6.4.0")
     implementation("org.ktorm:ktorm-core:$ktormVersion")
     implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.36.0.2")
     implementation(kotlin("stdlib-jdk8"))
