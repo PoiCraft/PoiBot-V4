@@ -3,6 +3,7 @@ package com.poicraft.bot.v4.plugin.services
 import com.poicraft.bot.v4.plugin.PluginData
 import com.poicraft.bot.v4.plugin.PluginMain
 import com.poicraft.bot.v4.plugin.PluginMain.logger
+import com.poicraft.bot.v4.plugin.maps.damageSource
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnJoinRes
 import com.poicraft.bot.v4.plugin.remote.bdxws.data.OnLeftRes
@@ -50,8 +51,9 @@ fun broadcastService(plugin: PluginMain) {
         val type = params.mobtype
         if (type == "minecraft:player") {
             val name = params.mobname
+            val text = damageSource[params.dmname] ?: "失败了"
             PluginData.groupList.forEach {
-                bot.getGroup(it)!!.sendMessage("$name 失败了")
+                bot.getGroup(it)!!.sendMessage("$name $text")
             }
         }
 
