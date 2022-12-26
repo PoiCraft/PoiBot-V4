@@ -22,7 +22,7 @@ val damageSource = mapOf(
     "none" to "失败了",
     "override" to "失败了",
     "piston" to "失败了",
-    "projectile" to "学会了动量",
+    "projectile" to "被刺中了",
     "stalactite" to "被坠落的钟乳石刺穿了",
     "stalagmite" to "被钉在石笋上",
     "starve" to "低血糖了",
