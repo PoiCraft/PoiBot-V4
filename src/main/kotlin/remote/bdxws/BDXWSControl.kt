@@ -160,7 +160,7 @@ object BDXWSControl : Control() {
         eventListeners.forEach {
             if (res::class === it.type) it.listener(res, res)
         }
-        PluginMain.logger.info("Received: $rawString")
+        //PluginMain.logger.info("Received: $rawString")
     }
 
     /**
