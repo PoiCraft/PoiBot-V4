@@ -37,15 +37,14 @@ fun B.status() {
 
         event.subject.sendMessage(
             """
-        CPU: ${DecimalFormat("#.##%").format(getCPUUsage(si))}
-        Memory: ${DecimalFormat("#.##%").format(getMemoryUsage(si))}  ${getMemoryUsageString(si)}
-        Swap: ${DecimalFormat("#.##%").format(getSwapUsage(si))}  ${getSwapUsageString(si)}
+        Full CPU:
+        ${getFullCPUUsage(si)}
+        
+        Memory: ${getMemoryUsageString(si)}  ${DecimalFormat("#.##%").format(getMemoryUsage(si))}
+        Swap: ${getSwapUsageString(si)}  ${DecimalFormat("#.##%").format(getSwapUsage(si))}
         
         Disk: 
         ${getFileSystemUsageString(si)}
-        
-        Full CPU:
-        ${getFullCPUUsage(si)}
         
         Processes:
         ${getProcessesInfoString(si)}
