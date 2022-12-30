@@ -1,7 +1,9 @@
+@file:Suppress("unused", "KotlinConstantConditions")
+
 package com.poicraft.bot.v4.plugin.database
 
 import com.poicraft.bot.v4.plugin.PluginMain
-import com.poicraft.bot.v4.plugin.constants.UserStatus
+import com.poicraft.bot.v4.plugin.data.constants.UserStatus
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.mamoe.mirai.event.events.GroupMessageEvent

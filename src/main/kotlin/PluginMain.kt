@@ -1,8 +1,9 @@
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.autoimport.loadAllPlugin
-import com.poicraft.bot.v4.plugin.autoimport.loadAllService
+import com.poicraft.bot.v4.plugin.provider.autoimport.loadAllCommand
+import com.poicraft.bot.v4.plugin.provider.autoimport.loadAllService
 import com.poicraft.bot.v4.plugin.database.initDatabase
+import com.poicraft.bot.v4.plugin.provider.command.CommandBox
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -83,7 +84,7 @@ object PluginMain : KotlinPlugin(
          *
          * 可至 plugins/Plugin.kt 查看命令的编写方法
          */
-        loadAllPlugin()
+        loadAllCommand()
 
         logger.info("AdminGroup: ${PluginData.adminGroup}")
 

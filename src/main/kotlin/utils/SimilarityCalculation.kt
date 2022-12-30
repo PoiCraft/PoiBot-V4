@@ -1,6 +1,6 @@
 package com.poicraft.bot.v4.plugin.utils
 
-import com.poicraft.bot.v4.plugin.CommandBox
+import com.poicraft.bot.v4.plugin.provider.command.CommandBox
 
 /**
  * 获得近似命令
@@ -36,8 +36,6 @@ fun levenshtein(a: String, b: String): Float {
 private fun editDis(a: String, b: String): Int {
     val aLen = a.length
     val bLen = b.length
-    if (aLen == 0) return aLen
-    if (bLen == 0) return bLen
     val v = Array(aLen + 1) { IntArray(bLen + 1) }
     for (i in 0..aLen) {
         for (j in 0..bLen) {
