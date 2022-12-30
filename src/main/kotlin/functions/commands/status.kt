@@ -1,12 +1,8 @@
 package com.poicraft.bot.v4.plugin.functions.commands
 
-import com.poicraft.bot.v4.plugin.provider.command.B
-import com.poicraft.bot.v4.plugin.provider.command.Command
-import com.poicraft.bot.v4.plugin.provider.command.by
-import com.poicraft.bot.v4.plugin.provider.command.command
-import com.poicraft.bot.v4.plugin.provider.command.intro
-import com.poicraft.bot.v4.plugin.provider.command.run
-import com.poicraft.bot.v4.plugin.utils.*
+import com.poicraft.bot.v4.plugin.data.constants.Permission
+import com.poicraft.bot.v4.plugin.provider.command.*
+import com.poicraft.bot.v4.plugin.utils.oshi.*
 import oshi.SystemInfo
 import java.text.DecimalFormat
 
@@ -30,8 +26,29 @@ fun B.status() {
         CPU总体占用率: ${DecimalFormat("#.##%").format(getCPUUsage(si))}
         内存总体占用率: ${DecimalFormat("#.##%").format(getMemoryUsage(si))}
         内存占用情况: ${getMemoryUsageString(si)}
-        磁盘占用情况: 
+        """.trimIndent()
+        )
+
+    }
+
+    command("服务器状态-管理员") by "status-p" intro "获取服务器信息" require Permission.ADMIN_GROUP run { event, _ ->
+
+        val si = SystemInfo()
+
+        event.subject.sendMessage(
+            """
+        CPU: ${DecimalFormat("#.##%").format(getCPUUsage(si))}
+        Memory: ${DecimalFormat("#.##%").format(getMemoryUsage(si))}  ${getMemoryUsageString(si)}
+        Swap: ${DecimalFormat("#.##%").format(getSwapUsage(si))}  ${getSwapUsageString(si)}
+        
+        Disk: 
         ${getFileSystemUsageString(si)}
+        
+        Full CPU:
+        ${getFullCPUUsage(si)}
+        
+        Processes:
+        ${getProcessesInfoString(si)}
         """.replace("        ", "").trimIndent()
         )
 

@@ -1,9 +1,13 @@
-package com.poicraft.bot.v4.plugin.utils
+@file:Suppress("unused")
 
+package com.poicraft.bot.v4.plugin.utils.oshi
+
+import com.poicraft.bot.v4.plugin.utils.formatByte
 import oshi.SystemInfo
 import oshi.hardware.CentralProcessor
 import java.util.concurrent.TimeUnit
 
+@Suppress("DuplicatedCode")
 fun getCPUUsage(si: SystemInfo): Double {
     val processors = si.hardware.processor
     val prevTicks: LongArray = processors.systemCpuLoadTicks
@@ -31,15 +35,3 @@ fun getMemoryUsageString(si: SystemInfo): String {
     return "${formatByte(memory.total - memory.available)}/${formatByte(memory.total)}"
 }
 
-fun getFileSystemUsageString(si: SystemInfo): String {
-    val fileSystem = si.operatingSystem.fileSystem.fileStores
-    var usage = ""
-    for (i in fileSystem.indices) {
-        usage += "${fileSystem[i].mount} ${formatByte(fileSystem[i].totalSpace - fileSystem[i].freeSpace)}/${
-            formatByte(
-                fileSystem[i].totalSpace
-            )
-        }\n"
-    }
-    return usage.dropLast(1)
-}
