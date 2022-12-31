@@ -88,3 +88,29 @@ fun getFileSystemUsageString(si: SystemInfo): String {
     }
     return usage.dropLast(1)
 }
+
+fun getUsageByPID(si: SystemInfo, pid: Int): String {
+    val os = si.operatingSystem
+    val process = os.getProcess(pid)
+    return """
+        PID: ${process.processID}
+        Name: ${process.name}
+        CPU: ${DecimalFormat("#.##%").format((process.kernelTime + process.userTime) * 1.0 / process.upTime)}
+        Memory: ${formatByte(process.residentSetSize)} / ${formatByte(process.virtualSize)}(VSZ) / ${formatByte(process.residentSetSize)}(RSS)
+    """.trimIndent()
+}
+
+fun getSelfUsage(si: SystemInfo): String {
+    val os = si.operatingSystem
+    return getUsageByPID(si, os.processId)
+}
+
+fun getBedrockUsage(si: SystemInfo): String {
+    val os = si.operatingSystem
+    os.getProcesses(ProcessFiltering.ALL_PROCESSES, ProcessSorting.CPU_DESC, 10).forEach {
+        if (it.name == "bedrock_server" || it.name == "bedrock_server_mod") {
+            return getUsageByPID(si, it.processID)
+        }
+    }
+    return "No bedrock server found in top 10 processes"
+}

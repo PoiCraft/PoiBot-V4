@@ -48,6 +48,12 @@ fun B.status() {
         
         Processes:
         ${getProcessesInfoString(si)}
+        
+        Self:
+        ${getSelfUsage(si)}
+        
+        BDS:
+        ${getBedrockUsage(si)}
         """.replace("        ", "").trimIndent()
         )
 
