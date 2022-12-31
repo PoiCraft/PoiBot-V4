@@ -3,10 +3,11 @@ package com.poicraft.bot.v4.plugin.utils.oshi
 import com.poicraft.bot.v4.plugin.utils.formatByte
 import oshi.SystemInfo
 import oshi.hardware.CentralProcessor
-import oshi.software.os.OperatingSystem
 import oshi.software.os.OperatingSystem.ProcessFiltering
 import oshi.software.os.OperatingSystem.ProcessSorting
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 @Suppress("DuplicatedCode")
@@ -92,11 +93,23 @@ fun getFileSystemUsageString(si: SystemInfo): String {
 fun getUsageByPID(si: SystemInfo, pid: Int): String {
     val os = si.operatingSystem
     val process = os.getProcess(pid)
+
+    val startAt = Date(process.startTime)
+    val timeFormatter = SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+
+    val uptime = process.upTime
+
     return """
         PID: ${process.processID}
         Name: ${process.name}
         CPU: ${DecimalFormat("#.##%").format((process.kernelTime + process.userTime) * 1.0 / process.upTime)}
         Memory: ${formatByte(process.residentSetSize)} / ${formatByte(process.virtualSize)}(VSZ) / ${formatByte(process.residentSetSize)}(RSS)
+        Start: ${timeFormatter.format(startAt)}
+        Uptime: ${TimeUnit.MILLISECONDS.toDays(uptime)}d ${TimeUnit.MILLISECONDS.toHours(uptime) % 24}h ${
+        TimeUnit.MILLISECONDS.toMinutes(
+            uptime
+        ) % 60
+    }m ${TimeUnit.MILLISECONDS.toSeconds(uptime) % 60}s ${uptime % 1000}ms
     """.trimIndent()
 }
 
