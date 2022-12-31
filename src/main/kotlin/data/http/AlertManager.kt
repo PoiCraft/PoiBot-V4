@@ -29,15 +29,15 @@ data class Alert(
 
 @Serializable
 data class Annotations(
-    val description: String,
-    val summary: String
+    val description: String? = "",
+    val summary: String? = ""
 )
 
 @Serializable
 data class Labels(
-    val alertname: String,
-    val instance: String,
-    val severity: String
+    val alertname: String? = "",
+    val instance: String? = "",
+    val severity: String? = ""
 )
 
 @Serializable

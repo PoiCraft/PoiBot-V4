@@ -1,6 +1,5 @@
 package com.poicraft.bot.v4.plugin
 
-import com.poicraft.bot.v4.plugin.database.initDatabase
 import com.poicraft.bot.v4.plugin.provider.autoimport.loadAllCommand
 import com.poicraft.bot.v4.plugin.provider.autoimport.loadAllService
 import com.poicraft.bot.v4.plugin.provider.command.CommandBox
@@ -15,7 +14,6 @@ import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.utils.info
-import org.ktorm.database.Database
 
 @ExperimentalCoroutinesApi
 object PluginMain : KotlinPlugin(
@@ -25,8 +23,6 @@ object PluginMain : KotlinPlugin(
         version = "4.0.0"
     )
 ) {
-
-    lateinit var database: Database
 
     override fun onEnable() {
         logger.info {
@@ -44,8 +40,6 @@ object PluginMain : KotlinPlugin(
         }
 
         PluginData.reload()
-
-        initDatabase()
 
         BDXWSControl.init()
 
@@ -99,8 +93,6 @@ object PluginMain : KotlinPlugin(
 }
 
 object PluginData : AutoSavePluginConfig("PoiBotConf") {
-    @ValueDescription("sqlite数据库的绝对位置")
-    var databasePath by value("")
     var remoteConfig by value(RemoteConfig())
 
     @ValueDescription("机器人服务的群")

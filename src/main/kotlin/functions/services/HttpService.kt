@@ -36,6 +36,7 @@ fun Application.module() {
         })
     }
 
+
     routing {
         alertManagerRoute()
     }
