@@ -1,8 +1,8 @@
 package com.poicraft.bot.v4.plugin
 
+import com.poicraft.bot.v4.plugin.database.initDatabase
 import com.poicraft.bot.v4.plugin.provider.autoimport.loadAllCommand
 import com.poicraft.bot.v4.plugin.provider.autoimport.loadAllService
-import com.poicraft.bot.v4.plugin.database.initDatabase
 import com.poicraft.bot.v4.plugin.provider.command.CommandBox
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -110,6 +110,8 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
     val adminGroup by value(123456L)
 
     val uptimeConfig by value(UptimeConfig())
+
+    val httpConfig by value(HttpConfig())
 }
 
 @Serializable
@@ -125,4 +127,10 @@ data class RemoteConfig(
 data class UptimeConfig(
     val url: String = "",
     val pingInterval: Int = 600
+)
+
+@Serializable
+data class HttpConfig(
+    val port: Int = 1536,
+    val alertManagerWebhook: String = "/alert_manager"
 )

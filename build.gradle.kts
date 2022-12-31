@@ -22,12 +22,18 @@ repositories {
 }
 
 dependencies {
-    val ktorVersion = "1.6.8"
+    implementation("io.ktor:ktor-server-call-logging-jvm:2.2.1")
+    val ktorVersion = "2.2.1"
     val ktormVersion = "3.3.0"
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-default-headers-jvm:$ktorVersion")
     implementation("com.github.oshi:oshi-core:6.4.0")
     implementation("org.ktorm:ktorm-core:$ktormVersion")
     implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.36.0.2")
