@@ -5,6 +5,7 @@ import com.poicraft.bot.v4.plugin.PluginMain
 import com.poicraft.bot.v4.plugin.data.http.AlertManagerWebhookData
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -14,7 +15,7 @@ import net.mamoe.mirai.message.data.buildForwardMessage
 import net.mamoe.mirai.message.data.toPlainText
 
 @ExperimentalCoroutinesApi
-fun Routing.alertManagerRoute() {
+fun Routing.alertManagerRoute() = authenticate("auth-basic") {
     post(PluginData.httpConfig.alertManagerWebhook) {
         try {
             val data = call.receive<AlertManagerWebhookData>()

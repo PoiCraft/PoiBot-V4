@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-server-auth-jvm:2.2.1")
     val ktorVersion = "2.2.1"
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")

@@ -124,5 +124,7 @@ data class UptimeConfig(
 @Serializable
 data class HttpConfig(
     val port: Int = 1536,
-    val alertManagerWebhook: String = "/alert_manager"
+    val alertManagerWebhook: String = "/alert_manager",
+    val credential: String = "",
+    val password: String = "",
 )
