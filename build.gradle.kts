@@ -23,14 +23,11 @@ repositories {
 
 dependencies {
     val ktorVersion = "1.6.8"
-    val ktormVersion = "3.3.0"
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("com.github.oshi:oshi-core:6.4.0")
-    implementation("org.ktorm:ktorm-core:$ktormVersion")
-    implementation(group = "org.xerial", name = "sqlite-jdbc", version = "3.36.0.2")
     implementation(kotlin("stdlib-jdk8"))
     implementation(group = "io.github.classgraph", name = "classgraph", version = "4.8.139")
 }
