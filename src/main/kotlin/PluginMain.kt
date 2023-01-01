@@ -101,6 +101,9 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
     @ValueDescription("发送日志的群, 管理群")
     val adminGroup by value(123456L)
 
+    @ValueDescription("同步消息的群")
+    val syncGroupList by value<List<Long>>(listOf())
+
     val uptimeConfig by value(UptimeConfig())
 
     val httpConfig by value(HttpConfig())

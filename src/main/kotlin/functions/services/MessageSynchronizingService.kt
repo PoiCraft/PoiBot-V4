@@ -19,7 +19,7 @@ fun messageSynchronizingService(plugin: PluginMain) {
         val bot = Bot.instances.last()
         val target = params.sender
         val message = params.text
-        PluginData.groupList.forEach {
+        PluginData.syncGroupList.forEach {
             bot.getGroup(it)!!.sendMessage("$target: $message")
         }
     }
