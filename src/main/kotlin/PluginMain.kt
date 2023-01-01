@@ -95,7 +95,7 @@ object PluginMain : KotlinPlugin(
 object PluginData : AutoSavePluginConfig("PoiBotConf") {
     var remoteConfig by value(RemoteConfig())
 
-    @ValueDescription("机器人服务的群")
+    @ValueDescription("机器人响应指令的群")
     var groupList by value<List<Long>>(listOf())
 
     @ValueDescription("发送日志的群, 管理群")
@@ -103,6 +103,9 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
 
     @ValueDescription("同步消息的群")
     val syncGroupList by value<List<Long>>(listOf())
+
+    @ValueDescription("广播消息的群")
+    val boardCastGroupList by value<List<Long>>(listOf())
 
     val uptimeConfig by value(UptimeConfig())
 

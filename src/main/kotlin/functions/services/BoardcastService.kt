@@ -28,7 +28,7 @@ fun broadcastService(plugin: PluginMain) {
     BDXWSControl.addEventListener<OnJoinRes> {
         val bot = Bot.instances.last()
         val target = params.sender
-        PluginData.groupList.forEach {
+        PluginData.boardCastGroupList.forEach {
             bot.getGroup(it)!!.sendMessage("$target 加入了游戏")
         }
     }
@@ -39,7 +39,7 @@ fun broadcastService(plugin: PluginMain) {
     BDXWSControl.addEventListener<OnLeftRes> {
         val bot = Bot.instances.last()
         val target = params.sender
-        PluginData.groupList.forEach {
+        PluginData.boardCastGroupList.forEach {
             bot.getGroup(it)!!.sendMessage("$target 离开了游戏")
         }
     }
@@ -86,7 +86,7 @@ fun broadcastService(plugin: PluginMain) {
                 text = (damageSourceWithDamager[params.dmname] ?: "因%s失败了").format(damager)
             }
             msg = "$name $text"
-            PluginData.groupList.forEach {
+            PluginData.boardCastGroupList.forEach {
                 bot.getGroup(it)!!.sendMessage(msg)
             }
         }
