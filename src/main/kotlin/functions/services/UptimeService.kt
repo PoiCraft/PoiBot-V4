@@ -25,9 +25,13 @@ fun uptimeService(plugin: PluginMain) {
 object UptimeTasker : TimerTask() {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun run() {
-        val url = URL(PluginData.uptimeConfig.url)
-        val con = url.openConnection() as HttpURLConnection
-        con.requestMethod = "GET"
-        PluginMain.logger.info("Uptime: ${con.responseCode}")
+        try {
+            val url = URL(PluginData.uptimeConfig.url)
+            val con = url.openConnection() as HttpURLConnection
+            con.requestMethod = "GET"
+            PluginMain.logger.info("Uptime: ${con.responseCode}")
+        } catch (e: Exception) {
+            PluginMain.logger.error("Uptime: ${e.message}")
+        }
     }
 }
