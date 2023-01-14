@@ -26,7 +26,7 @@ fun B.utils() {
      * 复杂回复的例子, 获得服务器状态信息
      */
     command("本服信息") by "info" reply {
-        val info = getServerInfo("play.poicraft.com")
+        val info = getServerInfo()
         """
             服务器名称: ${info.name}
             服务器版本: ${info.version}(${info.serverVersion})

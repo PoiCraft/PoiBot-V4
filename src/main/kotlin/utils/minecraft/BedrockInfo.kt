@@ -9,10 +9,10 @@ import java.net.InetAddress
 
 /**
  * 获取服务器信息
- * @param address 服务器地址
+ * @param address 服务器地址, 默认值为 `"127.0.0.1"`
  * @param port 服务器端口, 默认值为 `19132`
  */
-fun getServerInfo(address: String, port: Int = 19132): ServerInfoResult {
+fun getServerInfo(address: String = "127.0.0.1", port: Int = 19132): ServerInfoResult {
     val sData = // 抓包获得的数据
         Hex2Byte.hexToByteArray("01000000000000176B00FFFF00FEFEFEFEFDFDFDFD12345678ADDE22239AC7BD0F")
 

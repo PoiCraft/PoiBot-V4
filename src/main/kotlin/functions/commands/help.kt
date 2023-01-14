@@ -27,10 +27,7 @@ fun B.help() {
         val (_, args) = getCommandNameAndArgs()
         val similarOnes = getSimilarCommands(args.first())
         if (similarOnes.isNotEmpty()) {
-            var opt = "未知命令 " + args.first()
-            opt += "\n你可能想使用: "
-            opt += similarOnes.joinToString()
-            this.subject.sendMessage(opt)
+            this.subject.sendMessage("未知命令 ${args.first()}\n你可能想使用: ${similarOnes.joinToString()}")
         }
     }
 
@@ -44,26 +41,30 @@ fun B.help() {
             names[i.name] = i
         }
         if (arg.isEmpty()) {
-            var opt = "支持的功能有:\n"
-            opt += names.keys.joinToString()
-            event.subject.sendMessage(opt)
+            event.subject.sendMessage("支持的功能有:\n ${names.keys.joinToString()}")
         } else {
             if (names.keys.contains(arg.first())) {
                 val cmd = names[arg.first()]!!
-                var opt = cmd.name
-                opt += "\n命令: " + cmd.aliases.joinToString()
-                if (cmd.introduction != "") {
-                    opt += "\n" + cmd.introduction
-                }
-                event.subject.sendMessage(opt)
+                event.subject.sendMessage(
+                    "${cmd.name}:\n命令: ${cmd.aliases.joinToString()}${
+                        if (cmd.introduction != "") {
+                            "\n" + cmd.introduction
+                        } else {
+                            ""
+                        }
+                    }"
+                )
             } else { // 命令名纠错
                 val similarOnes = getSimilarCommandNames(arg.first())
-                var opt = "未知功能 " + arg.first()
-                if (similarOnes.isNotEmpty()) {
-                    opt += "\n你可能想查找: "
-                    opt += similarOnes.joinToString()
-                }
-                event.subject.sendMessage(opt)
+                event.subject.sendMessage(
+                    "未知功能 ${arg.first()}${
+                        if (similarOnes.isNotEmpty()) {
+                            "\n你可能想查找: ${similarOnes.joinToString()}"
+                        } else {
+                            ""
+                        }
+                    }"
+                )
             }
         }
 
