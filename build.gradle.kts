@@ -26,11 +26,6 @@ dependencies {
     val ktorVersion = "2.2.1"
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-default-headers-jvm:$ktorVersion")
     implementation("com.github.oshi:oshi-core:6.4.0")
     implementation(kotlin("stdlib-jdk8"))
     implementation(group = "io.github.classgraph", name = "classgraph", version = "4.8.139")
