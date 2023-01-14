@@ -1,13 +1,7 @@
 package com.poicraft.bot.v4.plugin.functions.commands
 
-import com.poicraft.bot.v4.plugin.data.constants.Permission
 import com.poicraft.bot.v4.plugin.data.constants.WhitelistStatus
-import com.poicraft.bot.v4.plugin.provider.command.B
-import com.poicraft.bot.v4.plugin.provider.command.Command
-import com.poicraft.bot.v4.plugin.provider.command.by
-import com.poicraft.bot.v4.plugin.provider.command.command
-import com.poicraft.bot.v4.plugin.provider.command.require
-import com.poicraft.bot.v4.plugin.provider.command.run
+import com.poicraft.bot.v4.plugin.provider.command.*
 import utils.minecraft.Whitelist
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -20,7 +14,7 @@ fun B.whitelist() {
     /**
      * 添加白名单
      */
-    command("添加白名单") by "addw" require Permission.ADMIN run { event, args ->
+    commandOP("添加白名单") by "addw" run { event, args ->
         val target = args.subList(1, args.size)
         if (target.isEmpty()) {
             event.subject.sendMessage("请提供 Xbox ID !")
@@ -37,7 +31,7 @@ fun B.whitelist() {
     /**
      * 添加白名单
      */
-    command("删除白名单") by "rmw" require Permission.ADMIN run { event, args ->
+    commandOP("删除白名单") by "rmw" run { event, args ->
         val target = args.subList(1, args.size)
         if (target.isEmpty()) {
             event.subject.sendMessage("请提供 Xbox ID !")

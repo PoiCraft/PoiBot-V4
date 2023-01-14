@@ -32,35 +32,11 @@ object CommandBox : HashMap<String, BotCommand>() {
     }
 
     /**
-     * 构造命令
-     * @param name 命令的人类友好名称
-     * @param aliases 命令的程序友好名称
-     */
-    @MessageDsl
-    fun command(name: String, aliases: List<String>, builder: BotCommand.() -> Unit) {
-        val cmd = BotCommand(name, aliases)
-        builder(cmd)
-        commands.add(cmd)
-    }
-
-    /**
-     * 构造命令
-     * @param name 命令的人类友好名称
-     * @param alias 命令的程序友好名称
-     */
-    @MessageDsl
-    fun command(name: String, alias: String, builder: BotCommand.() -> Unit) {
-        val cmd = BotCommand(name, listOf(alias))
-        builder(cmd)
-        commands.add(cmd)
-    }
-
-    /**
      * 导入命令
      * @param command 待导入的命令
      */
     @MessageDsl
-    fun command(command: BotCommand) {
+    fun registerCommand(command: BotCommand) {
         commands.add(command)
     }
 

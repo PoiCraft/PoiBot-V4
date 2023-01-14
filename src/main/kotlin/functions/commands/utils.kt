@@ -1,17 +1,11 @@
 package com.poicraft.bot.v4.plugin.functions.commands
 
-import com.poicraft.bot.v4.plugin.PluginData
 import com.poicraft.bot.v4.plugin.provider.command.B
 import com.poicraft.bot.v4.plugin.provider.command.Command
 import com.poicraft.bot.v4.plugin.provider.command.by
 import com.poicraft.bot.v4.plugin.provider.command.command
 import com.poicraft.bot.v4.plugin.provider.command.reply
-import com.poicraft.bot.v4.plugin.provider.command.run
 import utils.minecraft.getServerInfo
-import net.mamoe.mirai.contact.isAdministrator
-import net.mamoe.mirai.contact.isOperator
-import net.mamoe.mirai.contact.isOwner
-import net.mamoe.mirai.contact.nameCardOrNick
 
 /**
  * 小工具集
@@ -45,20 +39,4 @@ fun B.utils() {
      * 简单回复的例子, 确认机器人存活
      */
     command("生死检测") by "alive" reply "Bot 还活着"
-
-    /**
-     * 测试命令, 检查群员的权限等级
-     */
-    command("权限等级") by "level" run { event, _ ->
-        event.subject.sendMessage(
-            """
-               Level of ${event.sender.nameCardOrNick}
-               Owner [ ${if (event.sender.isOwner()) "✓" else "✕"} ]
-               Operator [ ${if (event.sender.isOperator()) "✓" else "✕"} ]
-               Admin [ ${if (event.sender.isAdministrator()) "✓" else "✕"} ]
-               Admin Group [ ${if (event.group.id == PluginData.adminGroup) "✓" else "✕"} ]
-               Everyone [ ✓ ]
-            """.trimIndent()
-        )
-    }
 }

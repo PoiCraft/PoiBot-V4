@@ -1,6 +1,5 @@
 package com.poicraft.bot.v4.plugin.functions.commands
 
-import com.poicraft.bot.v4.plugin.data.constants.Permission
 import com.poicraft.bot.v4.plugin.provider.command.*
 import com.poicraft.bot.v4.plugin.utils.oshi.*
 import oshi.SystemInfo
@@ -31,7 +30,7 @@ fun B.status() {
 
     }
 
-    command("服务器状态-管理员") by "status-p" intro "获取服务器信息" require Permission.ADMIN_GROUP run { event, _ ->
+    commandOP("服务器状态-管理员") by "status-p" intro "获取服务器信息" run { event, _ ->
 
         val si = SystemInfo()
 

@@ -1,7 +1,6 @@
 package com.poicraft.bot.v4.plugin.functions.commands
 
 import com.poicraft.bot.v4.plugin.PluginData
-import com.poicraft.bot.v4.plugin.data.constants.Permission
 import com.poicraft.bot.v4.plugin.provider.command.B
 import com.poicraft.bot.v4.plugin.provider.command.Command
 import com.poicraft.bot.v4.plugin.provider.command.*
@@ -30,7 +29,7 @@ fun B.exec() {
     /**
      * 执行任意命令
      */
-    command("执行命令") by "exec" intro "执行命令" require Permission.ADMIN_GROUP run { event, args ->
+    commandOP("执行命令") by "exec" intro "执行命令" run { event, args ->
         val result = BDXWSControl.runCmd(args.subList(1, args.size).joinToString(" ")).cleanMsg()
         event.subject.sendMessage(event.source.quote() + "执行完成:\n" + result)
     }
