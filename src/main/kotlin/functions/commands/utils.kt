@@ -5,7 +5,7 @@ import com.poicraft.bot.v4.plugin.provider.command.Command
 import com.poicraft.bot.v4.plugin.provider.command.by
 import com.poicraft.bot.v4.plugin.provider.command.command
 import com.poicraft.bot.v4.plugin.provider.command.reply
-import utils.minecraft.getServerInfo
+import com.poicraft.bot.v4.plugin.utils.minecraft.getServerInfo
 
 /**
  * 小工具集

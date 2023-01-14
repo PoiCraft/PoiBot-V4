@@ -2,7 +2,7 @@ package com.poicraft.bot.v4.plugin.functions.commands
 
 import com.poicraft.bot.v4.plugin.data.constants.WhitelistStatus
 import com.poicraft.bot.v4.plugin.provider.command.*
-import utils.minecraft.Whitelist
+import com.poicraft.bot.v4.plugin.utils.minecraft.Whitelist
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**

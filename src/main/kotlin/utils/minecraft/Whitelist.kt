@@ -1,4 +1,4 @@
-package utils.minecraft
+package com.poicraft.bot.v4.plugin.utils.minecraft
 
 import com.poicraft.bot.v4.plugin.data.constants.WhitelistStatus
 import com.poicraft.bot.v4.plugin.remote.bdxws.BDXWSControl
