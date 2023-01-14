@@ -86,7 +86,6 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
  * 用法如下:
  * ```
  * command("测试命令") by "test" reply "测试通过"
- * command("测试命令") by "test" require Permission.PERMISSION_LEVEL_EVERYONE intro "这是命令简介" reply "测试通过"
  * ```
  *
  * 此外, reply 也支持复杂回复, 用法如下:
@@ -106,9 +105,6 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
  * command("测试命令") by "test" run { event, args ->
  *         // 执行内容
  * }
- * command("测试命令") by "test" require Permission.PERMISSION_LEVEL_EVERYONE intro "这是命令简介" run { event, args ->
- *         // 执行内容
- * }
  *
  * ```
  * ### 完整配置 `to`
@@ -121,23 +117,30 @@ infix fun CommandNameHeader.by(alias: String) = CommandHeader(this.b, this.name,
  * ```
  * command("测试命令") by "test" to {
  *     intro("命令简介")
- *     require(Permission.PERMISSION_LEVEL_EVERYONE)
  *     onMessage { event, args ->
  *         // 执行内容
  *     }
  * }
  * ```
  *
+ * ----------------
+ * 构造无特殊权限需求的命令
  * @param name 命令的人类友好名称
  */
 @MessageDsl
 infix fun B.command(name: String) = CommandNameHeader(this, name)
 
+/**
+ * 构造仅管理群内人员可使用的命令
+ * @param name 命令的人类友好名称
+ * @see command
+ */
 @MessageDsl
 infix fun B.commandOP(name: String) = CommandNameHeader(this, name, true)
 
 /**
  * 设置命令介绍, 非必须
+ * @param introduction 命令介绍
  */
 infix fun CommandHeader.intro(introduction: String): CommandHeader {
     this.introduction = introduction
