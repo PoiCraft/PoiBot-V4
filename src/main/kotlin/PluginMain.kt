@@ -109,7 +109,6 @@ object PluginData : AutoSavePluginConfig("PoiBotConf") {
 
     val uptimeConfig by value(UptimeConfig())
 
-    val httpConfig by value(HttpConfig())
 }
 
 @Serializable
@@ -125,12 +124,4 @@ data class RemoteConfig(
 data class UptimeConfig(
     val url: String = "",
     val pingInterval: Int = 600
-)
-
-@Serializable
-data class HttpConfig(
-    val port: Int = 1536,
-    val alertManagerWebhook: String = "/alert_manager",
-    val credential: String = "",
-    val password: String = "",
 )
