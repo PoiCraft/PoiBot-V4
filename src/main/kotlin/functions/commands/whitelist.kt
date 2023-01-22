@@ -19,7 +19,7 @@ fun B.whitelist() {
         if (target.isEmpty()) {
             event.subject.sendMessage("请提供 Xbox ID !")
         } else {
-            val (status, result) = Whitelist.add(target.joinToString(" "))
+            val (status, result) = Whitelist.add(target.joinToString(" ").trim())
             when (status) {
                 WhitelistStatus.PLAYER_ALREADY_IN_WHITELIST -> event.subject.sendMessage("玩家已在白名单中")
                 WhitelistStatus.PLAY_ADDED -> event.subject.sendMessage("已添加至白名单")
@@ -36,7 +36,7 @@ fun B.whitelist() {
         if (target.isEmpty()) {
             event.subject.sendMessage("请提供 Xbox ID !")
         } else {
-            val (status, result) = Whitelist.remove(target.joinToString(" "))
+            val (status, result) = Whitelist.remove(target.joinToString(" ").trim())
             when (status) {
                 WhitelistStatus.PLAYER_NOT_IN_WHITELIST -> event.subject.sendMessage("玩家不在白名单中")
                 WhitelistStatus.PLAY_REMOVED -> event.subject.sendMessage("已从白名单中移除")
